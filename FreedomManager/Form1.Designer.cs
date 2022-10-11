@@ -72,6 +72,7 @@
             this.modInstall.TabIndex = 4;
             this.modInstall.Text = "Install Mod";
             this.modInstall.UseVisualStyleBackColor = true;
+            this.modInstall.Click += new System.EventHandler(this.modInstall_Click);
             // 
             // Form1
             // 

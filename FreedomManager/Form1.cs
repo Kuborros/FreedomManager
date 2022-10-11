@@ -28,6 +28,12 @@ namespace FreedomManager
                     "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            if (!fp2Found) {
+                MessageBox.Show(this, "Freedom Planet 2 not Found!.\n\n" +
+                "Please ensure the mod manager is in the main game directory.",
+                Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                savePlay.Hide(); 
+            }
         }
 
         private void exit_Click(object sender, EventArgs e)
@@ -55,6 +61,11 @@ namespace FreedomManager
                 File.Delete("winhttp.dll");
                 bepisPresent = false;
             }
+        }
+
+        private void modInstall_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
