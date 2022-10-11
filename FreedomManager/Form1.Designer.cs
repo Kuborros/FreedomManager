@@ -32,6 +32,7 @@
             this.setup = new System.Windows.Forms.Button();
             this.exit = new System.Windows.Forms.Button();
             this.modInstall = new System.Windows.Forms.Button();
+            this.modFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // savePlay
@@ -74,6 +75,11 @@
             this.modInstall.UseVisualStyleBackColor = true;
             this.modInstall.Click += new System.EventHandler(this.modInstall_Click);
             // 
+            // modFileDialog
+            // 
+            this.modFileDialog.DefaultExt = "zip";
+            this.modFileDialog.Title = "Select mod to install.";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,6 +100,7 @@
         private System.Windows.Forms.Button setup;
         private System.Windows.Forms.Button exit;
         private System.Windows.Forms.Button modInstall;
+        private System.Windows.Forms.OpenFileDialog modFileDialog;
     }
 }
 

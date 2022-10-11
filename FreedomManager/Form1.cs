@@ -27,7 +27,8 @@ namespace FreedomManager
             MessageBox.Show(this, "BepInEx not Found!.\n\n" +
                     "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            } else setup.Text = "Uninstall BepInEx";
+
             if (!fp2Found) {
                 MessageBox.Show(this, "Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
@@ -65,6 +66,15 @@ namespace FreedomManager
 
         private void modInstall_Click(object sender, EventArgs e)
         {
+            modFileDialog.ShowDialog();
+            string file = modFileDialog.FileName;
+            if (Path.GetExtension(file) == ".zip")
+            {
+                ZipFile.ExtractToDirectory(file, ".");
+                MessageBox.Show(this, "Mod Unpacked!.\n\n" +
+                "Test Message.",
+                Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
         }
     }
