@@ -22,6 +22,12 @@ namespace FreedomManager
             InitializeComponent();
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
+
+            if (!bepisPresent) {
+            MessageBox.Show(this, "BepInEx not Found!.\n\n" +
+                    "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void exit_Click(object sender, EventArgs e)
