@@ -64,7 +64,8 @@ namespace FreedomManager
                 ZipArchive zipArchive = ZipFile.OpenRead(path);
                 foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
                 {
-                    if (zipArchiveEntry.Name == "BepInEx") hasBepDir = true;
+                    Console.WriteLine(zipArchiveEntry.FullName);
+                    if (zipArchiveEntry.FullName == "BepInEx/") hasBepDir = true;
                 }
             }
             return hasBepDir;
