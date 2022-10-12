@@ -73,13 +73,15 @@ namespace FreedomManager
             {
                 foreach (string f in Directory.GetFiles(dir))
                 {
-                    treeView1.Nodes[1].Nodes.Add(Path.GetFileName(f));
-                    Console.WriteLine(f);
+
+                    if (Path.GetExtension(f) == ".dll")
+                    treeView1.Nodes[1].Nodes.Add(Path.GetFileNameWithoutExtension(f));
+                    treeView1.Nodes[1].Expand();
                 }
                 foreach (string d in Directory.GetDirectories(dir))
                 {
                     treeView1.Nodes[0].Nodes.Add(Path.GetFileName(d));
-                    Console.WriteLine(d);
+                    treeView1.Nodes[0].Expand();
                 }
             }
             catch (System.Exception ex)
