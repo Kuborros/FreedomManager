@@ -19,11 +19,13 @@ namespace FreedomManager
     {
         bool bepisPresent = false;
         bool fp2Found = false;
+        bool melonPresent = false;
         public Form1()
         {
             InitializeComponent();
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
+            melonPresent = Directory.Exists("Mods");
 
             if (!bepisPresent) {
             MessageBox.Show(this, "BepInEx not Found!.\n\n" +
@@ -40,14 +42,16 @@ namespace FreedomManager
 
             treeView1.Nodes.Add("Mods:");
             treeView1.Nodes.Add("Mods (Loose DLL):");
-            if (Directory.Exists("Mods"))
-            {
-                treeView1.Nodes.Add("External loader mods (Melons):");
-            }
 
             if (bepisPresent)
             {
                 DirectoryScan();
+            }
+
+            if (melonPresent)
+            {
+                treeView1.Nodes.Add("External loader mods (Melons):");
+                MelonScan();
             }
 
         }
@@ -75,8 +79,10 @@ namespace FreedomManager
                 {
 
                     if (Path.GetExtension(f) == ".dll")
-                    treeView1.Nodes[1].Nodes.Add(Path.GetFileNameWithoutExtension(f));
-                    treeView1.Nodes[1].Expand();
+                    {
+                        treeView1.Nodes[1].Nodes.Add(Path.GetFileNameWithoutExtension(f));
+                        treeView1.Nodes[1].Expand();
+                    }
                 }
                 foreach (string d in Directory.GetDirectories(dir))
                 {
@@ -88,7 +94,27 @@ namespace FreedomManager
             {
                 Console.WriteLine(ex.Message);
             }
-        }   
+        }
+        public void MelonScan()
+        {
+            String dir = "Mods";
+            try
+            {
+                foreach (string f in Directory.GetFiles(dir))
+                {
+
+                    if (Path.GetExtension(f) == ".dll")
+                    {
+                        treeView1.Nodes[2].Nodes.Add(Path.GetFileNameWithoutExtension(f));
+                        treeView1.Nodes[2].Expand();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
 
         private void exit_Click(object sender, EventArgs e)
@@ -154,6 +180,7 @@ namespace FreedomManager
         private void refresh_Click(object sender, EventArgs e)
         {
             DirectoryScan();
+            if (melonPresent) MelonScan();
         }
     }
 }
