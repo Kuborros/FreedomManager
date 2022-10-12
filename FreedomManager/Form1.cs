@@ -74,6 +74,8 @@ namespace FreedomManager
         public void DirectoryScan()
         {
             String dir = "BepInEx\\plugins";
+            treeView1.Nodes[1].Nodes.Clear();
+            treeView1.Nodes[0].Nodes.Clear();
             try
             {
                 foreach (string f in Directory.GetFiles(dir))
@@ -99,6 +101,7 @@ namespace FreedomManager
         public void MelonScan()
         {
             String dir = "Mods";
+            treeView1.Nodes[2].Nodes.Clear();
             try
             {
                 foreach (string f in Directory.GetFiles(dir))
@@ -131,17 +134,26 @@ namespace FreedomManager
         private void setup_Click(object sender, EventArgs e)
         {
             if (!bepisPresent) {
-                WebClient client = new WebClient();
-                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
-                //TODO: Check download?
-                ZipFile.ExtractToDirectory("BepInEx.zip", ".");
-                File.Delete("BepInEx.zip");
+                try
+                {
+                    WebClient client = new WebClient();
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
+                    //TODO: Check download?
+                    ZipFile.ExtractToDirectory("BepInEx.zip", ".");
+                    File.Delete("BepInEx.zip");
 
-                MessageBox.Show(this, "BepInEx installed!.\n\n" +
-                "The game is now ready for modding.",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(this, "BepInEx installed!.\n\n" +
+                    "The game is now ready for modding.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                setup.Text = "Uninstall BepInEx";
+                    setup.Text = "Uninstall BepInEx";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Unpacking BepInEx failed!.\n\n" +
+                    "Error info:" + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             } 
             else
             {
@@ -162,12 +174,17 @@ namespace FreedomManager
             modFileDialog.ShowDialog();
             string file = modFileDialog.FileName;
             if (CheckArchive(file))
-            {
+            {   
+                try { 
                 ZipFile.ExtractToDirectory(file, ".");
-                MessageBox.Show(this, "Mod Unpacked!.\n\n" +
-                "Test Message.",
+                MessageBox.Show(this, "Mod Unpacked!.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DirectoryScan();
+                } catch (Exception ex) {
+                    MessageBox.Show(this, "Unpacking failed!.\n\n" +
+                    "Error info: " + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
