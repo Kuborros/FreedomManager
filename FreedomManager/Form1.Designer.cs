@@ -54,7 +54,7 @@
             this.setup.Name = "setup";
             this.setup.Size = new System.Drawing.Size(281, 23);
             this.setup.TabIndex = 2;
-            this.setup.Text = "Setup BepInEx";
+            this.setup.Text = "Install BepInEx";
             this.setup.UseVisualStyleBackColor = true;
             this.setup.Click += new System.EventHandler(this.setup_Click);
             // 

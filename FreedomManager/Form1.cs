@@ -139,6 +139,8 @@ namespace FreedomManager
                 MessageBox.Show(this, "BepInEx installed!.\n\n" +
                 "The game is now ready for modding.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                setup.Text = "Uninstall BepInEx";
             } 
             else
             {
@@ -148,6 +150,8 @@ namespace FreedomManager
                 MessageBox.Show(this, "BepInEx hook removed!.\n\n" +
                 "The mods will no longer be loaded.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                setup.Text = "Install BepInEx";
 
             }
         }
