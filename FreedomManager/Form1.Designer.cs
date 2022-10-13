@@ -36,6 +36,8 @@
             this.modFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.refresh = new System.Windows.Forms.Button();
+            this.melonButton = new System.Windows.Forms.Button();
+            this.handlerButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // savePlay
@@ -87,7 +89,7 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(12, 12);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(406, 350);
+            this.treeView1.Size = new System.Drawing.Size(487, 350);
             this.treeView1.TabIndex = 5;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
@@ -101,11 +103,33 @@
             this.refresh.UseVisualStyleBackColor = true;
             this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
+            // melonButton
+            // 
+            this.melonButton.Location = new System.Drawing.Point(259, 368);
+            this.melonButton.Name = "melonButton";
+            this.melonButton.Size = new System.Drawing.Size(159, 67);
+            this.melonButton.TabIndex = 7;
+            this.melonButton.Text = "Install MelonLoader Compat";
+            this.melonButton.UseVisualStyleBackColor = true;
+            this.melonButton.Click += new System.EventHandler(this.melonButton_Click);
+            // 
+            // handlerButton
+            // 
+            this.handlerButton.Location = new System.Drawing.Point(424, 368);
+            this.handlerButton.Name = "handlerButton";
+            this.handlerButton.Size = new System.Drawing.Size(75, 67);
+            this.handlerButton.TabIndex = 8;
+            this.handlerButton.Text = "Register URL handler";
+            this.handlerButton.UseVisualStyleBackColor = true;
+            this.handlerButton.Click += new System.EventHandler(this.handlerButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(511, 475);
+            this.Controls.Add(this.handlerButton);
+            this.Controls.Add(this.melonButton);
             this.Controls.Add(this.refresh);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.modInstall);
@@ -127,6 +151,8 @@
         private System.Windows.Forms.OpenFileDialog modFileDialog;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Button refresh;
+        private System.Windows.Forms.Button melonButton;
+        private System.Windows.Forms.Button handlerButton;
     }
 }
 

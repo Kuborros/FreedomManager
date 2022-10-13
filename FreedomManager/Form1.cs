@@ -123,7 +123,10 @@ namespace FreedomManager
             }
         }
 
-
+        public bool DownloadMod(Uri url, string path, string name)
+        {
+            return false;
+        }
         private void exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -229,6 +232,16 @@ namespace FreedomManager
                 }
             }
             zipArchive.Dispose();
+        }
+
+        private void melonButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void handlerButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
