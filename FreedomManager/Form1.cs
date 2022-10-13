@@ -27,17 +27,20 @@ namespace FreedomManager
             fp2Found = File.Exists("FP2.exe");
             melonPresent = Directory.Exists("Mods");
 
-            if (!bepisPresent) {
-            MessageBox.Show(this, "BepInEx not Found!.\n\n" +
-                    "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            } else setup.Text = "Uninstall BepInEx";
+            if (!bepisPresent)
+            {
+                MessageBox.Show(this, "BepInEx not Found!.\n\n" +
+                        "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else setup.Text = "Uninstall BepInEx";
 
-            if (!fp2Found) {
+            if (!fp2Found)
+            {
                 MessageBox.Show(this, "Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                savePlay.Hide(); 
+                savePlay.Hide();
             }
 
             treeView1.Nodes.Add("Mods:");
@@ -64,9 +67,9 @@ namespace FreedomManager
                 ZipArchive zipArchive = ZipFile.OpenRead(path);
                 foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
                 {
-                    Console.WriteLine(zipArchiveEntry.FullName);
                     if (zipArchiveEntry.FullName == "BepInEx/") hasBepDir = true;
                 }
+                zipArchive.Dispose();
             }
             return hasBepDir;
         }
@@ -128,17 +131,19 @@ namespace FreedomManager
 
         private void savePlay_Click(object sender, EventArgs e)
         {
-            if(fp2Found) Process.Start("FP2.exe");
+            if (fp2Found) Process.Start("FP2.exe");
         }
 
         private void setup_Click(object sender, EventArgs e)
         {
-            if (!bepisPresent) {
+            if (!bepisPresent)
+            {
                 try
                 {
                     WebClient client = new WebClient();
                     client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
                     //TODO: Check download?
+                    DeleteFilesPresentInZip("BepInEx.zip");
                     ZipFile.ExtractToDirectory("BepInEx.zip", ".");
                     File.Delete("BepInEx.zip");
 
@@ -154,7 +159,7 @@ namespace FreedomManager
                     "Error info:" + ex.Message,
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            } 
+            }
             else
             {
                 File.Delete("winhttp.dll");
@@ -174,13 +179,17 @@ namespace FreedomManager
             modFileDialog.ShowDialog();
             string file = modFileDialog.FileName;
             if (CheckArchive(file))
-            {   
-                try { 
-                ZipFile.ExtractToDirectory(file, ".");
-                MessageBox.Show(this, "Mod Unpacked!.",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DirectoryScan();
-                } catch (Exception ex) {
+            {
+                try
+                {
+                    DeleteFilesPresentInZip(file);
+                    ZipFile.ExtractToDirectory(file, ".");
+                    MessageBox.Show(this, "Mod Unpacked!.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DirectoryScan();
+                }
+                catch (Exception ex)
+                {
                     MessageBox.Show(this, "Unpacking failed!.\n\n" +
                     "Error info: " + ex.Message,
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -203,6 +212,23 @@ namespace FreedomManager
         {
             DirectoryScan();
             if (melonPresent) MelonScan();
+        }
+
+        private void DeleteFilesPresentInZip(String path)
+        {
+            ZipArchive zipArchive = ZipFile.OpenRead(path);
+            foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
+            {
+                try
+                {
+                    File.Delete(zipArchiveEntry.FullName);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            zipArchive.Dispose();
         }
     }
 }
