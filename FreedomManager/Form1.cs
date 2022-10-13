@@ -127,6 +127,9 @@ namespace FreedomManager
         {
             return false;
         }
+
+
+
         private void exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
