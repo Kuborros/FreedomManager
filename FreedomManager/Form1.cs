@@ -185,12 +185,6 @@ namespace FreedomManager
             return false;
         }
 
-        public ModInfo parseArchive(string path)
-        {
-            ModInfo info = new ModInfo();
-            return info;
-        }
-
         private void exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
