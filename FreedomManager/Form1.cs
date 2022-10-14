@@ -185,16 +185,6 @@ namespace FreedomManager
             return false;
         }
 
-        void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            this.BeginInvoke((MethodInvoker)delegate {
-                double bytesIn = double.Parse(e.BytesReceived.ToString());
-                double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
-                double percentage = bytesIn / totalBytes * 100;
-                progressBar1.Value = int.Parse(Math.Truncate(percentage).ToString());
-            });
-        }
-
         private void exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
