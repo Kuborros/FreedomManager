@@ -68,6 +68,11 @@ namespace FreedomManager
                 MelonScan();
             }
 
+            using (var current = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
+            {
+                if (current != null) { handlerButton.Text = "Unregister URL handler"; }
+            }
+
             try
             {
                 string[] gblink = args[1].Replace("fp2mm:", string.Empty).Split(',');
