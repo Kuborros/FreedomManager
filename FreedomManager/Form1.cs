@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -29,7 +30,7 @@ namespace FreedomManager
             None
         }
 
-        public Form1()
+        public Form1(string[] args)
         {
             InitializeComponent();
             bepisPresent = File.Exists("winhttp.dll");
@@ -52,6 +53,27 @@ namespace FreedomManager
                         Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else setup.Text = "Uninstall BepInEx";
+
+            try
+            {
+                string[] gblink = args[1].Replace("fp2mm:", string.Empty).Split(',');
+                if (gblink.Length == 1)
+                {
+                    DownloadMod(new Uri(gblink[0]), "Unknown", "Unknown");
+                }
+                if (gblink.Length == 1)
+                {
+                    DownloadMod(new Uri(gblink[0]), gblink[1], "Unknown");
+                }
+                if (gblink.Length == 3)
+                {
+                    DownloadMod(new Uri(gblink[0]), gblink[1], gblink[2]);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("No arguments provided.");
+            }
 
             treeView1.Nodes.Add("Mods:");
             treeView1.Nodes.Add("Mods (Loose DLL):");
@@ -100,10 +122,10 @@ namespace FreedomManager
         public void DirectoryScan()
         {
             String dir = "BepInEx\\plugins";
-            treeView1.Nodes[1].Nodes.Clear();
-            treeView1.Nodes[0].Nodes.Clear();
             try
             {
+                treeView1.Nodes[1].Nodes.Clear();
+                treeView1.Nodes[0].Nodes.Clear();
                 foreach (string f in Directory.GetFiles(dir))
                 {
 
@@ -127,9 +149,9 @@ namespace FreedomManager
         public void MelonScan()
         {
             String dir = "MLLoader\\Mods";
-            treeView1.Nodes[2].Nodes.Clear();
             try
             {
+                treeView1.Nodes[2].Nodes.Clear();
                 foreach (string f in Directory.GetFiles(dir))
                 {
 
@@ -146,8 +168,20 @@ namespace FreedomManager
             }
         }
 
-        public bool DownloadMod(Uri url, string path, string name)
+        public bool DownloadMod(Uri url, string name, string author)
         {
+            DialogResult dialogResult = MessageBox.Show(this,"Do you want to install " + name + " by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                WebClient client = new WebClient();
+                client.DownloadFile(url, "tempmod.zip");
+                InstallMod("tempmod.zip");
+                File.Delete("tempmod.zip");
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                return false;
+            }
             return false;
         }
 
@@ -207,6 +241,11 @@ namespace FreedomManager
         {
             modFileDialog.ShowDialog();
             string file = modFileDialog.FileName;
+            InstallMod(file);
+        }
+
+        private void InstallMod(string file)
+        {
             switch (CheckArchive(file))
             {
                 case ArchiveType.BepinDir:
@@ -308,7 +347,7 @@ namespace FreedomManager
                             }
                         case ArchiveType.PluginDir:
                             {
-                                File.Delete("BepInEx\\"+zipArchiveEntry.FullName);
+                                File.Delete("BepInEx\\" + zipArchiveEntry.FullName);
                                 break;
                             }
                         case ArchiveType.MelonDir:
@@ -323,22 +362,58 @@ namespace FreedomManager
 
                     }
                 }
-                    catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
             zipArchive.Dispose();
         }
 
         private void melonButton_Click(object sender, EventArgs e)
         {
+            if (!melonPresent)
+            {
+                WebClient client = new WebClient();
+                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), "Melon.zip");
+                DeleteFilesPresentInZip("Melon.zip", ArchiveType.BepinDir);
+                ZipFile.ExtractToDirectory("Melon.zip", ".");
+                File.Delete("Melon.zip");
 
+                MessageBox.Show(this, "MelonLoader plugin installed!.\n\n" +
+                "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
+                Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                melonPresent = true;
+                treeView1.Nodes.Add("External loader mods (Melons):");
+            }
         }
 
         private void handlerButton_Click(object sender, EventArgs e)
         {
-
+            RegisterGameBananaProtocol();
         }
+
+        static void RegisterGameBananaProtocol()
+        {
+            using (var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
+            {
+                string applicationLocation = typeof(Form1).Assembly.Location;
+
+                key.SetValue("", "URL: FreedomLoader");
+                key.SetValue("URL Protocol", "");
+
+                using (var defaultIcon = key.CreateSubKey("DefaultIcon"))
+                {
+                    defaultIcon.SetValue("", applicationLocation + ",1");
+                }
+
+                using (var commandKey = key.CreateSubKey(@"shell\open\command"))
+                {
+                    commandKey.SetValue("", "\"" + applicationLocation + "\" \"%1\"");
+                }
+            }
+        }
+
     }
 }
