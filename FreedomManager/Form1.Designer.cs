@@ -1,6 +1,6 @@
 ﻿namespace FreedomManager
 {
-    partial class Form1
+    partial class FreedomManager
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FreedomManager));
             this.savePlay = new System.Windows.Forms.Button();
             this.setup = new System.Windows.Forms.Button();
             this.exit = new System.Windows.Forms.Button();
@@ -91,7 +91,6 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(487, 350);
             this.treeView1.TabIndex = 5;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // refresh
             // 
@@ -123,7 +122,7 @@
             this.handlerButton.UseVisualStyleBackColor = true;
             this.handlerButton.Click += new System.EventHandler(this.handlerButton_Click);
             // 
-            // Form1
+            // FreedomManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -137,7 +136,7 @@
             this.Controls.Add(this.setup);
             this.Controls.Add(this.savePlay);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "FreedomManager";
             this.Text = "FreedomInstaller";
             this.ResumeLayout(false);
 

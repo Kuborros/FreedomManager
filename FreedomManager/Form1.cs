@@ -1,41 +1,39 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
-using System.Text;
+using System.Reflection.Emit;
+using System.Threading;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 using File = System.IO.File;
 
 namespace FreedomManager
 {
-    public partial class Form1 : Form
+    public partial class FreedomManager : Form
     {
         bool bepisPresent = false;
         bool fp2Found = false;
         bool melonPresent = false;
+        string rootDir = "";
 
         public enum ArchiveType
         {
             BepinDir,
             PluginDir,
             MelonDir,
+            DllDir,
             None
         }
 
-        public Form1(string[] args)
+        public FreedomManager(string[] args)
         {
             InitializeComponent();
-            bepisPresent = File.Exists("winhttp.dll");
-            fp2Found = File.Exists("FP2.exe");
-            melonPresent = Directory.Exists("MLLoader\\Mods");
+            rootDir = typeof(FreedomManager).Assembly.Location.Replace("FreedomManager.exe", "");
+            bepisPresent = File.Exists(rootDir + "winhttp.dll");
+            fp2Found = File.Exists(rootDir + "FP2.exe");
+            melonPresent = Directory.Exists(rootDir + "MLLoader\\Mods");
 
             if (!fp2Found)
             {
@@ -44,6 +42,8 @@ namespace FreedomManager
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 savePlay.Hide();
                 setup.Hide();
+                handlerButton.Hide();
+                melonButton.Hide();
             }
 
             if (fp2Found && !bepisPresent)
@@ -53,6 +53,20 @@ namespace FreedomManager
                         Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else setup.Text = "Uninstall BepInEx";
+
+            treeView1.Nodes.Add("Mods:");
+            treeView1.Nodes.Add("Mods (Loose DLL):");
+
+            if (bepisPresent)
+            {
+                DirectoryScan();
+            }
+
+            if (melonPresent)
+            {
+                treeView1.Nodes.Add("External loader mods (Melons):");
+                MelonScan();
+            }
 
             try
             {
@@ -73,20 +87,6 @@ namespace FreedomManager
             catch
             {
                 Console.WriteLine("No arguments provided.");
-            }
-
-            treeView1.Nodes.Add("Mods:");
-            treeView1.Nodes.Add("Mods (Loose DLL):");
-
-            if (bepisPresent)
-            {
-                DirectoryScan();
-            }
-
-            if (melonPresent)
-            {
-                treeView1.Nodes.Add("External loader mods (Melons):");
-                MelonScan();
             }
 
         }
@@ -121,7 +121,7 @@ namespace FreedomManager
 
         public void DirectoryScan()
         {
-            String dir = "BepInEx\\plugins";
+            String dir = rootDir + "BepInEx\\plugins";
             try
             {
                 treeView1.Nodes[1].Nodes.Clear();
@@ -148,7 +148,7 @@ namespace FreedomManager
         }
         public void MelonScan()
         {
-            String dir = "MLLoader\\Mods";
+            String dir = rootDir + "MLLoader\\Mods";
             try
             {
                 treeView1.Nodes[2].Nodes.Clear();
@@ -170,19 +170,29 @@ namespace FreedomManager
 
         public bool DownloadMod(Uri url, string name, string author)
         {
-            DialogResult dialogResult = MessageBox.Show(this,"Do you want to install " + name + " by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install " + name + " by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                WebClient client = new WebClient();
-                client.DownloadFile(url, "tempmod.zip");
-                InstallMod("tempmod.zip");
-                File.Delete("tempmod.zip");
+                    WebClient client = new WebClient();
+                    client.DownloadFile(url, "tempmod.zip");
+                    InstallMod(rootDir + "tempmod.zip", CheckArchive(rootDir + "tempmod.zip"));
+                    File.Delete(rootDir + "tempmod.zip");
             }
             else if (dialogResult == DialogResult.No)
             {
                 return false;
             }
             return false;
+        }
+
+        void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            this.BeginInvoke((MethodInvoker)delegate {
+                double bytesIn = double.Parse(e.BytesReceived.ToString());
+                double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
+                double percentage = bytesIn / totalBytes * 100;
+                progressBar1.Value = int.Parse(Math.Truncate(percentage).ToString());
+            });
         }
 
         private void exit_Click(object sender, EventArgs e)
@@ -197,16 +207,16 @@ namespace FreedomManager
 
         private void setup_Click(object sender, EventArgs e)
         {
-            if (!File.Exists("winhttp.dll"))
+            if (!File.Exists(rootDir + "winhttp.dll"))
             {
                 try
                 {
                     WebClient client = new WebClient();
-                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), rootDir + "BepInEx.zip");
                     //TODO: Check download?
-                    DeleteFilesPresentInZip("BepInEx.zip", ArchiveType.BepinDir);
-                    ZipFile.ExtractToDirectory("BepInEx.zip", ".");
-                    File.Delete("BepInEx.zip");
+                    DeleteFilesPresentInZip(rootDir + "BepInEx.zip", ArchiveType.BepinDir);
+                    ZipFile.ExtractToDirectory(rootDir + "BepInEx.zip", rootDir);
+                    File.Delete(rootDir + "BepInEx.zip");
 
                     MessageBox.Show(this, "BepInEx installed!.\n\n" +
                     "The game is now ready for modding.",
@@ -223,7 +233,7 @@ namespace FreedomManager
             }
             else
             {
-                File.Delete("winhttp.dll");
+                File.Delete(rootDir + "winhttp.dll");
                 bepisPresent = false;
 
                 MessageBox.Show(this, "BepInEx hook removed!.\n\n" +
@@ -239,19 +249,19 @@ namespace FreedomManager
         {
             modFileDialog.ShowDialog();
             string file = modFileDialog.FileName;
-            InstallMod(file);
+            InstallMod(file, CheckArchive(file));
         }
 
-        private void InstallMod(string file)
+        private void InstallMod(string file, ArchiveType type)
         {
-            switch (CheckArchive(file))
+            switch (type)
             {
                 case ArchiveType.BepinDir:
                     {
                         try
                         {
                             DeleteFilesPresentInZip(file, ArchiveType.BepinDir);
-                            ZipFile.ExtractToDirectory(file, ".");
+                            ZipFile.ExtractToDirectory(file, rootDir);
                             MessageBox.Show(this, "Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             DirectoryScan();
@@ -269,7 +279,7 @@ namespace FreedomManager
                         try
                         {
                             DeleteFilesPresentInZip(file, ArchiveType.PluginDir);
-                            ZipFile.ExtractToDirectory(file, "BepInEx");
+                            ZipFile.ExtractToDirectory(file, rootDir + "BepInEx");
                             MessageBox.Show(this, "Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             DirectoryScan();
@@ -287,7 +297,7 @@ namespace FreedomManager
                         try
                         {
                             DeleteFilesPresentInZip(file, ArchiveType.MelonDir);
-                            ZipFile.ExtractToDirectory(file, "MLLoader\\Mods");
+                            ZipFile.ExtractToDirectory(file, rootDir + "MLLoader\\Mods");
                             MessageBox.Show(this, "Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             DirectoryScan();
@@ -317,15 +327,10 @@ namespace FreedomManager
             }
         }
 
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
-
         private void refresh_Click(object sender, EventArgs e)
         {
             DirectoryScan();
-            melonPresent = Directory.Exists("MLLoader\\Mods");
+            melonPresent = Directory.Exists(rootDir + "MLLoader\\Mods");
             if (melonPresent) MelonScan();
         }
 
@@ -340,17 +345,17 @@ namespace FreedomManager
                     {
                         case ArchiveType.BepinDir:
                             {
-                                File.Delete(zipArchiveEntry.FullName);
+                                File.Delete(rootDir + zipArchiveEntry.FullName);
                                 break;
                             }
                         case ArchiveType.PluginDir:
                             {
-                                File.Delete("BepInEx\\" + zipArchiveEntry.FullName);
+                                File.Delete(rootDir + "BepInEx\\" + zipArchiveEntry.FullName);
                                 break;
                             }
                         case ArchiveType.MelonDir:
                             {
-                                File.Delete("MLLoader\\" + zipArchiveEntry.FullName);
+                                File.Delete(rootDir + "MLLoader\\" + zipArchiveEntry.FullName);
                                 break;
                             }
                         default:
@@ -373,16 +378,17 @@ namespace FreedomManager
             if (!melonPresent)
             {
                 WebClient client = new WebClient();
-                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), "Melon.zip");
-                DeleteFilesPresentInZip("Melon.zip", ArchiveType.BepinDir);
-                ZipFile.ExtractToDirectory("Melon.zip", ".");
-                File.Delete("Melon.zip");
+                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), rootDir + "Melon.zip");
+                DeleteFilesPresentInZip(rootDir + "Melon.zip", ArchiveType.BepinDir);
+                ZipFile.ExtractToDirectory(rootDir + "Melon.zip", ".");
+                File.Delete(rootDir + "Melon.zip");
 
                 MessageBox.Show(this, "MelonLoader plugin installed!.\n\n" +
                 "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = true;
+                DirectoryScan();
                 treeView1.Nodes.Add("External loader mods (Melons):");
             }
         }
@@ -392,26 +398,49 @@ namespace FreedomManager
             RegisterGameBananaProtocol();
         }
 
-        static void RegisterGameBananaProtocol()
+        void RegisterGameBananaProtocol()
         {
-            using (var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
+            using (var current = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
             {
-                string applicationLocation = typeof(Form1).Assembly.Location;
-
-                key.SetValue("", "URL: FreedomLoader");
-                key.SetValue("URL Protocol", "");
-
-                using (var defaultIcon = key.CreateSubKey("DefaultIcon"))
+                if (current == null)
                 {
-                    defaultIcon.SetValue("", applicationLocation + ",1");
+                    using (var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
+                    {
+                        string applicationLocation = rootDir + "FreedomManager.exe";
+
+                        Console.WriteLine(applicationLocation);
+
+                        key.SetValue("", "URL: FreedomLoader");
+                        key.SetValue("URL Protocol", "");
+
+                        using (var defaultIcon = key.CreateSubKey("DefaultIcon"))
+                        {
+                            defaultIcon.SetValue("", applicationLocation + ",1");
+                        }
+
+                        using (var commandKey = key.CreateSubKey(@"shell\open\command"))
+                        {
+                            commandKey.SetValue("", "\"" + applicationLocation + "\" \"%1\"");
+                        }
+                    }
+                    MessageBox.Show("URL handler registered!.\n\n" +
+                    "Gamebanana 1-Click install is now available.",
+                     "URL Handler", MessageBoxButtons.OK);
+
+                    handlerButton.Text = "Unregister URL handler";
                 }
-
-                using (var commandKey = key.CreateSubKey(@"shell\open\command"))
+                else
                 {
-                    commandKey.SetValue("", "\"" + applicationLocation + "\" \"%1\"");
+                    Registry.CurrentUser.DeleteSubKeyTree("SOFTWARE\\Classes\\" + "fp2mm");
+                    MessageBox.Show("URL handler de-registered!.\n\n" +
+                    "Gamebanana 1-Click support has been uninstalled.",
+                    "URL Handler", MessageBoxButtons.OK);
+
+                    handlerButton.Text = "Register URL handler";
                 }
             }
         }
+
 
     }
 }
