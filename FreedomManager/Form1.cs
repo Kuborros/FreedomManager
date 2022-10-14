@@ -399,6 +399,7 @@ namespace FreedomManager
 
                 melonPresent = true;
                 melonButton.Text = "Install MelonLoader Compat";
+                DirectoryScan();
             }
         }
 
