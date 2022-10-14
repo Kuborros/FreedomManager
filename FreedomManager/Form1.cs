@@ -91,9 +91,9 @@ namespace FreedomManager
                     DownloadMod(new Uri(gblink[0]), gblink[1], gblink[2]);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine("No arguments provided.");
+                Console.WriteLine(ex.Message);
             }
 
         }
