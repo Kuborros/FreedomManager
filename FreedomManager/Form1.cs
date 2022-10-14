@@ -175,7 +175,7 @@ namespace FreedomManager
 
         public bool DownloadMod(Uri url, string name, string author)
         {
-            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install " + name + " by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name.Replace("%20", " ") + "\" by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                     WebClient client = new WebClient();
