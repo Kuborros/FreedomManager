@@ -27,6 +27,8 @@ namespace FreedomManager
 
         public FreedomManager(string[] args)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             InitializeComponent();
             rootDir = typeof(FreedomManager).Assembly.Location.Replace("FreedomManager.exe", "");
             Directory.SetCurrentDirectory(rootDir);
