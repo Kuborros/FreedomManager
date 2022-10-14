@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
-using System.Reflection.Emit;
-using System.Threading;
 using System.Windows.Forms;
 using File = System.IO.File;
 
@@ -34,7 +32,7 @@ namespace FreedomManager
             Directory.SetCurrentDirectory(rootDir);
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
-            melonPresent = Directory.Exists("MLLoader\\Mods");
+            melonPresent = Directory.Exists("MLLoader");
 
             if (!fp2Found)
             {
@@ -66,6 +64,7 @@ namespace FreedomManager
             if (melonPresent)
             {
                 treeView1.Nodes.Add("External loader mods (Melons):");
+                melonButton.Text = "Uninstall MelonLoader Compat";
                 MelonScan();
             }
 
@@ -147,7 +146,7 @@ namespace FreedomManager
                     treeView1.Nodes[0].Expand();
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -168,7 +167,7 @@ namespace FreedomManager
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -181,8 +180,8 @@ namespace FreedomManager
             {
                 WebClient client = new WebClient();
                 client.DownloadFile(url, "tempmod.zip");
-                    InstallMod("tempmod.zip", CheckArchive("tempmod.zip"));
-                    File.Delete("tempmod.zip");
+                InstallMod("tempmod.zip", CheckArchive("tempmod.zip"));
+                File.Delete("tempmod.zip");
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -380,13 +379,26 @@ namespace FreedomManager
                 ZipFile.ExtractToDirectory("Melon.zip", ".");
                 File.Delete("Melon.zip");
 
-                MessageBox.Show(this, "MelonLoader plugin installed!.\n\n" +
+                MessageBox.Show(this, "MelonLoader plugin installed!\n\n" +
                 "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = true;
                 DirectoryScan();
                 treeView1.Nodes.Add("External loader mods (Melons):");
+                MelonScan();
+                melonButton.Text = "Uninstall MelonLoader Compat";
+            } else
+            {
+                Directory.Delete("BepInEx\\plugins\\BepInEx.MelonLoader.Loader",true);
+                Directory.Delete("MLLoader", true);
+
+                MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
+                "",
+                Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                melonPresent = true;
+                melonButton.Text = "Install MelonLoader Compat";
             }
         }
 
