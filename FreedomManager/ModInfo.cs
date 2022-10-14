@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FreedomManager
 {
-    internal class ModInfo
+    public class ModInfo
     {
 
     }
