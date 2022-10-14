@@ -31,9 +31,10 @@ namespace FreedomManager
         {
             InitializeComponent();
             rootDir = typeof(FreedomManager).Assembly.Location.Replace("FreedomManager.exe", "");
-            bepisPresent = File.Exists(rootDir + "winhttp.dll");
-            fp2Found = File.Exists(rootDir + "FP2.exe");
-            melonPresent = Directory.Exists(rootDir + "MLLoader\\Mods");
+            Directory.SetCurrentDirectory(rootDir);
+            bepisPresent = File.Exists("winhttp.dll");
+            fp2Found = File.Exists("FP2.exe");
+            melonPresent = Directory.Exists("MLLoader\\Mods");
 
             if (!fp2Found)
             {
@@ -126,7 +127,7 @@ namespace FreedomManager
 
         public void DirectoryScan()
         {
-            String dir = rootDir + "BepInEx\\plugins";
+            String dir = "BepInEx\\plugins";
             try
             {
                 treeView1.Nodes[1].Nodes.Clear();
@@ -153,7 +154,7 @@ namespace FreedomManager
         }
         public void MelonScan()
         {
-            String dir = rootDir + "MLLoader\\Mods";
+            String dir = "MLLoader\\Mods";
             try
             {
                 treeView1.Nodes[2].Nodes.Clear();
@@ -178,10 +179,10 @@ namespace FreedomManager
             DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name.Replace("%20", " ") + "\" by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                    WebClient client = new WebClient();
-                    client.DownloadFile(url, "tempmod.zip");
-                    InstallMod(rootDir + "tempmod.zip", CheckArchive(rootDir + "tempmod.zip"));
-                    File.Delete(rootDir + "tempmod.zip");
+                WebClient client = new WebClient();
+                client.DownloadFile(url, "tempmod.zip");
+                    InstallMod("tempmod.zip", CheckArchive("tempmod.zip"));
+                    File.Delete("tempmod.zip");
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -202,16 +203,16 @@ namespace FreedomManager
 
         private void setup_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(rootDir + "winhttp.dll"))
+            if (!File.Exists("winhttp.dll"))
             {
                 try
                 {
                     WebClient client = new WebClient();
-                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), rootDir + "BepInEx.zip");
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
                     //TODO: Check download?
-                    DeleteFilesPresentInZip(rootDir + "BepInEx.zip", ArchiveType.BepinDir);
-                    ZipFile.ExtractToDirectory(rootDir + "BepInEx.zip", rootDir);
-                    File.Delete(rootDir + "BepInEx.zip");
+                    DeleteFilesPresentInZip("BepInEx.zip", ArchiveType.BepinDir);
+                    ZipFile.ExtractToDirectory("BepInEx.zip", rootDir);
+                    File.Delete("BepInEx.zip");
 
                     MessageBox.Show(this, "BepInEx installed!.\n\n" +
                     "The game is now ready for modding.",
@@ -228,7 +229,7 @@ namespace FreedomManager
             }
             else
             {
-                File.Delete(rootDir + "winhttp.dll");
+                File.Delete("winhttp.dll");
                 bepisPresent = false;
 
                 MessageBox.Show(this, "BepInEx hook removed!.\n\n" +
@@ -274,7 +275,7 @@ namespace FreedomManager
                         try
                         {
                             DeleteFilesPresentInZip(file, ArchiveType.PluginDir);
-                            ZipFile.ExtractToDirectory(file, rootDir + "BepInEx");
+                            ZipFile.ExtractToDirectory(file, "BepInEx");
                             MessageBox.Show(this, "Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             DirectoryScan();
@@ -292,7 +293,8 @@ namespace FreedomManager
                         try
                         {
                             DeleteFilesPresentInZip(file, ArchiveType.MelonDir);
-                            ZipFile.ExtractToDirectory(file, rootDir + "MLLoader\\Mods");
+                            Directory.CreateDirectory("MLLoader");
+                            ZipFile.ExtractToDirectory(file, "MLLoader");
                             MessageBox.Show(this, "Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             DirectoryScan();
@@ -325,7 +327,7 @@ namespace FreedomManager
         private void refresh_Click(object sender, EventArgs e)
         {
             DirectoryScan();
-            melonPresent = Directory.Exists(rootDir + "MLLoader\\Mods");
+            melonPresent = Directory.Exists("MLLoader\\Mods");
             if (melonPresent) MelonScan();
         }
 
@@ -340,17 +342,17 @@ namespace FreedomManager
                     {
                         case ArchiveType.BepinDir:
                             {
-                                File.Delete(rootDir + zipArchiveEntry.FullName);
+                                File.Delete(zipArchiveEntry.FullName);
                                 break;
                             }
                         case ArchiveType.PluginDir:
                             {
-                                File.Delete(rootDir + "BepInEx\\" + zipArchiveEntry.FullName);
+                                File.Delete("BepInEx\\" + zipArchiveEntry.FullName);
                                 break;
                             }
                         case ArchiveType.MelonDir:
                             {
-                                File.Delete(rootDir + "MLLoader\\" + zipArchiveEntry.FullName);
+                                File.Delete("MLLoader\\" + zipArchiveEntry.FullName);
                                 break;
                             }
                         default:
@@ -373,10 +375,10 @@ namespace FreedomManager
             if (!melonPresent)
             {
                 WebClient client = new WebClient();
-                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), rootDir + "Melon.zip");
-                DeleteFilesPresentInZip(rootDir + "Melon.zip", ArchiveType.BepinDir);
-                ZipFile.ExtractToDirectory(rootDir + "Melon.zip", ".");
-                File.Delete(rootDir + "Melon.zip");
+                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), "Melon.zip");
+                DeleteFilesPresentInZip("Melon.zip", ArchiveType.BepinDir);
+                ZipFile.ExtractToDirectory("Melon.zip", ".");
+                File.Delete("Melon.zip");
 
                 MessageBox.Show(this, "MelonLoader plugin installed!.\n\n" +
                 "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
@@ -401,7 +403,7 @@ namespace FreedomManager
                 {
                     using (var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
                     {
-                        string applicationLocation = rootDir + "FreedomManager.exe";
+                        string applicationLocation = "FreedomManager.exe";
 
                         Console.WriteLine(applicationLocation);
 
