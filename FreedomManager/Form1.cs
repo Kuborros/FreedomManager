@@ -1,10 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 using File = System.IO.File;
 
 namespace FreedomManager
@@ -28,6 +30,9 @@ namespace FreedomManager
         public FreedomManager(string[] args)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            this.DragDrop += new DragEventHandler(this.FM_DragDrop);
+            this.DragEnter += new DragEventHandler(this.FM_DragEnter);
 
             InitializeComponent();
             rootDir = typeof(FreedomManager).Assembly.Location.Replace("FreedomManager.exe", "");
@@ -453,6 +458,31 @@ namespace FreedomManager
             }
         }
 
+        private void FM_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
 
+        private void FM_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                try
+                {
+                    InstallMod(files[0], CheckArchive(files[0]));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
     }
 }
