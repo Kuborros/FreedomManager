@@ -110,23 +110,23 @@ namespace FreedomManager
             {
                 using (Stream stream = File.OpenRead(path))
                 using (var reader = ReaderFactory.Open(stream))
-                while (reader.MoveToNextEntry())
+                    while (reader.MoveToNextEntry())
                     {
-                    Console.WriteLine(reader.Entry.Key.ToLower());
-                    if (reader.Entry.Key.ToLower() == "bepinex/")
-                    {
-                        return ArchiveType.BepinDir;
+                        Console.WriteLine(reader.Entry.Key.ToLower());
+                        if (reader.Entry.Key.ToLower() == "bepinex/")
+                        {
+                            return ArchiveType.BepinDir;
+                        }
+                        if (reader.Entry.Key.ToLower() == "plugins/")
+                        {
+                            return ArchiveType.PluginDir;
+                        }
+                        if (reader.Entry.Key.ToLower() == "mods/")
+                        {
+                            return ArchiveType.MelonDir;
+                        }
                     }
-                    if (reader.Entry.Key.ToLower() == "plugins/")
-                    {
-                        return ArchiveType.PluginDir;
-                    }
-                    if (reader.Entry.Key.ToLower() == "mods/")
-                    {
-                        return ArchiveType.MelonDir;
-                    }
-                }
-            } 
+            }
             else if (File.Exists(path) && Path.GetExtension(path) == ".7z")
             {
                 using (Stream stream = File.OpenRead(path))
@@ -205,10 +205,23 @@ namespace FreedomManager
             DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name.Replace("%20", " ") + "\" by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                WebClient client = new WebClient();
-                client.DownloadFile(url, "tempmod.zip");
-                InstallMod("tempmod.zip", CheckArchive("tempmod.zip"));
-                File.Delete("tempmod.zip");
+                try
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        client.OpenRead(url);
+                        string format = client.ResponseHeaders.Get("Content-Type").Split('/')[1];
+                        string filename = "tempmod." + format;
+                        client.DownloadFile(url, filename);
+                        InstallMod(filename, CheckArchive(filename));
+                        File.Delete(filename);
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -330,16 +343,10 @@ namespace FreedomManager
                         break;
                     }
                 case ArchiveType.None:
-                    {
-                        MessageBox.Show("Provided archive is invalid!.\n\n" +
-                        "Please ensure the archive has proper directory structure, as well as containing a BepInEx plugin.",
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                        break;
-                    }
                 default:
                     {
                         MessageBox.Show("Provided archive is invalid!.\n\n" +
-                        "Please ensure the archive has proper directory structure, as well as containing a BepInEx plugin.",
+                        "Please ensure the archive has proper directory structure, as well as contains a BepInEx/MelonLoader plugin.",
                         Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         break;
                     }
@@ -357,7 +364,8 @@ namespace FreedomManager
                     path = "BepInEX";
                     break;
             }
-            if (Path.GetExtension(file) != ".7z") { 
+            if (Path.GetExtension(file) != ".7z")
+            {
                 using (Stream stream = File.OpenRead(file))
                 using (var reader = ReaderFactory.Open(stream))
                 {
@@ -374,7 +382,8 @@ namespace FreedomManager
                         }
                     }
                 }
-            } else
+            }
+            else
             {
                 using (Stream stream = File.OpenRead(file))
                 using (var reader = SevenZipArchive.Open(stream))
@@ -418,9 +427,10 @@ namespace FreedomManager
                 treeView1.Nodes.Add("External loader mods (Melons):");
                 MelonScan();
                 melonButton.Text = "Uninstall MelonLoader Compat";
-            } else
+            }
+            else
             {
-                Directory.Delete("BepInEx\\plugins\\BepInEx.MelonLoader.Loader",true);
+                Directory.Delete("BepInEx\\plugins\\BepInEx.MelonLoader.Loader", true);
                 Directory.Delete("MLLoader", true);
 
                 MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
@@ -446,7 +456,7 @@ namespace FreedomManager
                 {
                     using (var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
                     {
-                        string applicationLocation = "FreedomManager.exe";
+                        string applicationLocation = typeof(FreedomManager).Assembly.Location;
 
                         Console.WriteLine(applicationLocation);
 
@@ -495,7 +505,8 @@ namespace FreedomManager
 
         private void FM_DragDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 try
                 {
