@@ -1,12 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 using File = System.IO.File;
 
 namespace FreedomManager
@@ -43,9 +41,9 @@ namespace FreedomManager
 
             if (!fp2Found)
             {
-                MessageBox.Show(this, "Freedom Planet 2 not Found!.\n\n" +
+                MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 savePlay.Hide();
                 setup.Hide();
                 handlerButton.Hide();
@@ -54,9 +52,9 @@ namespace FreedomManager
 
             if (fp2Found && !bepisPresent)
             {
-                MessageBox.Show(this, "BepInEx not Found!.\n\n" +
+                MessageBox.Show("BepInEx not Found!.\n\n" +
                         "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
             else setup.Text = "Uninstall BepInEx";
 
@@ -264,15 +262,15 @@ namespace FreedomManager
                         {
                             DeleteFilesPresentInZip(file, ArchiveType.BepinDir);
                             ZipFile.ExtractToDirectory(file, rootDir);
-                            MessageBox.Show(this, "Mod Unpacked!.",
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Mod Unpacked!.",
+                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(this, "Unpacking failed!.\n\n" +
+                            MessageBox.Show("Unpacking failed!.\n\n" +
                             "Error info: " + ex.Message,
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                         break;
                     }
@@ -282,15 +280,15 @@ namespace FreedomManager
                         {
                             DeleteFilesPresentInZip(file, ArchiveType.PluginDir);
                             ZipFile.ExtractToDirectory(file, "BepInEx");
-                            MessageBox.Show(this, "Mod Unpacked!.",
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Mod Unpacked!.",
+                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show(this, "Unpacking failed!.\n\n" +
                             "Error info: " + ex.Message,
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                         break;
                     }
@@ -301,30 +299,30 @@ namespace FreedomManager
                             DeleteFilesPresentInZip(file, ArchiveType.MelonDir);
                             Directory.CreateDirectory("MLLoader");
                             ZipFile.ExtractToDirectory(file, "MLLoader");
-                            MessageBox.Show(this, "Mod Unpacked!.",
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Mod Unpacked!.",
+                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(this, "Unpacking failed!.\n\n" +
+                            MessageBox.Show("Unpacking failed!.\n\n" +
                             "Error info: " + ex.Message,
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                         break;
                     }
                 case ArchiveType.None:
                     {
-                        MessageBox.Show(this, "Provided archive is invalid!.\n\n" +
+                        MessageBox.Show("Provided archive is invalid!.\n\n" +
                         "Please ensure the archive has proper directory structure, as well as containing a BepInEx plugin.",
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         break;
                     }
                 default:
                     {
-                        MessageBox.Show(this, "Provided archive is invalid!.\n\n" +
+                        MessageBox.Show("Provided archive is invalid!.\n\n" +
                         "Please ensure the archive has proper directory structure, as well as containing a BepInEx plugin.",
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         break;
                     }
             }
@@ -486,3 +484,5 @@ namespace FreedomManager
         }
     }
 }
+
+
