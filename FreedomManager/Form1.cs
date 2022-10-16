@@ -1,8 +1,11 @@
 ﻿using Microsoft.Win32;
+using SharpCompress.Archives;
+using SharpCompress.Archives.SevenZip;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Windows.Forms;
 using File = System.IO.File;
@@ -29,8 +32,8 @@ namespace FreedomManager
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            this.DragDrop += new DragEventHandler(this.FM_DragDrop);
-            this.DragEnter += new DragEventHandler(this.FM_DragEnter);
+            DragDrop += new DragEventHandler(FM_DragDrop);
+            DragEnter += new DragEventHandler(FM_DragEnter);
 
             InitializeComponent();
             rootDir = typeof(FreedomManager).Assembly.Location.Replace("FreedomManager.exe", "");
@@ -103,28 +106,47 @@ namespace FreedomManager
 
         public ArchiveType CheckArchive(String path)
         {
-            if (File.Exists(path) && Path.GetExtension(path) == ".zip")
+            if (File.Exists(path) && (Path.GetExtension(path) == ".zip" || Path.GetExtension(path) == ".rar"))
             {
-                ZipArchive zipArchive = ZipFile.OpenRead(path);
-                foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
-                {
-                    if (zipArchiveEntry.FullName.ToLower() == "bepinex/")
+                using (Stream stream = File.OpenRead(path))
+                using (var reader = ReaderFactory.Open(stream))
+                while (reader.MoveToNextEntry())
                     {
-                        zipArchive.Dispose();
+                    Console.WriteLine(reader.Entry.Key.ToLower());
+                    if (reader.Entry.Key.ToLower() == "bepinex/")
+                    {
                         return ArchiveType.BepinDir;
                     }
-                    if (zipArchiveEntry.FullName.ToLower() == "plugins/")
+                    if (reader.Entry.Key.ToLower() == "plugins/")
                     {
-                        zipArchive.Dispose();
                         return ArchiveType.PluginDir;
                     }
-                    if (zipArchiveEntry.FullName.ToLower() == "mods/")
+                    if (reader.Entry.Key.ToLower() == "mods/")
                     {
-                        zipArchive.Dispose();
                         return ArchiveType.MelonDir;
                     }
                 }
-                zipArchive.Dispose();
+            } 
+            else if (File.Exists(path) && Path.GetExtension(path) == ".7z")
+            {
+                using (Stream stream = File.OpenRead(path))
+                using (var reader = SevenZipArchive.Open(stream))
+                    foreach (SevenZipArchiveEntry entry in reader.Entries)
+                    {
+                        Console.WriteLine(entry.Key.ToLower());
+                        if (entry.Key.ToLower() == "bepinex")
+                        {
+                            return ArchiveType.BepinDir;
+                        }
+                        if (entry.Key.ToLower() == "plugins")
+                        {
+                            return ArchiveType.PluginDir;
+                        }
+                        if (entry.Key.ToLower() == "mods")
+                        {
+                            return ArchiveType.MelonDir;
+                        }
+                    }
             }
             return ArchiveType.None;
         }
@@ -214,8 +236,7 @@ namespace FreedomManager
                     WebClient client = new WebClient();
                     client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
                     //TODO: Check download?
-                    DeleteFilesPresentInZip("BepInEx.zip", ArchiveType.BepinDir);
-                    ZipFile.ExtractToDirectory("BepInEx.zip", rootDir);
+                    ExtractMod("BepInEx.zip", ArchiveType.BepinDir);
                     File.Delete("BepInEx.zip");
 
                     MessageBox.Show(this, "BepInEx installed!.\n\n" +
@@ -260,8 +281,7 @@ namespace FreedomManager
                     {
                         try
                         {
-                            DeleteFilesPresentInZip(file, ArchiveType.BepinDir);
-                            ZipFile.ExtractToDirectory(file, rootDir);
+                            ExtractMod(file, ArchiveType.BepinDir);
                             MessageBox.Show("Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
@@ -278,8 +298,7 @@ namespace FreedomManager
                     {
                         try
                         {
-                            DeleteFilesPresentInZip(file, ArchiveType.PluginDir);
-                            ZipFile.ExtractToDirectory(file, "BepInEx");
+                            ExtractMod(file, ArchiveType.PluginDir);
                             MessageBox.Show("Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
@@ -296,9 +315,8 @@ namespace FreedomManager
                     {
                         try
                         {
-                            DeleteFilesPresentInZip(file, ArchiveType.MelonDir);
                             Directory.CreateDirectory("MLLoader");
-                            ZipFile.ExtractToDirectory(file, "MLLoader");
+                            ExtractMod(file, ArchiveType.MelonDir);
                             MessageBox.Show("Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
@@ -327,6 +345,53 @@ namespace FreedomManager
                     }
             }
         }
+        private void ExtractMod(string file, ArchiveType type)
+        {
+            string path = ".";
+            switch (type)
+            {
+                case ArchiveType.MelonDir:
+                    path = "MLLoader";
+                    break;
+                case ArchiveType.PluginDir:
+                    path = "BepInEX";
+                    break;
+            }
+            if (Path.GetExtension(file) != ".7z") { 
+                using (Stream stream = File.OpenRead(file))
+                using (var reader = ReaderFactory.Open(stream))
+                {
+                    while (reader.MoveToNextEntry())
+                    {
+                        if (!reader.Entry.IsDirectory)
+                        {
+                            Console.WriteLine(reader.Entry.Key);
+                            reader.WriteEntryToDirectory(path, new ExtractionOptions()
+                            {
+                                ExtractFullPath = true,
+                                Overwrite = true
+                            });
+                        }
+                    }
+                }
+            } else
+            {
+                using (Stream stream = File.OpenRead(file))
+                using (var reader = SevenZipArchive.Open(stream))
+                    foreach (SevenZipArchiveEntry entry in reader.Entries)
+                    {
+                        if (!entry.IsDirectory)
+                        {
+                            Console.WriteLine(entry.Key);
+                            entry.WriteToDirectory(path, new ExtractionOptions()
+                            {
+                                ExtractFullPath = true,
+                                Overwrite = true
+                            });
+                        }
+                    }
+            }
+        }
 
         private void refresh_Click(object sender, EventArgs e)
         {
@@ -335,53 +400,13 @@ namespace FreedomManager
             if (melonPresent) MelonScan();
         }
 
-        private void DeleteFilesPresentInZip(String path, ArchiveType type)
-        {
-            ZipArchive zipArchive = ZipFile.OpenRead(path);
-            foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
-            {
-                try
-                {
-                    switch (type)
-                    {
-                        case ArchiveType.BepinDir:
-                            {
-                                File.Delete(zipArchiveEntry.FullName);
-                                break;
-                            }
-                        case ArchiveType.PluginDir:
-                            {
-                                File.Delete("BepInEx\\" + zipArchiveEntry.FullName);
-                                break;
-                            }
-                        case ArchiveType.MelonDir:
-                            {
-                                File.Delete("MLLoader\\" + zipArchiveEntry.FullName);
-                                break;
-                            }
-                        default:
-                            {
-                                break;
-                            }
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-            zipArchive.Dispose();
-        }
-
         private void melonButton_Click(object sender, EventArgs e)
         {
             if (!melonPresent)
             {
                 WebClient client = new WebClient();
                 client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), "Melon.zip");
-                DeleteFilesPresentInZip("Melon.zip", ArchiveType.BepinDir);
-                ZipFile.ExtractToDirectory("Melon.zip", ".");
+                ExtractMod("Melon.zip", ArchiveType.BepinDir);
                 File.Delete("Melon.zip");
 
                 MessageBox.Show(this, "MelonLoader plugin installed!\n\n" +
