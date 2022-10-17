@@ -4,16 +4,11 @@ using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Pipes;
 using System.Linq;
 using System.Net;
-using System.Reflection.Emit;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using File = System.IO.File;
 
 namespace FreedomManager
@@ -23,6 +18,7 @@ namespace FreedomManager
         bool bepisPresent = false;
         bool fp2Found = false;
         bool melonPresent = false;
+        bool exists = false;
         string rootDir = "";
 
         public enum ArchiveType
@@ -42,9 +38,8 @@ namespace FreedomManager
             DragEnter += new DragEventHandler(FM_DragEnter);
 
             InitializeComponent();
-            rootDir = typeof(FreedomManager).Assembly.Location.Replace("FreedomManager.exe", "");
-            bool exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
-            Console.WriteLine(exists.ToString());
+            rootDir = typeof(FreedomManager).Assembly.Location.Replace(Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location), "");
+            exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
             Directory.SetCurrentDirectory(rootDir);
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
@@ -112,7 +107,7 @@ namespace FreedomManager
 
             if (exists)
             {
-                if (args.Length < 2) MessageBox.Show("Only one instance can be running at the time!","Warning",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (args.Length < 2) MessageBox.Show("Only one instance can be running at the time!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Process.GetCurrentProcess().Kill();
             }
         }
