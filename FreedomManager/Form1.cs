@@ -4,10 +4,16 @@ using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Pipes;
+using System.Linq;
 using System.Net;
+using System.Reflection.Emit;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using File = System.IO.File;
 
 namespace FreedomManager
@@ -37,6 +43,8 @@ namespace FreedomManager
 
             InitializeComponent();
             rootDir = typeof(FreedomManager).Assembly.Location.Replace("FreedomManager.exe", "");
+            bool exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+            Console.WriteLine(exists.ToString());
             Directory.SetCurrentDirectory(rootDir);
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
@@ -102,6 +110,11 @@ namespace FreedomManager
                 Console.WriteLine(ex.Message);
             }
 
+            if (exists)
+            {
+                if (args.Length < 2) MessageBox.Show("Only one instance can be running at the time!","Warning",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Process.GetCurrentProcess().Kill();
+            }
         }
 
         public ArchiveType CheckArchive(String path)
