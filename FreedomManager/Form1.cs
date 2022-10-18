@@ -186,20 +186,23 @@ namespace FreedomManager
                 foreach (string d in Directory.GetDirectories(dir))
                 {
                     string modname = Path.GetFileName(d);
-                    foreach (string js in Directory.GetFiles(d))
+                    if (modname != "BepInEx.MelonLoader.Loader")
                     {
-                        if (Path.GetFileName(js) == "modinfo.json")
+                        foreach (string js in Directory.GetFiles(d))
                         {
-                            try
+                            if (Path.GetFileName(js) == "modinfo.json")
                             {
-                                ModInfo info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(js));
-                                modname = info.Name + " " + info.Version;
+                                try
+                                {
+                                    ModInfo info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(js));
+                                    modname = info.Name + " " + info.Version;
+                                }
+                                catch (Exception ex) { Console.WriteLine(ex); }
                             }
-                            catch (Exception ex) { Console.WriteLine(ex); }
                         }
+                        treeView1.Nodes[0].Nodes.Add(Path.GetFileName(d), modname);
+                        treeView1.Nodes[0].Expand();
                     }
-                    treeView1.Nodes[0].Nodes.Add(Path.GetFileName(d), modname);
-                    treeView1.Nodes[0].Expand();
                 }
             }
             catch (Exception ex)
@@ -602,7 +605,7 @@ namespace FreedomManager
 
         private void uninstallToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string node = treeView1.SelectedNode.Text;
+            string node = treeView1.SelectedNode.Name;
 
             try
             {
