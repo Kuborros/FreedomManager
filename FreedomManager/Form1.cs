@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Windows.Forms;
 using File = System.IO.File;
 
@@ -233,9 +234,45 @@ namespace FreedomManager
             }
         }
 
-        public bool DownloadMod(Uri url, string name, string author)
+        public bool DownloadMod(Uri url, string type, string id)
         {
-            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name.Replace("%20", " ") + "\" by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
+            string name = "Unknown", author = "Unknown", version = "1.0.0";
+            string uri = string.Format("https://api.gamebanana.com/Core/Item/Data?itemid={0}&itemtype={1}&fields=name,Updates().aGetLatestUpdates(),Credits().aAuthors()", id, type);
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    string response = client.DownloadString(uri);
+                    using (JsonDocument document = JsonDocument.Parse(response))
+                    {
+                        if (document.RootElement.GetType().Equals(typeof(JsonObject))) {
+                            MessageBox.Show(document.RootElement.GetProperty("Error").GetString());
+                            return false;
+                        }
+                        JsonElement jName = document.RootElement[0];
+                        name = jName.GetString();
+                        JsonElement jUpdate = document.RootElement[1];
+                        try { 
+                        version = jUpdate[0].GetProperty("_sVersion").GetString();
+                        } catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                        JsonElement jAuthor = document.RootElement[2];
+                        author = jAuthor[0][0].ToString();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+
+            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\" by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 try
