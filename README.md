@@ -1,4 +1,4 @@
-# Freedom Installer
+# FreedomManager
 
 A simple mod manager capable of setting up BepInEx, as well as installing all of my current mods.
 
