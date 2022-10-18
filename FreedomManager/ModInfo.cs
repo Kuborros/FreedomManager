@@ -21,12 +21,13 @@ namespace FreedomManager
         public string Version { get; set; }
         public string Loader { get; set; }
         public bool? HasAssets { get; set; }
+        public int? GBID { get; set; }
         public ArchiveType? ArchiveType { get; set; }
 
 
 
         [JsonConstructor]
-        public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ArchiveType? archiveType)
+        public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ArchiveType? archiveType, int? gBID)
         {
             Name = name;
             Author = author;
@@ -47,6 +48,12 @@ namespace FreedomManager
                 ArchiveType = FreedomManager.ArchiveType.BepinDir;
             }
             else ArchiveType = archiveType;
+
+            if(!gBID.HasValue)
+            {
+                GBID = 0;
+            } 
+            else GBID = gBID;
         }
 
         public ModInfo(string name, ArchiveType archiveType)
@@ -62,6 +69,7 @@ namespace FreedomManager
 
             HasAssets = true;
             ArchiveType = archiveType;
+            GBID = 0;
         }
 
     }
