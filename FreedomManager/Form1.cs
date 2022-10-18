@@ -470,7 +470,7 @@ namespace FreedomManager
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = false;
-                treeView1.Nodes.RemoveByKey("melonmod");
+                treeView1.Nodes.RemoveByKey("melonmods");
                 melonButton.Text = "Install MelonLoader Compat";
                 DirectoryScan();
             }
