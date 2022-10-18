@@ -125,15 +125,15 @@ namespace FreedomManager
                     while (reader.MoveToNextEntry())
                     {
                         Console.WriteLine(reader.Entry.Key.ToLower());
-                        if (reader.Entry.Key.ToLower() == "bepinex/")
+                        if (reader.Entry.Key.ToLower() == "bepinex/" || reader.Entry.Key.ToLower() == "bepinex")
                         {
                             return ArchiveType.BepinDir;
                         }
-                        if (reader.Entry.Key.ToLower() == "plugins/")
+                        if (reader.Entry.Key.ToLower() == "plugins/" || reader.Entry.Key.ToLower() == "plugins")
                         {
                             return ArchiveType.PluginDir;
                         }
-                        if (reader.Entry.Key.ToLower() == "mods/")
+                        if (reader.Entry.Key.ToLower() == "mods/" || reader.Entry.Key.ToLower() == "mods")
                         {
                             return ArchiveType.MelonDir;
                         }
@@ -635,7 +635,6 @@ namespace FreedomManager
                 Console.WriteLine(ex.Message);
             }
             DirectoryScan();
-
         }
     }
 }
