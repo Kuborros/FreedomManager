@@ -456,6 +456,7 @@ namespace FreedomManager
 
                 melonPresent = true;
                 DirectoryScan();
+                treeView1.Nodes.RemoveByKey("melonmods");
                 treeView1.Nodes.Add("melonmods", "MelonLoader mods:");
                 MelonScan();
                 melonButton.Text = "Uninstall MelonLoader Compat";
