@@ -6,17 +6,12 @@ using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
-using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Xml.Linq;
 using File = System.IO.File;
 
 namespace FreedomManager
@@ -72,9 +67,9 @@ namespace FreedomManager
             }
             else setup.Text = "Uninstall BepInEx";
 
-            treeView1.Nodes.Add("bepinmods","Mods:");
-            treeView1.Nodes.Add("bepindllmods","Mods (Loose DLL):");
-            
+            treeView1.Nodes.Add("bepinmods", "Mods:");
+            treeView1.Nodes.Add("bepindllmods", "Mods (Loose DLL):");
+
 
             if (bepisPresent)
             {
@@ -83,7 +78,7 @@ namespace FreedomManager
 
             if (melonPresent)
             {
-                treeView1.Nodes.Add("melonmods","MelonLoader mods:");
+                treeView1.Nodes.Add("melonmods", "MelonLoader mods:");
                 melonButton.Text = "Uninstall MelonLoader Compat";
                 MelonScan();
             }
@@ -184,7 +179,7 @@ namespace FreedomManager
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        treeView1.Nodes[1].Nodes.Add(modname,modname);
+                        treeView1.Nodes[1].Nodes.Add(modname, modname);
                         treeView1.Nodes[1].Expand();
                     }
                 }
@@ -195,14 +190,15 @@ namespace FreedomManager
                     {
                         if (Path.GetFileName(js) == "modinfo.json")
                         {
-                            try {
+                            try
+                            {
                                 ModInfo info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(js));
                                 modname = info.Name + " " + info.Version;
                             }
                             catch (Exception ex) { Console.WriteLine(ex); }
                         }
                     }
-                    treeView1.Nodes[0].Nodes.Add(Path.GetFileName(d),modname);
+                    treeView1.Nodes[0].Nodes.Add(Path.GetFileName(d), modname);
                     treeView1.Nodes[0].Expand();
                 }
             }
@@ -223,7 +219,7 @@ namespace FreedomManager
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        treeView1.Nodes[2].Nodes.Add(modname,modname);
+                        treeView1.Nodes[2].Nodes.Add(modname, modname);
                         treeView1.Nodes[2].Expand();
                     }
                 }
@@ -563,44 +559,45 @@ namespace FreedomManager
 
         private void infoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-                string node = treeView1.SelectedNode.Name;
-                ModInfo modInfo;
-                if (treeView1.SelectedNode.Parent == treeView1.Nodes[0] && File.Exists("BepInEx\\plugins\\" + node + "\\modinfo.json")) //Bepin mod with ModInfo
+            string node = treeView1.SelectedNode.Name;
+            ModInfo modInfo;
+            if (treeView1.SelectedNode.Parent == treeView1.Nodes[0] && File.Exists("BepInEx\\plugins\\" + node + "\\modinfo.json")) //Bepin mod with ModInfo
+            {
+                try
                 {
-                    try
-                    {
-                        modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText("BepInEx\\plugins\\" + node + "\\modinfo.json"));
-                    } 
-                    catch
-                    {
-                        modInfo = new ModInfo(node, ArchiveType.BepinDir); //In case .json reading fails, fallback to no modinfo method
-                    }
+                    modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText("BepInEx\\plugins\\" + node + "\\modinfo.json"));
                 }
-                else if (treeView1.SelectedNode.Parent == treeView1.Nodes[0]) //Bepin mod
+                catch
                 {
-                    modInfo = new ModInfo(node, ArchiveType.BepinDir);
+                    modInfo = new ModInfo(node, ArchiveType.BepinDir); //In case .json reading fails, fallback to no modinfo method
                 }
-                else if (treeView1.SelectedNode.Parent == treeView1.Nodes[1]) //Loose DLL bepin
+            }
+            else if (treeView1.SelectedNode.Parent == treeView1.Nodes[0]) //Bepin mod
+            {
+                modInfo = new ModInfo(node, ArchiveType.BepinDir);
+            }
+            else if (treeView1.SelectedNode.Parent == treeView1.Nodes[1]) //Loose DLL bepin
+            {
+                modInfo = new ModInfo(node, ArchiveType.DllDir);
+            }
+            else if (melonPresent)
+            {
+                if (treeView1.SelectedNode.Parent == treeView1.Nodes[2]) //Melon mod
                 {
-                    modInfo = new ModInfo(node, ArchiveType.DllDir);
-                }
-                else if (melonPresent) {
-                    if (treeView1.SelectedNode.Parent == treeView1.Nodes[2]) //Melon mod
-                    {
-                        modInfo = new ModInfo(node, ArchiveType.MelonDir);
-                    }
-                    else return;
+                    modInfo = new ModInfo(node, ArchiveType.MelonDir);
                 }
                 else return;
+            }
+            else return;
 
-                StringBuilder builder = new StringBuilder();
-                builder.Append("Name: ").AppendLine(modInfo.Name);
-                builder.Append("Version: ").AppendLine(modInfo.Version);
-                builder.Append("Author: ").AppendLine(modInfo.Author);
-                builder.Append("Used Loader: ").AppendLine(modInfo.Loader);
-                builder.Append("Uses mod_overrides: ").AppendLine((bool)modInfo.HasAssets ? "Yes" : "No");
+            StringBuilder builder = new StringBuilder();
+            builder.Append("Name: ").AppendLine(modInfo.Name);
+            builder.Append("Version: ").AppendLine(modInfo.Version);
+            builder.Append("Author: ").AppendLine(modInfo.Author);
+            builder.Append("Used Loader: ").AppendLine(modInfo.Loader);
+            builder.Append("Uses mod_overrides: ").AppendLine((bool)modInfo.HasAssets ? "Yes" : "No");
 
-                MessageBox.Show(this, builder.ToString(), "Mod information", MessageBoxButtons.OK);
+            MessageBox.Show(this, builder.ToString(), "Mod information", MessageBoxButtons.OK);
         }
 
         private void uninstallToolStripMenuItem_Click(object sender, EventArgs e)
@@ -620,14 +617,16 @@ namespace FreedomManager
                     {
                         File.Delete("BepInEx\\plugins\\" + node + ".dll");
                     }
-                    else if (melonPresent) {
+                    else if (melonPresent)
+                    {
                         if (treeView1.SelectedNode.Parent == treeView1.Nodes[2]) //Melon mod
                         {
                             File.Delete("MLLoader\\mods\\" + node + ".dll");
                         }
                     }
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

@@ -45,7 +45,8 @@ namespace FreedomManager
             if (!archiveType.HasValue)
             {
                 ArchiveType = FreedomManager.ArchiveType.BepinDir;
-            } else ArchiveType = archiveType;
+            }
+            else ArchiveType = archiveType;
         }
 
         public ModInfo(string name, ArchiveType archiveType)
