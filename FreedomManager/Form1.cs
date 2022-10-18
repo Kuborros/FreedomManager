@@ -214,7 +214,7 @@ namespace FreedomManager
         {
             string dir = "MLLoader\\Mods";
             try
-            {
+            {                
                 treeView1.Nodes[2].Nodes.Clear();
                 foreach (string f in Directory.GetFiles(dir))
                 {
@@ -437,7 +437,6 @@ namespace FreedomManager
         private void refresh_Click(object sender, EventArgs e)
         {
             DirectoryScan();
-            melonPresent = Directory.Exists("MLLoader\\Mods");
             if (melonPresent) MelonScan();
         }
 
