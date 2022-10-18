@@ -1,0 +1,68 @@
+﻿using System.Text.Json.Serialization;
+using static FreedomManager.FreedomManager;
+
+namespace FreedomManager
+{
+    /*
+    {
+	    "ManifestVer":1,
+	    "Name":"",
+	    "Author":"",
+	    "Version":"",
+	    "Loader":"",
+	    "HasAssets":false
+    }
+    */
+    internal class ModInfo
+    {
+        public int ManifestVer { get; set; }
+        public string Name { get; set; }
+        public string Author { get; set; }
+        public string Version { get; set; }
+        public string Loader { get; set; }
+        public bool? HasAssets { get; set; }
+        public ArchiveType? ArchiveType { get; set; }
+
+
+
+        [JsonConstructor]
+        public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ArchiveType? archiveType)
+        {
+            Name = name;
+            Author = author;
+            Version = version;
+
+            if (loader.ToLower() == "bepinex" || loader.ToLower() == "bepin") Loader = "BepInEx";
+            else if (loader.ToLower() == "melonloader" || loader.ToLower() == "melon") Loader = "MelonLoader";
+            else Loader = "Unknown";
+
+            if (!hasAssets.HasValue)
+            {
+                HasAssets = true;
+            }
+            else HasAssets = hasAssets;
+
+            if (!archiveType.HasValue)
+            {
+                ArchiveType = FreedomManager.ArchiveType.BepinDir;
+            } else ArchiveType = archiveType;
+        }
+
+        public ModInfo(string name, ArchiveType archiveType)
+        {
+            Name = name;
+            Author = "N/A";
+            Version = "N/A";
+
+            if (archiveType == FreedomManager.ArchiveType.BepinDir) Loader = "BepInEx";
+            else if (archiveType == FreedomManager.ArchiveType.PluginDir) Loader = "BepInEx (Loose DLL)";
+            else if (archiveType == FreedomManager.ArchiveType.MelonDir) Loader = "MelonLoader";
+            else Loader = "Unknown";
+
+            HasAssets = true;
+            ArchiveType = archiveType;
+        }
+
+    }
+
+}

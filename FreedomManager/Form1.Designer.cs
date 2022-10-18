@@ -28,16 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FreedomManager));
             this.savePlay = new System.Windows.Forms.Button();
             this.setup = new System.Windows.Forms.Button();
             this.exit = new System.Windows.Forms.Button();
             this.modInstall = new System.Windows.Forms.Button();
             this.modFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.refresh = new System.Windows.Forms.Button();
             this.melonButton = new System.Windows.Forms.Button();
             this.handlerButton = new System.Windows.Forms.Button();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // savePlay
@@ -85,13 +90,6 @@
             this.modFileDialog.DefaultExt = "zip";
             this.modFileDialog.Title = "Select mod to install.";
             // 
-            // treeView1
-            // 
-            this.treeView1.Location = new System.Drawing.Point(12, 12);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(487, 350);
-            this.treeView1.TabIndex = 5;
-            // 
             // refresh
             // 
             this.refresh.Location = new System.Drawing.Point(137, 368);
@@ -122,6 +120,37 @@
             this.handlerButton.UseVisualStyleBackColor = true;
             this.handlerButton.Click += new System.EventHandler(this.handlerButton_Click);
             // 
+            // treeView1
+            // 
+            this.treeView1.HideSelection = false;
+            this.treeView1.Location = new System.Drawing.Point(12, 12);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(487, 350);
+            this.treeView1.TabIndex = 5;
+            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.infoToolStripMenuItem,
+            this.uninstallToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(121, 48);
+            // 
+            // infoToolStripMenuItem
+            // 
+            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.infoToolStripMenuItem.Text = "Info";
+            this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
+            // 
+            // uninstallToolStripMenuItem
+            // 
+            this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.uninstallToolStripMenuItem.Text = "Uninstall";
+            this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.uninstallToolStripMenuItem_Click);
+            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -139,6 +168,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FreedomManager";
             this.Text = "FreedomManager";
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -149,10 +179,13 @@
         private System.Windows.Forms.Button exit;
         private System.Windows.Forms.Button modInstall;
         private System.Windows.Forms.OpenFileDialog modFileDialog;
-        private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Button refresh;
         private System.Windows.Forms.Button melonButton;
         private System.Windows.Forms.Button handlerButton;
+        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
     }
 }
 
