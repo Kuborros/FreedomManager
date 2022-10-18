@@ -469,7 +469,7 @@ namespace FreedomManager
                 "",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                melonPresent = true;
+                melonPresent = false;
                 melonButton.Text = "Install MelonLoader Compat";
                 DirectoryScan();
             }
