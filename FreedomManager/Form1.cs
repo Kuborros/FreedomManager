@@ -47,7 +47,7 @@ namespace FreedomManager
             Directory.SetCurrentDirectory(rootDir);
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
-            melonPresent = Directory.Exists("MLLoader");
+            melonPresent = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
 
             if (!fp2Found)
             {
@@ -126,15 +126,15 @@ namespace FreedomManager
                     while (reader.MoveToNextEntry())
                     {
                         Console.WriteLine(reader.Entry.Key.ToLower());
-                        if (reader.Entry.Key.ToLower() == "bepinex/" || reader.Entry.Key.ToLower() == "bepinex")
+                        if (reader.Entry.Key.ToLower().StartsWith("bepinex"))
                         {
                             return ArchiveType.BepinDir;
                         }
-                        if (reader.Entry.Key.ToLower() == "plugins/" || reader.Entry.Key.ToLower() == "plugins")
+                        if (reader.Entry.Key.ToLower().StartsWith("plugins"))
                         {
                             return ArchiveType.PluginDir;
                         }
-                        if (reader.Entry.Key.ToLower() == "mods/" || reader.Entry.Key.ToLower() == "mods")
+                        if (reader.Entry.Key.ToLower().StartsWith("mods"))
                         {
                             return ArchiveType.MelonDir;
                         }
@@ -147,15 +147,15 @@ namespace FreedomManager
                     foreach (SevenZipArchiveEntry entry in reader.Entries)
                     {
                         Console.WriteLine(entry.Key.ToLower());
-                        if (entry.Key.ToLower() == "bepinex")
+                        if (entry.Key.ToLower().StartsWith("bepinex"))
                         {
                             return ArchiveType.BepinDir;
                         }
-                        if (entry.Key.ToLower() == "plugins")
+                        if (entry.Key.ToLower().StartsWith("plugins"))
                         {
                             return ArchiveType.PluginDir;
                         }
-                        if (entry.Key.ToLower() == "mods")
+                        if (entry.Key.ToLower().StartsWith("mods"))
                         {
                             return ArchiveType.MelonDir;
                         }
@@ -167,7 +167,6 @@ namespace FreedomManager
         public void DirectoryScan()
         {
             string dir = "BepInEx\\plugins";
-            List<ModInfo> bepinMods = new List<ModInfo>();
             try
             {
                 treeView1.Nodes[1].Nodes.Clear();
@@ -350,9 +349,10 @@ namespace FreedomManager
 
         private void modInstall_Click(object sender, EventArgs e)
         {
-            modFileDialog.ShowDialog();
-            string file = modFileDialog.FileName;
-            InstallMod(file, CheckArchive(file));
+            if (modFileDialog.ShowDialog() == DialogResult.OK) {
+                string file = modFileDialog.FileName;
+                InstallMod(file, CheckArchive(file));
+            }
         }
 
         private void InstallMod(string file, ArchiveType type)
@@ -364,7 +364,7 @@ namespace FreedomManager
                         try
                         {
                             ExtractMod(file, ArchiveType.BepinDir);
-                            MessageBox.Show("Mod Unpacked!.",
+                            MessageBox.Show("Mod unpacked!",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
                         }
@@ -381,13 +381,13 @@ namespace FreedomManager
                         try
                         {
                             ExtractMod(file, ArchiveType.PluginDir);
-                            MessageBox.Show("Mod Unpacked!.",
+                            MessageBox.Show("Mod unpacked!",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(this, "Unpacking failed!.\n\n" +
+                            MessageBox.Show(this, "Unpacking failed!\n\n" +
                             "Error info: " + ex.Message,
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
@@ -399,13 +399,24 @@ namespace FreedomManager
                         {
                             Directory.CreateDirectory("MLLoader");
                             ExtractMod(file, ArchiveType.MelonDir);
-                            MessageBox.Show("Mod Unpacked!.",
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            DirectoryScan();
+                            if (melonPresent)
+                            {
+                                MessageBox.Show("MelonLoader mod unpacked!",
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                DirectoryScan();
+                                MelonScan();
+                            } 
+                            else
+                            {
+                                MessageBox.Show("MelonLoader mod unpacked!\n\nBut MelonLoader is not installed! Please install it before running Melon mods!",
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                            }
+
+
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Unpacking failed!.\n\n" +
+                            MessageBox.Show("Unpacking failed!\n\n" +
                             "Error info: " + ex.Message,
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
@@ -414,7 +425,7 @@ namespace FreedomManager
                 case ArchiveType.None:
                 default:
                     {
-                        MessageBox.Show("Provided archive is invalid!.\n\n" +
+                        MessageBox.Show("Provided archive is invalid!\n\n" +
                         "Please ensure the archive has proper directory structure, as well as contains a BepInEx/MelonLoader plugin.",
                         Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         break;
@@ -500,7 +511,7 @@ namespace FreedomManager
             else
             {
                 Directory.Delete("BepInEx\\plugins\\BepInEx.MelonLoader.Loader", true);
-                Directory.Delete("MLLoader", true);
+                //Directory.Delete("MLLoader", true);
 
                 MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
                 "",
