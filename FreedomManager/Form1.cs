@@ -126,15 +126,15 @@ namespace FreedomManager
                     while (reader.MoveToNextEntry())
                     {
                         Console.WriteLine(reader.Entry.Key.ToLower());
-                        if (reader.Entry.Key.ToLower() == "bepinex/" || reader.Entry.Key.ToLower() == "bepinex")
+                        if (reader.Entry.Key.ToLower().StartsWith("bepinex"))
                         {
                             return ArchiveType.BepinDir;
                         }
-                        if (reader.Entry.Key.ToLower() == "plugins/" || reader.Entry.Key.ToLower() == "plugins")
+                        if (reader.Entry.Key.ToLower().StartsWith("plugins"))
                         {
                             return ArchiveType.PluginDir;
                         }
-                        if (reader.Entry.Key.ToLower() == "mods/" || reader.Entry.Key.ToLower() == "mods")
+                        if (reader.Entry.Key.ToLower().StartsWith("mods"))
                         {
                             return ArchiveType.MelonDir;
                         }
@@ -147,15 +147,15 @@ namespace FreedomManager
                     foreach (SevenZipArchiveEntry entry in reader.Entries)
                     {
                         Console.WriteLine(entry.Key.ToLower());
-                        if (entry.Key.ToLower() == "bepinex")
+                        if (entry.Key.ToLower().StartsWith("bepinex"))
                         {
                             return ArchiveType.BepinDir;
                         }
-                        if (entry.Key.ToLower() == "plugins")
+                        if (entry.Key.ToLower().StartsWith("plugins"))
                         {
                             return ArchiveType.PluginDir;
                         }
-                        if (entry.Key.ToLower() == "mods")
+                        if (entry.Key.ToLower().StartsWith("mods"))
                         {
                             return ArchiveType.MelonDir;
                         }
@@ -167,7 +167,6 @@ namespace FreedomManager
         public void DirectoryScan()
         {
             string dir = "BepInEx\\plugins";
-            List<ModInfo> bepinMods = new List<ModInfo>();
             try
             {
                 treeView1.Nodes[1].Nodes.Clear();
@@ -350,9 +349,10 @@ namespace FreedomManager
 
         private void modInstall_Click(object sender, EventArgs e)
         {
-            modFileDialog.ShowDialog();
-            string file = modFileDialog.FileName;
-            InstallMod(file, CheckArchive(file));
+            if (modFileDialog.ShowDialog() == DialogResult.OK) {
+                string file = modFileDialog.FileName;
+                InstallMod(file, CheckArchive(file));
+            }
         }
 
         private void InstallMod(string file, ArchiveType type)
@@ -402,6 +402,18 @@ namespace FreedomManager
                             MessageBox.Show("Mod Unpacked!.",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
+
+                            if (melonPresent)
+                            {
+                                MelonScan();
+                            } 
+                            else
+                            {
+                                MessageBox.Show("Mod Unpacked!.",
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                            }
+
+
                         }
                         catch (Exception ex)
                         {
