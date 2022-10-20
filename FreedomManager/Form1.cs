@@ -47,7 +47,7 @@ namespace FreedomManager
             Directory.SetCurrentDirectory(rootDir);
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
-            melonPresent = Directory.Exists("MLLoader");
+            melonPresent = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
 
             if (!fp2Found)
             {
@@ -364,7 +364,7 @@ namespace FreedomManager
                         try
                         {
                             ExtractMod(file, ArchiveType.BepinDir);
-                            MessageBox.Show("Mod Unpacked!.",
+                            MessageBox.Show("Mod unpacked!",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
                         }
@@ -381,13 +381,13 @@ namespace FreedomManager
                         try
                         {
                             ExtractMod(file, ArchiveType.PluginDir);
-                            MessageBox.Show("Mod Unpacked!.",
+                            MessageBox.Show("Mod unpacked!",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             DirectoryScan();
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(this, "Unpacking failed!.\n\n" +
+                            MessageBox.Show(this, "Unpacking failed!\n\n" +
                             "Error info: " + ex.Message,
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
@@ -399,17 +399,16 @@ namespace FreedomManager
                         {
                             Directory.CreateDirectory("MLLoader");
                             ExtractMod(file, ArchiveType.MelonDir);
-                            MessageBox.Show("Mod Unpacked!.",
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            DirectoryScan();
-
                             if (melonPresent)
                             {
+                                MessageBox.Show("MelonLoader mod unpacked!",
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                DirectoryScan();
                                 MelonScan();
                             } 
                             else
                             {
-                                MessageBox.Show("Mod Unpacked!.",
+                                MessageBox.Show("MelonLoader mod unpacked!\n\nBut MelonLoader is not installed! Please install it before running Melon mods!",
                                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
 
@@ -417,7 +416,7 @@ namespace FreedomManager
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Unpacking failed!.\n\n" +
+                            MessageBox.Show("Unpacking failed!\n\n" +
                             "Error info: " + ex.Message,
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
@@ -426,7 +425,7 @@ namespace FreedomManager
                 case ArchiveType.None:
                 default:
                     {
-                        MessageBox.Show("Provided archive is invalid!.\n\n" +
+                        MessageBox.Show("Provided archive is invalid!\n\n" +
                         "Please ensure the archive has proper directory structure, as well as contains a BepInEx/MelonLoader plugin.",
                         Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         break;
