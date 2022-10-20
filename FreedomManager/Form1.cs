@@ -91,7 +91,7 @@ namespace FreedomManager
 
             try
             {
-                string[] gblink = args[1].Replace("fp2mm:", string.Empty).Split(',');
+                string[] gblink = args[1].Replace("fp2mm://", string.Empty).Replace("fp2mm:", string.Empty).Split(',');
                 if (gblink.Length == 1)
                 {
                     DownloadMod(new Uri(gblink[0]), "Unknown", "Unknown");
