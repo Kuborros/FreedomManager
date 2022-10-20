@@ -165,7 +165,10 @@
             this.Controls.Add(this.exit);
             this.Controls.Add(this.setup);
             this.Controls.Add(this.savePlay);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FreedomManager";
             this.Text = "FreedomManager";
             this.contextMenuStrip1.ResumeLayout(false);
