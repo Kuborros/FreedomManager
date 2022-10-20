@@ -511,7 +511,7 @@ namespace FreedomManager
             else
             {
                 Directory.Delete("BepInEx\\plugins\\BepInEx.MelonLoader.Loader", true);
-                Directory.Delete("MLLoader", true);
+                //Directory.Delete("MLLoader", true);
 
                 MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
                 "",
