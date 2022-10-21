@@ -18,7 +18,7 @@ From there you can use "Install Mod" button to select a zipfile to install.
 The files are checked for basic validity (containing a BepInEx folder in its root).  
 Mods using mod_overrides are also properly extracted.  
 
-Loader also offers a basic list of currently installed mods.  
+Loader also offers a basic list of currently installed mods. With the ability to view information about the mod and allows for mod removal via right-click context menu.  
 ![image](https://user-images.githubusercontent.com/33236735/197233273-1cc28b7e-05d7-423c-b721-283697d2c72b.png)  
 
 To install MelonLoader mods you must first install the compatibility layer via the `Install MelonLoader Compat` button.
