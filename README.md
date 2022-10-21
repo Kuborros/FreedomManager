@@ -6,6 +6,7 @@ A simple mod manager capable of setting up BepInEx, as well as installing all of
 
 To install the manager, copy the .exe from the downloaded zip to the main game directory.  
 You can find it from Steam, by right clicking on the game on the list, and then pressing "Manage > Browse local files".  
+
 ![xqB3yB7](https://user-images.githubusercontent.com/33236735/195651639-d54b74e7-ce74-486c-b094-a0fde05dbc81.png)
 
 .NET framework 4.8 is required for the loader to function. It is included by default in Windows 10 and above.  
