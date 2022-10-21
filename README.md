@@ -19,9 +19,10 @@ The files are checked for basic validity (containing a BepInEx folder in its roo
 Mods using mod_overrides are also properly extracted.  
 
 Loader also offers a basic list of currently installed mods.  
-![iBLoT3z](https://user-images.githubusercontent.com/33236735/195651573-765053cd-198b-4ea9-a616-e2df74df822a.png)
+![image](https://user-images.githubusercontent.com/33236735/197233273-1cc28b7e-05d7-423c-b721-283697d2c72b.png)  
 
-MelonLoader mods will be listed, but are not supported for installation.  
+To install MelonLoader mods you must first install the compatibility layer via the `Install MelonLoader Compat` button.
+You may also choose to register the URL Handler, which will allow you to install mods via GameBanana's 1-click integration.  
 
 ## Notes:
 
@@ -33,9 +34,7 @@ Additionally, here is the VirusTotal scan result: [Here](https://www.virustotal.
 
 ## For modders:
 
-This mod manager installs any bepinex mod as long as it has a proper directory structure, as recommended by BepInEx devs and gamebanana (so main directory of the zip maps to main game directory)  
-
-MelonLoader mods can be supported, however as of now every mod out there has different directory stucture in its zipfile, which complicates things.  
+This mod manager installs any BepInEx or MelonLoader mod as long as it has a proper directory structure, as recommended by BepInEx devs and gamebanana (so main directory of the zip maps to main game directory)  
 
 ## Building:
 Open the solution in Visual Studio 2022 and build the project :)
