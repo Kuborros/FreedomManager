@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Security.Policy;
+using System.Text.Json.Serialization;
 using static FreedomManager.FreedomManager;
 
 namespace FreedomManager
@@ -13,7 +14,7 @@ namespace FreedomManager
 	    "HasAssets":false
     }
     */
-    internal class ModInfo
+    public class ModInfo
     {
         public int ManifestVer { get; set; }
         public string Name { get; set; }
@@ -23,6 +24,7 @@ namespace FreedomManager
         public bool? HasAssets { get; set; }
         public int? GBID { get; set; }
         public ArchiveType? ArchiveType { get; set; }
+        public string Dirname { get; set; }
 
 
 
@@ -54,6 +56,7 @@ namespace FreedomManager
                 GBID = 0;
             } 
             else GBID = gBID;
+            Dirname = "invalid-directory-to-be-set";
         }
 
         public ModInfo(string name, ArchiveType archiveType)
@@ -70,6 +73,7 @@ namespace FreedomManager
             HasAssets = true;
             ArchiveType = archiveType;
             GBID = 0;
+            Dirname = name;
         }
 
     }

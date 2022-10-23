@@ -24,13 +24,13 @@ namespace FreedomManager
         bool melonPresent = false;
         bool exists = false;
         string rootDir = "";
+        List<ModInfo> mods = new List<ModInfo>();
 
         public enum ArchiveType
         {
             BepinDir,
             PluginDir,
             MelonDir,
-            DllDir,
             None
         }
 
@@ -71,17 +71,16 @@ namespace FreedomManager
             treeView1.Nodes.Add("bepinmods", "Mods:");
             treeView1.Nodes.Add("bepindllmods", "Mods (Loose DLL):");
 
-
             if (bepisPresent)
             {
-                DirectoryScan();
+                mods.AddRange(DirectoryScan());
             }
 
             if (melonPresent)
             {
                 treeView1.Nodes.Add("melonmods", "MelonLoader mods:");
                 melonButton.Text = "Uninstall MelonLoader Compat";
-                MelonScan();
+                mods.AddRange(MelonScan());
             }
 
             using (var current = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
@@ -164,9 +163,10 @@ namespace FreedomManager
             return ArchiveType.None;
         }
 
-        public void DirectoryScan()
+        public List<ModInfo> DirectoryScan()
         {
             string dir = "BepInEx\\plugins";
+            List<ModInfo> list = new List<ModInfo>();
             try
             {
                 treeView1.Nodes[1].Nodes.Clear();
@@ -179,6 +179,7 @@ namespace FreedomManager
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
+                        list.Add(new ModInfo(modname, ArchiveType.PluginDir));
                         treeView1.Nodes[1].Nodes.Add(modname, modname);
                         treeView1.Nodes[1].Expand();
                     }
@@ -195,6 +196,8 @@ namespace FreedomManager
                                 try
                                 {
                                     ModInfo info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(js));
+                                    info.Dirname = modname;
+                                    list.Add(info);
                                     modname = info.Name + " " + info.Version;
                                 }
                                 catch (Exception ex) { Console.WriteLine(ex); }
@@ -209,10 +212,12 @@ namespace FreedomManager
             {
                 Console.WriteLine(ex.Message);
             }
+            return list;
         }
-        public void MelonScan()
+        public List<ModInfo> MelonScan()
         {
             string dir = "MLLoader\\Mods";
+            List<ModInfo> list = new List<ModInfo>();
             try
             {                
                 treeView1.Nodes[2].Nodes.Clear();
@@ -222,6 +227,7 @@ namespace FreedomManager
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
+                        list.Add(new ModInfo(modname, ArchiveType.MelonDir));
                         treeView1.Nodes[2].Nodes.Add(modname, modname);
                         treeView1.Nodes[2].Expand();
                     }
@@ -231,6 +237,7 @@ namespace FreedomManager
             {
                 Console.WriteLine(ex.Message);
             }
+            return list;
         }
 
         public bool DownloadMod(Uri url, string type, string id)
@@ -271,7 +278,7 @@ namespace FreedomManager
 
 
 
-            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\" by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\", version " + version + "  by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 try
