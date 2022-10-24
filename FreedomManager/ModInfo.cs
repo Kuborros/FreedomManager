@@ -1,5 +1,4 @@
-﻿using System.Security.Policy;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using static FreedomManager.FreedomManager;
 
 namespace FreedomManager
@@ -52,10 +51,10 @@ namespace FreedomManager
             }
             else ArchiveType = archiveType;
 
-            if(!gBID.HasValue)
+            if (!gBID.HasValue)
             {
                 GBID = 0;
-            } 
+            }
             else GBID = gBID;
             Dirname = "invalid-directory-to-be-set";
             Enabled = true;

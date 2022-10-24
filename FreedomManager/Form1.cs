@@ -195,9 +195,17 @@ namespace FreedomManager
                 {
                     string modname = Path.GetFileName(d);
                     if (Directory.Exists(dirDisabled + "\\" + modname))
-                    { 
+                    {
                         foreach (string js in Directory.GetFiles(dirDisabled + "\\" + modname))
                         {
+                            try
+                            { //Try to copy any extra files from disabled mod. By specification none should have things there, but we should try anyways.
+                                File.Copy(js, dirDisabled + "\\" + modname + "\\" + Path.GetFileName(js), false);
+                            }
+                            catch (Exception ex)
+                            { //It should fail on files that alredy exist.
+                                Console.WriteLine(ex.Message);
+                            }
                             File.Delete(js);
                         }
                         Directory.Delete(dirDisabled + "\\" + modname);
@@ -381,7 +389,7 @@ namespace FreedomManager
             string dir = "MLLoader\\Mods";
             List<ModInfo> list = new List<ModInfo>();
             try
-            {                
+            {
                 foreach (string f in Directory.GetFiles(dir))
                 {
 
@@ -434,16 +442,19 @@ namespace FreedomManager
                     string response = client.DownloadString(uri);
                     using (JsonDocument document = JsonDocument.Parse(response))
                     {
-                        if (document.RootElement.GetType().Equals(typeof(JsonObject))) {
+                        if (document.RootElement.GetType().Equals(typeof(JsonObject)))
+                        {
                             MessageBox.Show(document.RootElement.GetProperty("Error").GetString());
                             return false;
                         }
                         JsonElement jName = document.RootElement[0];
                         name = jName.GetString();
                         JsonElement jUpdate = document.RootElement[1];
-                        try { 
-                        version = jUpdate[0].GetProperty("_sVersion").GetString();
-                        } catch (Exception ex)
+                        try
+                        {
+                            version = jUpdate[0].GetProperty("_sVersion").GetString();
+                        }
+                        catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message);
                         }
@@ -535,7 +546,8 @@ namespace FreedomManager
 
         private void modInstall_Click(object sender, EventArgs e)
         {
-            if (modFileDialog.ShowDialog() == DialogResult.OK) {
+            if (modFileDialog.ShowDialog() == DialogResult.OK)
+            {
                 string file = modFileDialog.FileName;
                 InstallMod(file, CheckArchive(file));
             }
@@ -589,7 +601,7 @@ namespace FreedomManager
                             {
                                 MessageBox.Show("MelonLoader mod unpacked!",
                                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            } 
+                            }
                             else
                             {
                                 MessageBox.Show("MelonLoader mod unpacked!\n\nBut MelonLoader is not installed! Please install it before running Melon mods!",
@@ -676,11 +688,11 @@ namespace FreedomManager
                 string destDir;
                 if (info.Enabled)
                 {
-                    if (info.ArchiveType != ArchiveType.MelonDir) 
-                    { 
+                    if (info.ArchiveType != ArchiveType.MelonDir)
+                    {
                         sourceDir = "BepInEx\\plugins\\";
                         destDir = "BepInEx\\plugins-disabled\\";
-                    } 
+                    }
                     else
                     {
                         sourceDir = "MLLoader\\Mods\\";
@@ -700,7 +712,8 @@ namespace FreedomManager
                         destDir = "MLLoader\\Mods\\";
                     }
                 }
-                switch (info.ArchiveType) {
+                switch (info.ArchiveType)
+                {
                     case ArchiveType.BepinDir:
                     case ArchiveType.PluginDir:
                         Directory.Move(sourceDir + info.Dirname, destDir + info.Dirname);
@@ -711,7 +724,7 @@ namespace FreedomManager
                         return !info.Enabled;
                 }
                 return info.Enabled;
-            } 
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -872,25 +885,25 @@ namespace FreedomManager
                     if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
                     {
                         if (modInfo.Enabled)
-                        Directory.Delete("BepInEx\\plugins\\" + modInfo.Dirname, true);
+                            Directory.Delete("BepInEx\\plugins\\" + modInfo.Dirname, true);
                         else
-                        Directory.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname, true);
+                            Directory.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname, true);
                     }
                     else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
                     {
                         if (modInfo.Enabled)
-                        File.Delete("BepInEx\\plugins\\" + modInfo.Dirname + ".dll");
+                            File.Delete("BepInEx\\plugins\\" + modInfo.Dirname + ".dll");
                         else
-                        File.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname + ".dll");
+                            File.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname + ".dll");
                     }
                     else if (melonPresent)
                     {
                         if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
                         {
                             if (modInfo.Enabled)
-                            File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
+                                File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
                             else
-                            File.Delete("MLLoader\\mods-disabled\\" + modInfo.Dirname + ".dll");
+                                File.Delete("MLLoader\\mods-disabled\\" + modInfo.Dirname + ".dll");
                         }
                     }
                 }
@@ -919,7 +932,7 @@ namespace FreedomManager
                 string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (lines[i].Contains("Enabled = true")) 
+                    if (lines[i].Contains("Enabled = true"))
                     {
                         lines[i] = "Enabled = false";
                         break;
@@ -927,7 +940,7 @@ namespace FreedomManager
                 }
                 File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
                 enableConsoleToolStripMenuItem.Checked = false;
-            } 
+            }
             else if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
             {
                 string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
@@ -938,7 +951,7 @@ namespace FreedomManager
                         lines[i] = "Enabled = true";
                         break;
                     }
-                }               
+                }
                 File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
                 enableConsoleToolStripMenuItem.Checked = true;
             }
