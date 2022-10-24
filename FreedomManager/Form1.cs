@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -141,24 +140,87 @@ namespace FreedomManager
             {
                 mods.AddRange(MelonScan());
             }
-            RenderList(mods);
+            DeduplicateMods();
         }
         private void RenderList(List<ModInfo> modInfos)
         {
             listView1.Items.Clear();
-            
+            listView1.FocusedItem = null;
             foreach (ModInfo modInfo in modInfos)
             {
-                ListViewItem item = new ListViewItem();
-                item.Tag = modInfo;
-                item.Text = modInfo.Name;
+                ListViewItem item = new ListViewItem
+                {
+                    Tag = modInfo,
+                    Text = modInfo.Name
+                };
                 item.SubItems.Add(modInfo.Version);
                 item.SubItems.Add(modInfo.Author);
                 item.SubItems.Add(modInfo.Loader);
                 item.Checked = modInfo.Enabled;
                 listView1.Items.Add(item);
             }
+        }
 
+        private void DeduplicateMods()
+        {
+
+            string dirEnabled = "BepInEx\\plugins";
+            string dirDisabled = "BepInEx\\plugins-disabled";
+            string dirEnabledM = "MLLoader\\Mods";
+            string dirDisabledM = "MLLoader\\Mods-disabled";
+
+            try
+            {
+                foreach (string f in Directory.GetFiles(dirEnabled))
+                {
+
+                    if (Path.GetExtension(f) == ".dll")
+                    { //Loose .dll mods wont have any extra files, can nuke blindly.
+                        string modname = Path.GetFileName(f);
+                        if (File.Exists(dirDisabled + "\\" + modname))
+                            File.Delete(dirDisabled + "\\" + modname);
+                    }
+                }
+                foreach (string f in Directory.GetFiles(dirEnabledM))
+                {
+
+                    if (Path.GetExtension(f) == ".dll")
+                    { //Loose .dll mods wont have any extra files, can nuke blindly. Melon edition.
+                        string modname = Path.GetFileName(f);
+                        if (File.Exists(dirDisabledM + "\\" + modname))
+                            File.Delete(dirDisabledM + "\\" + modname);
+                    }
+                }
+                foreach (string d in Directory.GetDirectories(dirEnabled))
+                {
+                    string modname = Path.GetFileName(d);
+                    if (Directory.Exists(dirDisabled + "\\" + modname))
+                    { 
+                        foreach (string js in Directory.GetFiles(dirDisabled + "\\" + modname))
+                        {
+                            File.Delete(js);
+                        }
+                        Directory.Delete(dirDisabled + "\\" + modname);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            //Redoing the work, but we just possibly removed multiple duplicate mods. Needs to be rescanned.
+            mods.Clear();
+            if (bepisPresent)
+            {
+                mods.AddRange(DirectoryScan());
+            }
+
+            if (melonPresent)
+            {
+                mods.AddRange(MelonScan());
+            }
+            RenderList(mods);
         }
 
         private ArchiveType CheckArchive(String path)
@@ -210,6 +272,7 @@ namespace FreedomManager
 
         private List<ModInfo> DirectoryScan()
         {
+            //Enabled mods
             string dir = "BepInEx\\plugins";
             List<ModInfo> list = new List<ModInfo>();
             bool hasManifest;
@@ -255,6 +318,62 @@ namespace FreedomManager
             {
                 Console.WriteLine(ex.Message);
             }
+
+            //Disabled Mods
+            dir = "BepInEx\\plugins-disabled";
+            try
+            {
+                foreach (string f in Directory.GetFiles(dir))
+                {
+
+                    if (Path.GetExtension(f) == ".dll")
+                    {
+                        string modname = Path.GetFileNameWithoutExtension(f);
+                        ModInfo info = new ModInfo(modname, ArchiveType.DllDir)
+                        {
+                            Enabled = false
+                        };
+                        list.Add(info);
+                    }
+                }
+                foreach (string d in Directory.GetDirectories(dir))
+                {
+                    string modname = Path.GetFileName(d);
+                    hasManifest = false;
+                    if (modname != "BepInEx.MelonLoader.Loader")
+                    {
+                        foreach (string js in Directory.GetFiles(d))
+                        {
+                            if (Path.GetFileName(js) == "modinfo.json")
+                            {
+                                try
+                                {
+                                    ModInfo info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(js));
+                                    info.Dirname = modname;
+                                    info.Enabled = false;
+                                    list.Add(info);
+                                    hasManifest = true;
+                                }
+                                catch (Exception ex) { Console.WriteLine(ex); }
+                            }
+                        }
+                        if (!hasManifest)
+                        {
+                            ModInfo info = new ModInfo(modname, ArchiveType.BepinDir)
+                            {
+                                Enabled = false
+                            };
+                            list.Add(info);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
             return list;
         }
         public List<ModInfo> MelonScan()
@@ -277,6 +396,29 @@ namespace FreedomManager
             {
                 Console.WriteLine(ex.Message);
             }
+
+            dir = "MLLoader\\Mods-disabled";
+            try
+            {
+                foreach (string f in Directory.GetFiles(dir))
+                {
+
+                    if (Path.GetExtension(f) == ".dll")
+                    {
+                        string modname = Path.GetFileNameWithoutExtension(f);
+                        ModInfo info = new ModInfo(modname, ArchiveType.MelonDir)
+                        {
+                            Enabled = false
+                        };
+                        list.Add(info);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             return list;
         }
 
@@ -523,6 +665,63 @@ namespace FreedomManager
             }
         }
 
+        private bool EnableDisableMod(ModInfo info)
+        {
+            try
+            {
+                Directory.CreateDirectory("BepInEx\\plugins-disabled");
+                Directory.CreateDirectory("MLLoader\\Mods-disabled");
+
+                string sourceDir;
+                string destDir;
+                if (info.Enabled)
+                {
+                    if (info.ArchiveType != ArchiveType.MelonDir) 
+                    { 
+                        sourceDir = "BepInEx\\plugins\\";
+                        destDir = "BepInEx\\plugins-disabled\\";
+                    } 
+                    else
+                    {
+                        sourceDir = "MLLoader\\Mods\\";
+                        destDir = "MLLoader\\Mods-disabled\\";
+                    }
+                }
+                else
+                {
+                    if (info.ArchiveType != ArchiveType.MelonDir)
+                    {
+                        sourceDir = "BepInEx\\plugins-disabled\\";
+                        destDir = "BepInEx\\plugins\\";
+                    }
+                    else
+                    {
+                        sourceDir = "MLLoader\\Mods-disabled\\";
+                        destDir = "MLLoader\\Mods\\";
+                    }
+                }
+                switch (info.ArchiveType) {
+                    case ArchiveType.BepinDir:
+                    case ArchiveType.PluginDir:
+                        Directory.Move(sourceDir + info.Dirname, destDir + info.Dirname);
+                        return !info.Enabled;
+                    case ArchiveType.DllDir:
+                    case ArchiveType.MelonDir:
+                        File.Move(sourceDir + info.Dirname + ".dll", destDir + info.Dirname + ".dll");
+                        return !info.Enabled;
+                }
+                return info.Enabled;
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                //MessageBox.Show(ex.Message, "Error while changing mod status",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                //Disabled that as it would show if user spams the checkbox. More expected 'desync' behavior should propably stay
+                return info.Enabled;
+            }
+        }
+
+
         private void refresh_Click(object sender, EventArgs e)
         {
             RenderList();
@@ -672,17 +871,26 @@ namespace FreedomManager
                 {
                     if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
                     {
+                        if (modInfo.Enabled)
                         Directory.Delete("BepInEx\\plugins\\" + modInfo.Dirname, true);
+                        else
+                        Directory.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname, true);
                     }
                     else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
                     {
+                        if (modInfo.Enabled)
                         File.Delete("BepInEx\\plugins\\" + modInfo.Dirname + ".dll");
+                        else
+                        File.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname + ".dll");
                     }
                     else if (melonPresent)
                     {
                         if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
                         {
+                            if (modInfo.Enabled)
                             File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
+                            else
+                            File.Delete("MLLoader\\mods-disabled\\" + modInfo.Dirname + ".dll");
                         }
                     }
                 }
@@ -734,6 +942,17 @@ namespace FreedomManager
                 File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
                 enableConsoleToolStripMenuItem.Checked = true;
             }
+        }
+        private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            listView1.BeginUpdate();
+            if (listView1.FocusedItem != null) //Prevents the initial checking of every item from firing an event
+            {
+                ModInfo info = (ModInfo)e.Item.Tag;
+                e.Item.Checked = EnableDisableMod(info);
+                RenderList();
+            }
+            listView1.EndUpdate();
         }
     }
 }
