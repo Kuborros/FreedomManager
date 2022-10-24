@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -24,6 +25,7 @@ namespace FreedomManager
         bool melonPresent = false;
         bool exists = false;
         string rootDir = "";
+        int columnIndex = 0;
         List<ModInfo> mods = new List<ModInfo>();
 
         public enum ArchiveType
@@ -31,6 +33,7 @@ namespace FreedomManager
             BepinDir,
             PluginDir,
             MelonDir,
+            DllDir,
             None
         }
 
@@ -68,9 +71,6 @@ namespace FreedomManager
             }
             else setup.Text = "Uninstall BepInEx";
 
-            treeView1.Nodes.Add("bepinmods", "Mods:");
-            treeView1.Nodes.Add("bepindllmods", "Mods (Loose DLL):");
-
             if (bepisPresent)
             {
                 mods.AddRange(DirectoryScan());
@@ -78,7 +78,6 @@ namespace FreedomManager
 
             if (melonPresent)
             {
-                treeView1.Nodes.Add("melonmods", "MelonLoader mods:");
                 melonButton.Text = "Uninstall MelonLoader Compat";
                 mods.AddRange(MelonScan());
             }
@@ -114,9 +113,55 @@ namespace FreedomManager
                 if (args.Length < 2) MessageBox.Show("Only one instance can be running at the time!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Process.GetCurrentProcess().Kill();
             }
+
+            if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            {
+                string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("Enabled ="))
+                    {
+                        if (lines[i].Contains("Enabled = true")) enableConsoleToolStripMenuItem.Checked = true;
+                        break;
+                    }
+                }
+            }
+            RenderList(mods);
         }
 
-        public ArchiveType CheckArchive(String path)
+        private void RenderList()
+        {
+            mods.Clear();
+            if (bepisPresent)
+            {
+                mods.AddRange(DirectoryScan());
+            }
+
+            if (melonPresent)
+            {
+                mods.AddRange(MelonScan());
+            }
+            RenderList(mods);
+        }
+        private void RenderList(List<ModInfo> modInfos)
+        {
+            listView1.Items.Clear();
+            
+            foreach (ModInfo modInfo in modInfos)
+            {
+                ListViewItem item = new ListViewItem();
+                item.Tag = modInfo;
+                item.Text = modInfo.Name;
+                item.SubItems.Add(modInfo.Version);
+                item.SubItems.Add(modInfo.Author);
+                item.SubItems.Add(modInfo.Loader);
+                item.Checked = modInfo.Enabled;
+                listView1.Items.Add(item);
+            }
+
+        }
+
+        private ArchiveType CheckArchive(String path)
         {
             if (File.Exists(path) && (Path.GetExtension(path) == ".zip" || Path.GetExtension(path) == ".rar"))
             {
@@ -163,30 +208,26 @@ namespace FreedomManager
             return ArchiveType.None;
         }
 
-        public List<ModInfo> DirectoryScan()
+        private List<ModInfo> DirectoryScan()
         {
             string dir = "BepInEx\\plugins";
             List<ModInfo> list = new List<ModInfo>();
+            bool hasManifest;
             try
             {
-                treeView1.Nodes[1].Nodes.Clear();
-                treeView1.Nodes[0].Nodes.Clear();
-
-
                 foreach (string f in Directory.GetFiles(dir))
                 {
 
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        list.Add(new ModInfo(modname, ArchiveType.PluginDir));
-                        treeView1.Nodes[1].Nodes.Add(modname, modname);
-                        treeView1.Nodes[1].Expand();
+                        list.Add(new ModInfo(modname, ArchiveType.DllDir));
                     }
                 }
                 foreach (string d in Directory.GetDirectories(dir))
                 {
                     string modname = Path.GetFileName(d);
+                    hasManifest = false;
                     if (modname != "BepInEx.MelonLoader.Loader")
                     {
                         foreach (string js in Directory.GetFiles(d))
@@ -198,13 +239,15 @@ namespace FreedomManager
                                     ModInfo info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(js));
                                     info.Dirname = modname;
                                     list.Add(info);
-                                    modname = info.Name + " " + info.Version;
+                                    hasManifest = true;
                                 }
                                 catch (Exception ex) { Console.WriteLine(ex); }
                             }
                         }
-                        treeView1.Nodes[0].Nodes.Add(Path.GetFileName(d), modname);
-                        treeView1.Nodes[0].Expand();
+                        if (!hasManifest)
+                        {
+                            list.Add(new ModInfo(modname, ArchiveType.BepinDir));
+                        }
                     }
                 }
             }
@@ -220,7 +263,6 @@ namespace FreedomManager
             List<ModInfo> list = new List<ModInfo>();
             try
             {                
-                treeView1.Nodes[2].Nodes.Clear();
                 foreach (string f in Directory.GetFiles(dir))
                 {
 
@@ -228,8 +270,6 @@ namespace FreedomManager
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
                         list.Add(new ModInfo(modname, ArchiveType.MelonDir));
-                        treeView1.Nodes[2].Nodes.Add(modname, modname);
-                        treeView1.Nodes[2].Expand();
                     }
                 }
             }
@@ -267,7 +307,6 @@ namespace FreedomManager
                         }
                         JsonElement jAuthor = document.RootElement[2];
                         author = jAuthor[0][0].ToString();
-
                     }
                 }
             }
@@ -275,8 +314,6 @@ namespace FreedomManager
             {
                 MessageBox.Show(ex.Message);
             }
-
-
 
             DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\", version " + version + "  by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
@@ -373,7 +410,7 @@ namespace FreedomManager
                             ExtractMod(file, ArchiveType.BepinDir);
                             MessageBox.Show("Mod unpacked!",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            DirectoryScan();
+                            RenderList();
                         }
                         catch (Exception ex)
                         {
@@ -390,7 +427,7 @@ namespace FreedomManager
                             ExtractMod(file, ArchiveType.PluginDir);
                             MessageBox.Show("Mod unpacked!",
                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            DirectoryScan();
+                            RenderList();
                         }
                         catch (Exception ex)
                         {
@@ -410,16 +447,13 @@ namespace FreedomManager
                             {
                                 MessageBox.Show("MelonLoader mod unpacked!",
                                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                                DirectoryScan();
-                                MelonScan();
                             } 
                             else
                             {
                                 MessageBox.Show("MelonLoader mod unpacked!\n\nBut MelonLoader is not installed! Please install it before running Melon mods!",
                                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
-
-
+                            RenderList();
                         }
                         catch (Exception ex)
                         {
@@ -491,8 +525,7 @@ namespace FreedomManager
 
         private void refresh_Click(object sender, EventArgs e)
         {
-            DirectoryScan();
-            if (melonPresent) MelonScan();
+            RenderList();
         }
 
         private void melonButton_Click(object sender, EventArgs e)
@@ -509,25 +542,20 @@ namespace FreedomManager
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = true;
-                DirectoryScan();
-                treeView1.Nodes.RemoveByKey("melonmods");
-                treeView1.Nodes.Add("melonmods", "MelonLoader mods:");
-                MelonScan();
+                RenderList();
                 melonButton.Text = "Uninstall MelonLoader Compat";
             }
             else
             {
                 Directory.Delete("BepInEx\\plugins\\BepInEx.MelonLoader.Loader", true);
-                //Directory.Delete("MLLoader", true);
 
                 MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
                 "",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = false;
-                treeView1.Nodes.RemoveByKey("melonmods");
                 melonButton.Text = "Install MelonLoader Compat";
-                DirectoryScan();
+                RenderList();
             }
         }
 
@@ -578,13 +606,16 @@ namespace FreedomManager
                 }
             }
         }
-
-        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void listView1_NodeMouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right && !(e.Node == treeView1.Nodes[0] || e.Node == treeView1.Nodes[1] || e.Node.Name == "melonmods"))
+            if (e.Button == MouseButtons.Right)
             {
-                treeView1.SelectedNode = treeView1.GetNodeAt(e.X, e.Y); //Critical for other code, we need to know what node is selected by the user.
-                contextMenuStrip1.Show(treeView1, e.Location);
+                ListViewHitTestInfo listViewHitTestInfo = listView1.HitTest(e.X, e.Y);
+                if (listViewHitTestInfo.Item != null)
+                {
+                    columnIndex = listViewHitTestInfo.Item.Index;
+                    contextMenuStrip1.Show(listView1, e.Location);
+                }
             }
         }
 
@@ -618,36 +649,7 @@ namespace FreedomManager
 
         private void infoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string node = treeView1.SelectedNode.Name;
-            ModInfo modInfo;
-            if (treeView1.SelectedNode.Parent == treeView1.Nodes[0] && File.Exists("BepInEx\\plugins\\" + node + "\\modinfo.json")) //Bepin mod with ModInfo
-            {
-                try
-                {
-                    modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText("BepInEx\\plugins\\" + node + "\\modinfo.json"));
-                }
-                catch
-                {
-                    modInfo = new ModInfo(node, ArchiveType.BepinDir); //In case .json reading fails, fallback to no modinfo method
-                }
-            }
-            else if (treeView1.SelectedNode.Parent == treeView1.Nodes[0]) //Bepin mod
-            {
-                modInfo = new ModInfo(node, ArchiveType.BepinDir);
-            }
-            else if (treeView1.SelectedNode.Parent == treeView1.Nodes[1]) //Loose DLL bepin
-            {
-                modInfo = new ModInfo(node, ArchiveType.DllDir);
-            }
-            else if (melonPresent)
-            {
-                if (treeView1.SelectedNode.Parent == treeView1.Nodes[2]) //Melon mod
-                {
-                    modInfo = new ModInfo(node, ArchiveType.MelonDir);
-                }
-                else return;
-            }
-            else return;
+            ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
 
             StringBuilder builder = new StringBuilder();
             builder.Append("Name: ").AppendLine(modInfo.Name);
@@ -661,26 +663,26 @@ namespace FreedomManager
 
         private void uninstallToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string node = treeView1.SelectedNode.Name;
+            ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
 
             try
             {
-                DialogResult dialogResult = MessageBox.Show(this, "Do you want to remove \"" + node + "\"?", "Mod uninstall", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(this, "Do you want to remove \"" + modInfo.Name + "\"?", "Mod uninstall", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    if (treeView1.SelectedNode.Parent == treeView1.Nodes[0]) //Bepin mod
+                    if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
                     {
-                        Directory.Delete("BepInEx\\plugins\\" + node, true);
+                        Directory.Delete("BepInEx\\plugins\\" + modInfo.Dirname, true);
                     }
-                    else if (treeView1.SelectedNode.Parent == treeView1.Nodes[1]) //Loose DLL bepin
+                    else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
                     {
-                        File.Delete("BepInEx\\plugins\\" + node + ".dll");
+                        File.Delete("BepInEx\\plugins\\" + modInfo.Dirname + ".dll");
                     }
                     else if (melonPresent)
                     {
-                        if (treeView1.SelectedNode.Parent == treeView1.Nodes[2]) //Melon mod
+                        if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
                         {
-                            File.Delete("MLLoader\\mods\\" + node + ".dll");
+                            File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
                         }
                     }
                 }
@@ -689,7 +691,49 @@ namespace FreedomManager
             {
                 Console.WriteLine(ex.Message);
             }
-            DirectoryScan();
+            RenderList();
+        }
+
+        private void gitHubWikiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer", "https://github.com/Kuborros/FreedomManager/wiki");
+        }
+
+        private void gameBananaPageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer", "https://gamebanana.com/tools/10870");
+        }
+
+        private void enableConsoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (enableConsoleToolStripMenuItem.Checked && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            {
+                string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("Enabled = true")) 
+                    {
+                        lines[i] = "Enabled = false";
+                        break;
+                    }
+                }
+                File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
+                enableConsoleToolStripMenuItem.Checked = false;
+            } 
+            else if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            {
+                string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("Enabled = false"))
+                    {
+                        lines[i] = "Enabled = true";
+                        break;
+                    }
+                }               
+                File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
+                enableConsoleToolStripMenuItem.Checked = true;
+            }
         }
     }
 }

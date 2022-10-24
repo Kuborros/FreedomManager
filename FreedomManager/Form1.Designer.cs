@@ -38,7 +38,6 @@
             this.refresh = new System.Windows.Forms.Button();
             this.melonButton = new System.Windows.Forms.Button();
             this.handlerButton = new System.Windows.Forms.Button();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +45,14 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.gitHubWikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gameBananaPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -125,15 +132,6 @@
             this.handlerButton.UseVisualStyleBackColor = true;
             this.handlerButton.Click += new System.EventHandler(this.handlerButton_Click);
             // 
-            // treeView1
-            // 
-            this.treeView1.HideSelection = false;
-            this.treeView1.Location = new System.Drawing.Point(12, 27);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(487, 335);
-            this.treeView1.TabIndex = 5;
-            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -176,15 +174,80 @@
             // 
             // settingsToolStripMenuItem
             // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableConsoleToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // helpToolStripMenuItem
             // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gitHubWikiToolStripMenuItem,
+            this.gameBananaPageToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // listView1
+            // 
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(12, 27);
+            this.listView1.MultiSelect = false;
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(487, 335);
+            this.listView1.Sorting = System.Windows.Forms.SortOrder.Descending;
+            this.listView1.TabIndex = 10;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_NodeMouseClick);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 144;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Version";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Author";
+            this.columnHeader3.Width = 116;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Loader";
+            this.columnHeader4.Width = 162;
+            // 
+            // gitHubWikiToolStripMenuItem
+            // 
+            this.gitHubWikiToolStripMenuItem.Name = "gitHubWikiToolStripMenuItem";
+            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gitHubWikiToolStripMenuItem.Text = "GitHub Wiki";
+            this.gitHubWikiToolStripMenuItem.Click += new System.EventHandler(this.gitHubWikiToolStripMenuItem_Click);
+            // 
+            // gameBananaPageToolStripMenuItem
+            // 
+            this.gameBananaPageToolStripMenuItem.Name = "gameBananaPageToolStripMenuItem";
+            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gameBananaPageToolStripMenuItem.Text = "GameBanana Page";
+            this.gameBananaPageToolStripMenuItem.Click += new System.EventHandler(this.gameBananaPageToolStripMenuItem_Click);
+            // 
+            // enableConsoleToolStripMenuItem
+            // 
+            this.enableConsoleToolStripMenuItem.Name = "enableConsoleToolStripMenuItem";
+            this.enableConsoleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enableConsoleToolStripMenuItem.Text = "Enable Console";
+            this.enableConsoleToolStripMenuItem.Click += new System.EventHandler(this.enableConsoleToolStripMenuItem_Click);
             // 
             // FreedomManager
             // 
@@ -192,11 +255,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(511, 475);
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.handlerButton);
             this.Controls.Add(this.melonButton);
             this.Controls.Add(this.refresh);
-            this.Controls.Add(this.treeView1);
             this.Controls.Add(this.modInstall);
             this.Controls.Add(this.exit);
             this.Controls.Add(this.setup);
@@ -225,7 +288,6 @@
         private System.Windows.Forms.Button refresh;
         private System.Windows.Forms.Button melonButton;
         private System.Windows.Forms.Button handlerButton;
-        private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
@@ -233,6 +295,14 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ToolStripMenuItem gitHubWikiToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gameBananaPageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableConsoleToolStripMenuItem;
     }
 }
 
