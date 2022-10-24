@@ -1005,12 +1005,14 @@ namespace FreedomManager
 
         private void bepInExToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "BepInEx\\plugins"));
+            if (Directory.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\plugins")))
+                Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "BepInEx\\plugins"));
         }
 
         private void melonLoaderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "MLLoader\\mods"));
+            if (Directory.Exists(Path.Combine(Path.GetFullPath("."), "MLLoader\\mods")))
+                Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "MLLoader\\mods"));
         }
 
         private void installModToolStripMenuItem_Click(object sender, EventArgs e)
