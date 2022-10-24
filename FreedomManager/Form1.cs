@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using Onova.Services;
+using Onova;
 using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
@@ -14,6 +16,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Windows.Forms;
 using File = System.IO.File;
+using System.Xml.Linq;
 
 namespace FreedomManager
 {
@@ -26,6 +29,10 @@ namespace FreedomManager
         string rootDir = "";
         int columnIndex = 0;
         List<ModInfo> mods = new List<ModInfo>();
+
+        private readonly IUpdateManager _updateManager = new UpdateManager(
+            new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager*.zip "),
+            new ZipPackageExtractor());
 
         public enum ArchiveType
         {
@@ -1027,6 +1034,26 @@ namespace FreedomManager
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private async void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var check = await _updateManager.CheckForUpdatesAsync();
+            if (!check.CanUpdate)
+            {
+                MessageBox.Show(this,"There are no updates available.","Update check",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return;
+            } 
+            else
+            {
+                DialogResult dialogResult = MessageBox.Show(this, "An update is available!\n\nDo you want to install it? (Manager will restart to do so)", "Update check", MessageBoxButtons.YesNo,MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    await _updateManager.PrepareUpdateAsync(check.LastVersion);
+                    _updateManager.LaunchUpdater(check.LastVersion,true);
+                    Application.Exit();
+                }
+            }
         }
     }
 }

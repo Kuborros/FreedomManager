@@ -39,10 +39,16 @@
             this.melonButton = new System.Windows.Forms.Button();
             this.handlerButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openModsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bepInExToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.melonLoaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.installModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,12 +59,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openModsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bepInExToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.melonLoaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.installModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -147,6 +148,13 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(138, 70);
             // 
+            // openFolderToolStripMenuItem
+            // 
+            this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.openFolderToolStripMenuItem.Text = "Open folder";
+            this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
+            // 
             // infoToolStripMenuItem
             // 
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
@@ -183,6 +191,43 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // openModsFolderToolStripMenuItem
+            // 
+            this.openModsFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bepInExToolStripMenuItem,
+            this.melonLoaderToolStripMenuItem});
+            this.openModsFolderToolStripMenuItem.Name = "openModsFolderToolStripMenuItem";
+            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openModsFolderToolStripMenuItem.Text = "Open Mods Folder";
+            // 
+            // bepInExToolStripMenuItem
+            // 
+            this.bepInExToolStripMenuItem.Name = "bepInExToolStripMenuItem";
+            this.bepInExToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.bepInExToolStripMenuItem.Text = "BepInEx";
+            this.bepInExToolStripMenuItem.Click += new System.EventHandler(this.bepInExToolStripMenuItem_Click);
+            // 
+            // melonLoaderToolStripMenuItem
+            // 
+            this.melonLoaderToolStripMenuItem.Name = "melonLoaderToolStripMenuItem";
+            this.melonLoaderToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.melonLoaderToolStripMenuItem.Text = "MelonLoader";
+            this.melonLoaderToolStripMenuItem.Click += new System.EventHandler(this.melonLoaderToolStripMenuItem_Click);
+            // 
+            // installModToolStripMenuItem
+            // 
+            this.installModToolStripMenuItem.Name = "installModToolStripMenuItem";
+            this.installModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.installModToolStripMenuItem.Text = "Install Mod";
+            this.installModToolStripMenuItem.Click += new System.EventHandler(this.installModToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -202,7 +247,8 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gitHubWikiToolStripMenuItem,
-            this.gameBananaPageToolStripMenuItem});
+            this.gameBananaPageToolStripMenuItem,
+            this.checkForUpdatesToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -261,49 +307,12 @@
             this.columnHeader4.Text = "Loader";
             this.columnHeader4.Width = 162;
             // 
-            // openFolderToolStripMenuItem
+            // checkForUpdatesToolStripMenuItem
             // 
-            this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.openFolderToolStripMenuItem.Text = "Open folder";
-            this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
-            // 
-            // openModsFolderToolStripMenuItem
-            // 
-            this.openModsFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bepInExToolStripMenuItem,
-            this.melonLoaderToolStripMenuItem});
-            this.openModsFolderToolStripMenuItem.Name = "openModsFolderToolStripMenuItem";
-            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openModsFolderToolStripMenuItem.Text = "Open Mods Folder";
-            // 
-            // bepInExToolStripMenuItem
-            // 
-            this.bepInExToolStripMenuItem.Name = "bepInExToolStripMenuItem";
-            this.bepInExToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.bepInExToolStripMenuItem.Text = "BepInEx";
-            this.bepInExToolStripMenuItem.Click += new System.EventHandler(this.bepInExToolStripMenuItem_Click);
-            // 
-            // melonLoaderToolStripMenuItem
-            // 
-            this.melonLoaderToolStripMenuItem.Name = "melonLoaderToolStripMenuItem";
-            this.melonLoaderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.melonLoaderToolStripMenuItem.Text = "MelonLoader";
-            this.melonLoaderToolStripMenuItem.Click += new System.EventHandler(this.melonLoaderToolStripMenuItem_Click);
-            // 
-            // installModToolStripMenuItem
-            // 
-            this.installModToolStripMenuItem.Name = "installModToolStripMenuItem";
-            this.installModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.installModToolStripMenuItem.Text = "Install Mod";
-            this.installModToolStripMenuItem.Click += new System.EventHandler(this.installModToolStripMenuItem_Click);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // FreedomManager
             // 
@@ -365,6 +374,7 @@
         private System.Windows.Forms.ToolStripMenuItem melonLoaderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem installModToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
     }
 }
 
