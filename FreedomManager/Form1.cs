@@ -967,6 +967,65 @@ namespace FreedomManager
             }
             listView1.EndUpdate();
         }
+
+        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
+            if (modInfo != null)
+            {
+                string path = "";
+                if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
+                {
+                    if (modInfo.Enabled)
+                        path = "BepInEx\\plugins\\" + modInfo.Dirname;
+                    else
+                        path = "BepInEx\\plugins-disabled\\" + modInfo.Dirname;
+                }
+                else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
+                {
+                    if (modInfo.Enabled)
+                        path = "BepInEx\\plugins";
+                    else
+                        path = "BepInEx\\plugins-disabled";
+                }
+                else if (melonPresent)
+                {
+                    if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
+                    {
+                        if (modInfo.Enabled)
+                            path = "MLLoader\\mods";
+                        else
+                            path = "MLLoader\\mods-disabled";
+                    }
+
+                }
+                Process.Start("explorer", Path.Combine(Path.GetFullPath("."), path));
+            }
+        }
+
+        private void bepInExToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "BepInEx\\plugins"));
+        }
+
+        private void melonLoaderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "MLLoader\\mods"));
+        }
+
+        private void installModToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string file = modFileDialog.FileName;
+                InstallMod(file, CheckArchive(file));
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
 
