@@ -16,7 +16,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Windows.Forms;
 using File = System.IO.File;
-using System.Xml.Linq;
 
 namespace FreedomManager
 {
@@ -31,7 +30,7 @@ namespace FreedomManager
         List<ModInfo> mods = new List<ModInfo>();
 
         private readonly IUpdateManager _updateManager = new UpdateManager(
-            new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager*.zip "),
+            new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager1*.zip "),
             new ZipPackageExtractor());
 
         public enum ArchiveType
@@ -57,6 +56,7 @@ namespace FreedomManager
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
             melonPresent = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
+
 
             if (!fp2Found)
             {
