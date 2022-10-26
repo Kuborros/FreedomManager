@@ -13,7 +13,7 @@ namespace FreedomManager
 	    "HasAssets":false
     }
     */
-    internal class ModInfo
+    public class ModInfo
     {
         public int ManifestVer { get; set; }
         public string Name { get; set; }
@@ -23,6 +23,8 @@ namespace FreedomManager
         public bool? HasAssets { get; set; }
         public int? GBID { get; set; }
         public ArchiveType? ArchiveType { get; set; }
+        public string Dirname { get; set; }
+        public bool Enabled { get; set; }
 
 
 
@@ -49,11 +51,13 @@ namespace FreedomManager
             }
             else ArchiveType = archiveType;
 
-            if(!gBID.HasValue)
+            if (!gBID.HasValue)
             {
                 GBID = 0;
-            } 
+            }
             else GBID = gBID;
+            Dirname = "invalid-directory-to-be-set";
+            Enabled = true;
         }
 
         public ModInfo(string name, ArchiveType archiveType)
@@ -63,13 +67,15 @@ namespace FreedomManager
             Version = "N/A";
 
             if (archiveType == FreedomManager.ArchiveType.BepinDir) Loader = "BepInEx";
-            else if (archiveType == FreedomManager.ArchiveType.PluginDir) Loader = "BepInEx (Loose DLL)";
+            else if (archiveType == FreedomManager.ArchiveType.DllDir) Loader = "BepInEx (Loose DLL)";
             else if (archiveType == FreedomManager.ArchiveType.MelonDir) Loader = "MelonLoader";
             else Loader = "Unknown";
 
             HasAssets = true;
             ArchiveType = archiveType;
             GBID = 0;
+            Dirname = name;
+            Enabled = true;
         }
 
     }
