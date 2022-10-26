@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Stupid dingus generates classes named like that by itself.", Scope = "namespace", Target = "~N:FreedomManager")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "*")]
