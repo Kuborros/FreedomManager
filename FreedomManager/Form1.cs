@@ -91,11 +91,11 @@ namespace FreedomManager
                 string[] gblink = args[1].Replace("fp2mm://", string.Empty).Replace("fp2mm:", string.Empty).Split(',');
                 if (gblink.Length == 1)
                 {
-                    DownloadMod(new Uri(gblink[0]), "Unknown", "Unknown");
+                    DownloadMod(new Uri(gblink[0]), "", "");
                 }
                 if (gblink.Length == 1)
                 {
-                    DownloadMod(new Uri(gblink[0]), gblink[1], "Unknown");
+                    DownloadMod(new Uri(gblink[0]), gblink[1], "");
                 }
                 if (gblink.Length == 3)
                 {
@@ -435,37 +435,44 @@ namespace FreedomManager
             string name = "Unknown", author = "Unknown", version = "1.0.0";
             string uri = string.Format("https://api.gamebanana.com/Core/Item/Data?itemid={0}&itemtype={1}&fields=name,Updates().aGetLatestUpdates(),Credits().aAuthors()", id, type);
 
-            try
+            if (!type.Equals("") && !id.Equals(""))
             {
-                using (WebClient client = new WebClient())
+                try
                 {
-                    string response = client.DownloadString(uri);
-                    using (JsonDocument document = JsonDocument.Parse(response))
+                    using (WebClient client = new WebClient())
                     {
-                        if (document.RootElement.GetType().Equals(typeof(JsonObject)))
+                        string response = client.DownloadString(uri);
+                        using (JsonDocument document = JsonDocument.Parse(response))
                         {
-                            MessageBox.Show(document.RootElement.GetProperty("Error").GetString());
-                            return false;
+                            if (document.RootElement.GetType().Equals(typeof(JsonObject)))
+                            {
+                                MessageBox.Show(document.RootElement.GetProperty("Error").GetString());
+                                return false;
+                            }
+                            JsonElement jName = document.RootElement[0];
+                            name = jName.GetString();
+                            JsonElement jUpdate = document.RootElement[1];
+                            try
+                            {
+                                version = jUpdate[0].GetProperty("_sVersion").GetString();
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                            JsonElement jAuthor = document.RootElement[2];
+                            author = jAuthor[0][0].ToString();
                         }
-                        JsonElement jName = document.RootElement[0];
-                        name = jName.GetString();
-                        JsonElement jUpdate = document.RootElement[1];
-                        try
-                        {
-                            version = jUpdate[0].GetProperty("_sVersion").GetString();
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
-                        JsonElement jAuthor = document.RootElement[2];
-                        author = jAuthor[0][0].ToString();
                     }
                 }
-            }
-            catch (Exception ex)
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            } 
+            else if(!type.Equals("") && id.Equals(""))
             {
-                MessageBox.Show(ex.Message);
+                name = type;
             }
 
             DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\", version " + version + "  by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
@@ -646,7 +653,7 @@ namespace FreedomManager
                 {
                     while (reader.MoveToNextEntry())
                     {
-                        if (!reader.Entry.IsDirectory)
+                        if (!reader.Entry.IsDirectory && reader.Entry.Key != "FP2.exe")
                         {
                             Console.WriteLine(reader.Entry.Key);
                             reader.WriteEntryToDirectory(path, new ExtractionOptions()
@@ -664,7 +671,7 @@ namespace FreedomManager
                 using (var reader = SevenZipArchive.Open(stream))
                     foreach (SevenZipArchiveEntry entry in reader.Entries)
                     {
-                        if (!entry.IsDirectory)
+                        if (!entry.IsDirectory && entry.Key != "FP2.exe")
                         {
                             Console.WriteLine(entry.Key);
                             entry.WriteToDirectory(path, new ExtractionOptions()
