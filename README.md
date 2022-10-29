@@ -12,16 +12,15 @@ You can find it from Steam, by right clicking on the game on the list, and then 
 
 ## Usage:
 
-On initial startup, you will be prompted to install BepInEx - simply click on the "Install BepInEx" button to download, and install, recommended version of the loader. The file is securely downloaded from the official GitHub repository over https://.  
+On initial startup, you will be prompted to install BepInEx - simply click on the `Install BepInEx` button to download, and install, recommended version of the loader. The file is securely downloaded from the official GitHub repository over https://.  
 
-From there you can use "Install Mod" button to select a zipfile to install.  
-The files are checked for basic validity (containing a BepInEx folder in its root).  
+From there you can use `Install Mod` button to select a zipfile to install.  
+The files are checked for basic validity (containing a BepInEx folder in its root, A MelonLoader Mods folder or a mod manifest json).  
 Mods using mod_overrides are also properly extracted.  
+If you wish to install a MelonLoader compatible mod instead, you must install the MelonLoader compatibility layer with the `Install MelonLoader Compat` button before running any MelonLoader mods.  
 
-Loader also offers a basic list of currently installed mods.  
-![iBLoT3z](https://user-images.githubusercontent.com/33236735/195651573-765053cd-198b-4ea9-a616-e2df74df822a.png)
-
-MelonLoader mods will be listed, but are not supported for installation.  
+Loader also offers a basic list of currently installed mods. Enabling or disabling of them. Support for enabling a debug console and 1-click integration on GameBanana!    
+![NewFreedomManager](https://user-images.githubusercontent.com/33236735/198375013-8b22fc3e-3289-4663-9f09-666083393670.png)  
 
 ## Notes:
 
@@ -36,6 +35,8 @@ Additionally, here is the VirusTotal scan result: [Here](https://www.virustotal.
 This mod manager installs any bepinex mod as long as it has a proper directory structure, as recommended by BepInEx devs and gamebanana (so main directory of the zip maps to main game directory)  
 
 MelonLoader mods can be supported, however as of now every mod out there has different directory stucture in its zipfile, which complicates things.  
+
+Please read our Wiki documentation on making mods [here](https://github.com/Kuborros/FreedomManager/wiki)!  
 
 ## Building:
 Open the solution in Visual Studio 2022 and build the project :)
