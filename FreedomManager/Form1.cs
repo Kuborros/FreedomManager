@@ -469,8 +469,8 @@ namespace FreedomManager
                 {
                     MessageBox.Show(ex.Message);
                 }
-            } 
-            else if(!type.Equals("") && id.Equals(""))
+            }
+            else if (!type.Equals("") && id.Equals(""))
             {
                 name = type;
             }
