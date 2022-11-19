@@ -59,6 +59,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.seeOnGameBananaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -143,28 +144,29 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFolderToolStripMenuItem,
             this.infoToolStripMenuItem,
+            this.seeOnGameBananaToolStripMenuItem,
             this.uninstallToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 114);
             // 
             // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.openFolderToolStripMenuItem.Text = "Open folder";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
             // 
             // infoToolStripMenuItem
             // 
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.infoToolStripMenuItem.Text = "Info";
             this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
             // 
             // uninstallToolStripMenuItem
             // 
             this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.uninstallToolStripMenuItem.Text = "Uninstall";
             this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.uninstallToolStripMenuItem_Click);
             // 
@@ -202,14 +204,14 @@
             // bepInExToolStripMenuItem
             // 
             this.bepInExToolStripMenuItem.Name = "bepInExToolStripMenuItem";
-            this.bepInExToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bepInExToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.bepInExToolStripMenuItem.Text = "BepInEx";
             this.bepInExToolStripMenuItem.Click += new System.EventHandler(this.bepInExToolStripMenuItem_Click);
             // 
             // melonLoaderToolStripMenuItem
             // 
             this.melonLoaderToolStripMenuItem.Name = "melonLoaderToolStripMenuItem";
-            this.melonLoaderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.melonLoaderToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.melonLoaderToolStripMenuItem.Text = "MelonLoader";
             this.melonLoaderToolStripMenuItem.Click += new System.EventHandler(this.melonLoaderToolStripMenuItem_Click);
             // 
@@ -254,14 +256,14 @@
             // gitHubWikiToolStripMenuItem
             // 
             this.gitHubWikiToolStripMenuItem.Name = "gitHubWikiToolStripMenuItem";
-            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.gitHubWikiToolStripMenuItem.Text = "GitHub Wiki";
             this.gitHubWikiToolStripMenuItem.Click += new System.EventHandler(this.gitHubWikiToolStripMenuItem_Click);
             // 
             // gameBananaPageToolStripMenuItem
             // 
             this.gameBananaPageToolStripMenuItem.Name = "gameBananaPageToolStripMenuItem";
-            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.gameBananaPageToolStripMenuItem.Text = "GameBanana Page";
             this.gameBananaPageToolStripMenuItem.Click += new System.EventHandler(this.gameBananaPageToolStripMenuItem_Click);
             // 
@@ -304,6 +306,13 @@
             // 
             this.columnHeader4.Text = "Loader";
             this.columnHeader4.Width = 162;
+            // 
+            // seeOnGameBananaToolStripMenuItem
+            // 
+            this.seeOnGameBananaToolStripMenuItem.Name = "seeOnGameBananaToolStripMenuItem";
+            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.seeOnGameBananaToolStripMenuItem.Text = "See on GameBanana";
+            this.seeOnGameBananaToolStripMenuItem.Click += new System.EventHandler(this.seeOnGameBananaToolStripMenuItem_Click);
             // 
             // FreedomManager
             // 
@@ -365,6 +374,7 @@
         private System.Windows.Forms.ToolStripMenuItem melonLoaderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem installModToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem seeOnGameBananaToolStripMenuItem;
     }
 }
 

@@ -871,6 +871,17 @@ namespace FreedomManager
             MessageBox.Show(this, builder.ToString(), "Mod information", MessageBoxButtons.OK);
         }
 
+        private void seeOnGameBananaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
+
+            if (modInfo.GBID != null && modInfo.GBID != 0)
+            {
+                Process.Start("explorer", "https://gamebanana.com/mods/" + modInfo.GBID + "/");
+            }
+
+        }
+
         private void uninstallToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
