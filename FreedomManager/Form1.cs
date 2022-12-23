@@ -432,8 +432,8 @@ namespace FreedomManager
 
         public bool DownloadMod(Uri url, string type, string id)
         {
-            string name = "Unknown", author = "Unknown", version = "1.0.0";
-            string uri = string.Format("https://api.gamebanana.com/Core/Item/Data?itemid={0}&itemtype={1}&fields=name,Updates().aGetLatestUpdates(),Credits().aAuthors()", id, type);
+            string name = "Unknown", author = "Unknown";
+            string uri = string.Format("https://api.gamebanana.com/Core/Item/Data?itemid={0}&itemtype={1}&fields=name,Owner().name", id, type);
 
             if (!type.Equals("") && !id.Equals(""))
             {
@@ -446,36 +446,27 @@ namespace FreedomManager
                         {
                             if (document.RootElement.GetType().Equals(typeof(JsonObject)))
                             {
-                                MessageBox.Show(document.RootElement.GetProperty("Error").GetString());
+                                MessageBox.Show("Gamebanana api request returned error:\n" + document.RootElement.GetProperty("error").GetString());
                                 return false;
                             }
                             JsonElement jName = document.RootElement[0];
                             name = jName.GetString();
-                            JsonElement jUpdate = document.RootElement[1];
-                            try
-                            {
-                                version = jUpdate[0].GetProperty("_sVersion").GetString();
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex.Message);
-                            }
-                            JsonElement jAuthor = document.RootElement[2];
-                            author = jAuthor[0][0].ToString();
+                            JsonElement jAuthor = document.RootElement[1];
+                            author = jAuthor.GetString();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    Console.WriteLine(ex.Message);
                 }
-            } 
-            else if(!type.Equals("") && id.Equals(""))
+            }
+            else if (!type.Equals("") && id.Equals(""))
             {
                 name = type;
             }
 
-            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\", version " + version + "  by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\",  by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 try
@@ -878,6 +869,19 @@ namespace FreedomManager
             builder.Append("Uses mod_overrides: ").AppendLine((bool)modInfo.HasAssets ? "Yes" : "No");
 
             MessageBox.Show(this, builder.ToString(), "Mod information", MessageBoxButtons.OK);
+        }
+
+        private void seeOnGameBananaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
+            if (modInfo.GBID != null && modInfo.GBID != 0)
+            {
+                Process.Start("explorer", "https://gamebanana.com/mods/" + modInfo.GBID + "/");
+            }
+            else
+            {
+                MessageBox.Show("This mod does not specify GameBanana link.","Unable to open page",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+            }
         }
 
         private void uninstallToolStripMenuItem_Click(object sender, EventArgs e)
