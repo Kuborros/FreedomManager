@@ -1,8 +1,8 @@
 <!-- Badges -->
-[![GitHub issues](https://img.shields.io/github/issues/Kuborros/FreedomManager?style=flat-square)](https://github.com/Kuborros/FreedomManager/issues)
-[![GitHub forks](https://img.shields.io/github/forks/Kuborros/FreedomManager?style=flat-square)](https://github.com/Kuborros/FreedomManager/network)
-[![GitHub stars](https://img.shields.io/github/stars/Kuborros/FreedomManager?style=flat-square)](https://github.com/Kuborros/FreedomManager/stargazers)
-[![GitHub license](https://img.shields.io/github/license/Kuborros/FreedomManager?style=flat-square)](https://github.com/Kuborros/FreedomManager/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/Kuborros/FreedomManager?style=flat)](https://github.com/Kuborros/FreedomManager/issues)
+[![GitHub forks](https://img.shields.io/github/forks/Kuborros/FreedomManager?style=flat)](https://github.com/Kuborros/FreedomManager/network)
+[![GitHub stars](https://img.shields.io/github/stars/Kuborros/FreedomManager?style=flat)](https://github.com/Kuborros/FreedomManager/stargazers)
+[![GitHub license](https://img.shields.io/github/license/Kuborros/FreedomManager?style=flat)](https://github.com/Kuborros/FreedomManager/blob/master/LICENSE)
 # FreedomManager
 
 A simple mod manager capable of setting up BepInEx, as well as installing all of my current mods.
