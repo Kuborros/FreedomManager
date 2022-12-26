@@ -511,8 +511,7 @@ namespace FreedomManager
 
         private void savePlay_Click(object sender, EventArgs e)
         {
-            // TODO replace this with a Steam call, because I'm pretty sure FP2 doesn't launch if you run it directly?
-            if (fp2Found) Process.Start("FP2.exe");
+            ProcessUtils.OpenUrl("steam://rungameid/595500");
         }
 
         private void setup_Click(object sender, EventArgs e)
