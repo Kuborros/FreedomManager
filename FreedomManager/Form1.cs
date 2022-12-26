@@ -887,8 +887,7 @@ namespace FreedomManager
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
             if (modInfo.GBID != null && modInfo.GBID != 0)
             {
-                // TODO there is a better way to do this...
-                Process.Start("explorer", "https://gamebanana.com/mods/" + modInfo.GBID + "/");
+                ProcessUtils.OpenUrl("https://gamebanana.com/mods/" + modInfo.GBID + "/");
             }
             else
             {
@@ -940,14 +939,12 @@ namespace FreedomManager
 
         private void gitHubWikiToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO better way to open links
-            Process.Start("explorer", "https://github.com/Kuborros/FreedomManager/wiki");
+            ProcessUtils.OpenUrl("https://github.com/Kuborros/FreedomManager/wiki");
         }
 
         private void gameBananaPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO better way to open links
-            Process.Start("explorer", "https://gamebanana.com/tools/10870");
+            ProcessUtils.OpenUrl("https://gamebanana.com/tools/10870");
         }
 
         private void enableConsoleToolStripMenuItem_Click(object sender, EventArgs e)
