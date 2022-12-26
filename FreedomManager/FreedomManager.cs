@@ -53,7 +53,7 @@ namespace FreedomManager
 
             if (!fp2Found)
             {
-                MessageBox.Show(this, "Freedom Planet 2 was not found!\n\n" +
+                MessageBox.Show("Freedom Planet 2 was not found!\n\n" +
                     "Please ensure the mod manager is in the main game directory.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 Application.Exit();
@@ -66,7 +66,7 @@ namespace FreedomManager
 
             if (fp2Found && !bepisPresent)
             {
-                MessageBox.Show(this, "BepInEx was not found!\n\n" +
+                MessageBox.Show("BepInEx was not found!\n\n" +
                         "Seems you don't have the BepInEx mod loader installed - install it by clicking on the \"Install BepInEx\" button.\n" +
                         "You will not be able to use any mods you install before doing this!",
                         Text, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
