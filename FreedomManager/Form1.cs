@@ -952,8 +952,17 @@ namespace FreedomManager
 
         private void enableConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO notify user if bepis config doesn't exist
-            if (enableConsoleToolStripMenuItem.Checked && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            if (!File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            {
+                MessageBox.Show(this, "BepInEx config does not exist!\n\n" +
+                    "Please install BepInEx, then run the game at least once.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // TODO use an actual INI library instead of doing this manually
+            //  (since this will break if BepInEx adds another key named "Enabled")
+            if (enableConsoleToolStripMenuItem.Checked)
             {
                 string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
                 for (int i = 0; i < lines.Length; i++)
@@ -967,7 +976,7 @@ namespace FreedomManager
                 File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
                 enableConsoleToolStripMenuItem.Checked = false;
             }
-            else if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            else if (bepisPresent)
             {
                 string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
                 for (int i = 0; i < lines.Length; i++)
