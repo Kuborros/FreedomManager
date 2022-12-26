@@ -22,7 +22,7 @@ namespace FreedomManager
         bool bepisPresent = false;
         bool fp2Found = false;
         bool melonPresent = false;
-        bool exists = false;
+        //bool exists = false;
         string rootDir = "";
         int columnIndex = 0;
         List<ModInfo> mods = new List<ModInfo>();
@@ -38,6 +38,9 @@ namespace FreedomManager
 
         public FreedomManager(string[] args)
         {
+            // TODO move everything up to checking if FP2 is present into Program.Main
+            // TODO move everything after that into OnLoad
+
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             DragDrop += new DragEventHandler(FM_DragDrop);
@@ -45,7 +48,7 @@ namespace FreedomManager
 
             InitializeComponent();
             rootDir = typeof(FreedomManager).Assembly.Location.Replace(Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location), "");
-            exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+            //exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
             Directory.SetCurrentDirectory(rootDir);
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
@@ -56,7 +59,7 @@ namespace FreedomManager
                 MessageBox.Show("Freedom Planet 2 was not found!\n\n" +
                     "Please ensure the mod manager is in the main game directory.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                Application.Exit();
+                Environment.Exit(1);
                 return;
                 /*savePlay.Hide();
                 setup.Hide();
@@ -110,12 +113,12 @@ namespace FreedomManager
                 Console.WriteLine(ex.Message);
             }
 
-            if (exists)
+            /*if (exists)
             {
                 if (args.Length < 2)
-                    MessageBox.Show("Only one instance can be running at once!", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Only one instance can be running at once!", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Process.GetCurrentProcess().Kill();
-            }
+            }*/
 
             if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
             {
