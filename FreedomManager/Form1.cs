@@ -53,19 +53,22 @@ namespace FreedomManager
 
             if (!fp2Found)
             {
-                MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
-                "Please ensure the mod manager is in the main game directory.",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                savePlay.Hide();
+                MessageBox.Show(this, "Freedom Planet 2 was not found!\n\n" +
+                    "Please ensure the mod manager is in the main game directory.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                Application.Exit();
+                return;
+                /*savePlay.Hide();
                 setup.Hide();
                 handlerButton.Hide();
-                melonButton.Hide();
+                melonButton.Hide();*/
             }
 
             if (fp2Found && !bepisPresent)
             {
-                MessageBox.Show("BepInEx not Found!.\n\n" +
-                        "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
+                MessageBox.Show(this, "BepInEx was not found!\n\n" +
+                        "Seems you don't have the BepInEx mod loader installed - install it by clicking on the \"Install BepInEx\" button.\n" +
+                        "You will not be able to use any mods you install before doing this!",
                         Text, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
             else setup.Text = "Uninstall BepInEx";
@@ -109,7 +112,8 @@ namespace FreedomManager
 
             if (exists)
             {
-                if (args.Length < 2) MessageBox.Show("Only one instance can be running at the time!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (args.Length < 2)
+                    MessageBox.Show("Only one instance can be running at once!", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Process.GetCurrentProcess().Kill();
             }
 
@@ -446,7 +450,9 @@ namespace FreedomManager
                         {
                             if (document.RootElement.GetType().Equals(typeof(JsonObject)))
                             {
-                                MessageBox.Show("Gamebanana api request returned error:\n" + document.RootElement.GetProperty("error").GetString());
+                                MessageBox.Show(this, "GameBanana API request returned error:\n" +
+                                    document.RootElement.GetProperty("error").GetString(),
+                                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return false;
                             }
                             JsonElement jName = document.RootElement[0];
@@ -466,7 +472,8 @@ namespace FreedomManager
                 name = type;
             }
 
-            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\",  by: " + author + "?", "Mod install", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\",\nby: " + author + "?",
+                "Install mod", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 try
@@ -501,6 +508,7 @@ namespace FreedomManager
 
         private void savePlay_Click(object sender, EventArgs e)
         {
+            // TODO replace this with a Steam call, because I'm pretty sure FP2 doesn't launch if you run it directly?
             if (fp2Found) Process.Start("FP2.exe");
         }
 
@@ -515,17 +523,17 @@ namespace FreedomManager
                     ExtractMod("BepInEx.zip", ArchiveType.BepinDir);
                     File.Delete("BepInEx.zip");
 
-                    MessageBox.Show(this, "BepInEx installed!.\n\n" +
-                    "The game is now ready for modding.",
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(this, "BepInEx has been installed!\n\n" +
+                        "The game is now ready for modding.",
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     setup.Text = "Uninstall BepInEx";
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Unpacking BepInEx failed!.\n\n" +
-                    "Error info: " + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Failed to install BepInEx!\n\n" +
+                        ex.GetType().Name + ": " + ex.Message,
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -533,9 +541,9 @@ namespace FreedomManager
                 File.Delete("winhttp.dll");
                 bepisPresent = false;
 
-                MessageBox.Show(this, "BepInEx hook removed!.\n\n" +
-                "The mods will no longer be loaded.",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "BepInEx has been installed!.\n\n" +
+                    "Mods will no longer be loaded.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 setup.Text = "Install BepInEx";
 
@@ -561,14 +569,14 @@ namespace FreedomManager
                         {
                             ExtractMod(file, ArchiveType.BepinDir);
                             MessageBox.Show("Mod unpacked!",
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             RenderList();
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Unpacking failed!.\n\n" +
-                            "Error info: " + ex.Message,
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                            MessageBox.Show("Unpacking failed!\n\n" +
+                                ex.GetType().Name + ": " + ex.Message,
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                         break;
                     }
@@ -578,14 +586,14 @@ namespace FreedomManager
                         {
                             ExtractMod(file, ArchiveType.PluginDir);
                             MessageBox.Show("Mod unpacked!",
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             RenderList();
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show(this, "Unpacking failed!\n\n" +
-                            "Error info: " + ex.Message,
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                ex.GetType().Name + ": " + ex.Message,
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                         break;
                     }
@@ -598,20 +606,21 @@ namespace FreedomManager
                             if (melonPresent)
                             {
                                 MessageBox.Show("MelonLoader mod unpacked!",
-                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
                             else
                             {
-                                MessageBox.Show("MelonLoader mod unpacked!\n\nBut MelonLoader is not installed! Please install it before running Melon mods!",
-                                Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                MessageBox.Show("MelonLoader mod unpacked!\n\n" +
+                                    "Note that the MelonLoader plugin is not installed. You must install it before you're able to run Melon mods.",
+                                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
                             RenderList();
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show("Unpacking failed!\n\n" +
-                            "Error info: " + ex.Message,
-                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                ex.GetType().Name + ": " + ex.Message,
+                                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                         break;
                     }
@@ -619,9 +628,9 @@ namespace FreedomManager
                 default:
                     {
                         MessageBox.Show("Provided archive is invalid!\n\n" +
-                        "Please ensure the archive has proper directory structure, as well as contains a BepInEx/MelonLoader plugin.",
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                        break;
+                            "Please ensure the archive has proper directory structure, as well as contains a BepInEx/MelonLoader plugin.",
+                            Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                            break;
                     }
             }
         }
@@ -740,6 +749,7 @@ namespace FreedomManager
 
         private void melonButton_Click(object sender, EventArgs e)
         {
+            // TODO check that BepInEx is present
             if (!melonPresent)
             {
                 WebClient client = new WebClient();
@@ -748,7 +758,7 @@ namespace FreedomManager
                 File.Delete("Melon.zip");
 
                 MessageBox.Show(this, "MelonLoader plugin installed!\n\n" +
-                "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
+                    "MelonLoader mods will now be loaded. Please be aware that MelonLoader can be heavy on the game.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = true;
@@ -760,8 +770,8 @@ namespace FreedomManager
                 Directory.Delete("BepInEx\\plugins\\BepInEx.MelonLoader.Loader", true);
 
                 MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
-                "",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    "MelonLoader mods will no longer be loaded.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = false;
                 melonButton.Text = "Install MelonLoader Compat";
@@ -799,18 +809,18 @@ namespace FreedomManager
                             commandKey.SetValue("", "\"" + applicationLocation + "\" \"%1\"");
                         }
                     }
-                    MessageBox.Show("URL handler registered!.\n\n" +
-                    "Gamebanana 1-Click install is now available.",
-                     "URL Handler", MessageBoxButtons.OK);
+                    MessageBox.Show("URL handler registered!\n\n" +
+                        "GameBanana 1-Click install is now available.",
+                        "URL Handler");
 
                     handlerButton.Text = "Unregister URL handler";
                 }
                 else if (deleteIfPresent)
                 {
                     Registry.CurrentUser.DeleteSubKeyTree("SOFTWARE\\Classes\\" + "fp2mm");
-                    MessageBox.Show("URL handler de-registered!.\n\n" +
-                    "Gamebanana 1-Click support has been uninstalled.",
-                    "URL Handler", MessageBoxButtons.OK);
+                    MessageBox.Show("URL handler unregistered!\n\n" +
+                        "GameBanana 1-Click support has been uninstalled.",
+                        "URL Handler");
 
                     handlerButton.Text = "Register URL handler";
                 }
@@ -848,6 +858,7 @@ namespace FreedomManager
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 try
                 {
+                    // TODO handle multiple files
                     InstallMod(files[0], CheckArchive(files[0])); //We deal with just one file, unpacking more at the time would add pointless complications.
                 }
                 catch (Exception ex)
@@ -876,11 +887,12 @@ namespace FreedomManager
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
             if (modInfo.GBID != null && modInfo.GBID != 0)
             {
+                // TODO there is a better way to do this...
                 Process.Start("explorer", "https://gamebanana.com/mods/" + modInfo.GBID + "/");
             }
             else
             {
-                MessageBox.Show("This mod does not specify GameBanana link.","Unable to open page",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show("This mod does not specify a GameBanana link.", "Unable to open page", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -928,16 +940,19 @@ namespace FreedomManager
 
         private void gitHubWikiToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // TODO better way to open links
             Process.Start("explorer", "https://github.com/Kuborros/FreedomManager/wiki");
         }
 
         private void gameBananaPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // TODO better way to open links
             Process.Start("explorer", "https://gamebanana.com/tools/10870");
         }
 
         private void enableConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // TODO notify user if bepis config doesn't exist
             if (enableConsoleToolStripMenuItem.Checked && File.Exists("BepInEx\\config\\BepInEx.cfg"))
             {
                 string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
