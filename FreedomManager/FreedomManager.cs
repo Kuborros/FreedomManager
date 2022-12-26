@@ -543,7 +543,7 @@ namespace FreedomManager
                 File.Delete("winhttp.dll");
                 bepisPresent = false;
 
-                MessageBox.Show(this, "BepInEx has been installed!.\n\n" +
+                MessageBox.Show(this, "BepInEx has been installed!\n\n" +
                     "Mods will no longer be loaded.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
