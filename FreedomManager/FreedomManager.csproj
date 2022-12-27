@@ -154,6 +154,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BepInExHelper.cs" />
+    <Compile Include="Ini\IniElement.cs" />
+    <Compile Include="Ini\IniFile.cs" />
+    <Compile Include="Ini\IniProperty.cs" />
+    <Compile Include="Ini\IniReader.cs" />
+    <Compile Include="Ini\IniSection.cs" />
+    <Compile Include="Ini\IniWriter.cs" />
     <Compile Include="ModInfo.cs" />
     <Compile Include="FreedomManager.cs">
       <SubType>Form</SubType>

@@ -19,7 +19,7 @@ namespace FreedomManager
 {
     public partial class FreedomManager : Form
     {
-        bool bepisPresent = false;
+        //bool bepisPresent = false;
         bool fp2Found = false;
         bool melonPresent = false;
         //bool exists = false;
@@ -50,7 +50,7 @@ namespace FreedomManager
             rootDir = typeof(FreedomManager).Assembly.Location.Replace(Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location), "");
             //exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
             Directory.SetCurrentDirectory(rootDir);
-            bepisPresent = File.Exists("winhttp.dll");
+            //bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
             melonPresent = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
 
@@ -67,7 +67,8 @@ namespace FreedomManager
                 melonButton.Hide();*/
             }
 
-            if (fp2Found && !bepisPresent)
+            //if (fp2Found && !bepisPresent)
+            if (!BepInExHelper.IsInstalled)
             {
                 MessageBox.Show("BepInEx was not found!\n\n" +
                         "Seems you don't have the BepInEx mod loader installed - install it by clicking on the \"Install BepInEx\" button.\n" +
@@ -76,7 +77,8 @@ namespace FreedomManager
             }
             else setup.Text = "Uninstall BepInEx";
 
-            if (bepisPresent)
+            //if (bepisPresent)
+            if (BepInExHelper.IsInstalled)
             {
                 mods.AddRange(DirectoryScan());
             }
@@ -120,7 +122,7 @@ namespace FreedomManager
                 Process.GetCurrentProcess().Kill();
             }*/
 
-            if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            /*if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
             {
                 string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
                 for (int i = 0; i < lines.Length; i++)
@@ -131,14 +133,16 @@ namespace FreedomManager
                         break;
                     }
                 }
-            }
+            }*/
+            enableConsoleToolStripMenuItem.Checked = BepInExHelper.IsConsoleEnabled;
             RenderList(mods);
         }
 
         private void RenderList()
         {
             mods.Clear();
-            if (bepisPresent)
+            //if (bepisPresent)
+            if (BepInExHelper.IsInstalled)
             {
                 mods.AddRange(DirectoryScan());
             }
@@ -226,7 +230,8 @@ namespace FreedomManager
 
             //Redoing the work, but we just possibly removed multiple duplicate mods. Needs to be rescanned.
             mods.Clear();
-            if (bepisPresent)
+            //if (bepisPresent)
+            if (BepInExHelper.IsInstalled)
             {
                 mods.AddRange(DirectoryScan());
             }
@@ -516,6 +521,7 @@ namespace FreedomManager
 
         private void setup_Click(object sender, EventArgs e)
         {
+            // TODO move to BepInExHelper
             if (!File.Exists("winhttp.dll"))
             {
                 try
@@ -541,9 +547,10 @@ namespace FreedomManager
             else
             {
                 File.Delete("winhttp.dll");
-                bepisPresent = false;
+                //bepisPresent = false;
+                BepInExHelper.Refresh();
 
-                MessageBox.Show(this, "BepInEx has been installed!\n\n" +
+                MessageBox.Show(this, "BepInEx has been uninstalled!\n\n" +
                     "Mods will no longer be loaded.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -951,7 +958,28 @@ namespace FreedomManager
 
         private void enableConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            try
+            {
+                enableConsoleToolStripMenuItem.Checked = BepInExHelper.ToggleIsConsoleEnabled();
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show(this, "BepInEx config does not exist!\n\n" +
+                    "Please install BepInEx, then run the game at least once.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                enableConsoleToolStripMenuItem.Checked = false;
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Failed to toggle the 'Logging.Console.Enabled' option!\n\n" +
+                    ex.GetType().Name + ": " + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                enableConsoleToolStripMenuItem.Checked = false;
+                return;
+            }
+
+            /*if (!File.Exists("BepInEx\\config\\BepInEx.cfg"))
             {
                 MessageBox.Show(this, "BepInEx config does not exist!\n\n" +
                     "Please install BepInEx, then run the game at least once.",
@@ -988,7 +1016,7 @@ namespace FreedomManager
                 }
                 File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
                 enableConsoleToolStripMenuItem.Checked = true;
-            }
+            }*/
         }
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
