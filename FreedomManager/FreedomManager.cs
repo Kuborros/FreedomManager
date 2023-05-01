@@ -56,10 +56,8 @@ namespace FreedomManager
                 MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                savePlay.Hide();
-                setup.Hide();
-                handlerButton.Hide();
-                melonButton.Hide();
+                Application.Exit();
+                
             }
 
             if (fp2Found && !bepisPresent)
@@ -748,7 +746,7 @@ namespace FreedomManager
                 File.Delete("Melon.zip");
 
                 MessageBox.Show(this, "MelonLoader plugin installed!\n\n" +
-                "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
+                "MelonLoader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 melonPresent = true;

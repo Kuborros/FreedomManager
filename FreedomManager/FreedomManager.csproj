@@ -52,6 +52,8 @@
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Loader.ico</ApplicationIcon>
@@ -161,18 +163,24 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModInfo.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="ModDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ModDetails.Designer.cs">
+      <DependentUpon>ModDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModInfo.cs" />
+    <Compile Include="FreedomManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FreedomManager.Designer.cs">
+      <DependentUpon>FreedomManager.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="FreedomManager.resx">
+      <DependentUpon>FreedomManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

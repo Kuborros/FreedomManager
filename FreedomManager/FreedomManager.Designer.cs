@@ -41,6 +41,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seeOnGameBananaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,19 +55,28 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubWikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameBananaPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.seeOnGameBananaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // savePlay
             // 
-            this.savePlay.Location = new System.Drawing.Point(12, 441);
+            this.savePlay.Location = new System.Drawing.Point(24, 554);
             this.savePlay.Name = "savePlay";
             this.savePlay.Size = new System.Drawing.Size(119, 23);
             this.savePlay.TabIndex = 1;
@@ -76,9 +86,9 @@
             // 
             // setup
             // 
-            this.setup.Location = new System.Drawing.Point(137, 441);
+            this.setup.Location = new System.Drawing.Point(133, 419);
             this.setup.Name = "setup";
-            this.setup.Size = new System.Drawing.Size(281, 23);
+            this.setup.Size = new System.Drawing.Size(256, 70);
             this.setup.TabIndex = 2;
             this.setup.Text = "Install BepInEx";
             this.setup.UseVisualStyleBackColor = true;
@@ -86,9 +96,9 @@
             // 
             // exit
             // 
-            this.exit.Location = new System.Drawing.Point(424, 441);
+            this.exit.Location = new System.Drawing.Point(411, 554);
             this.exit.Name = "exit";
-            this.exit.Size = new System.Drawing.Size(75, 23);
+            this.exit.Size = new System.Drawing.Size(78, 23);
             this.exit.TabIndex = 3;
             this.exit.Text = "Exit";
             this.exit.UseVisualStyleBackColor = true;
@@ -96,9 +106,9 @@
             // 
             // modInstall
             // 
-            this.modInstall.Location = new System.Drawing.Point(12, 368);
+            this.modInstall.Location = new System.Drawing.Point(8, 457);
             this.modInstall.Name = "modInstall";
-            this.modInstall.Size = new System.Drawing.Size(119, 67);
+            this.modInstall.Size = new System.Drawing.Size(119, 32);
             this.modInstall.TabIndex = 4;
             this.modInstall.Text = "Install Mod";
             this.modInstall.UseVisualStyleBackColor = true;
@@ -111,9 +121,9 @@
             // 
             // refresh
             // 
-            this.refresh.Location = new System.Drawing.Point(137, 368);
+            this.refresh.Location = new System.Drawing.Point(8, 419);
             this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(116, 67);
+            this.refresh.Size = new System.Drawing.Size(119, 32);
             this.refresh.TabIndex = 6;
             this.refresh.Text = "Refresh";
             this.refresh.UseVisualStyleBackColor = true;
@@ -121,9 +131,9 @@
             // 
             // melonButton
             // 
-            this.melonButton.Location = new System.Drawing.Point(259, 368);
+            this.melonButton.Location = new System.Drawing.Point(395, 419);
             this.melonButton.Name = "melonButton";
-            this.melonButton.Size = new System.Drawing.Size(159, 67);
+            this.melonButton.Size = new System.Drawing.Size(78, 70);
             this.melonButton.TabIndex = 7;
             this.melonButton.Text = "Install MelonLoader Compat";
             this.melonButton.UseVisualStyleBackColor = true;
@@ -131,9 +141,9 @@
             // 
             // handlerButton
             // 
-            this.handlerButton.Location = new System.Drawing.Point(424, 368);
+            this.handlerButton.Location = new System.Drawing.Point(149, 554);
             this.handlerButton.Name = "handlerButton";
-            this.handlerButton.Size = new System.Drawing.Size(75, 67);
+            this.handlerButton.Size = new System.Drawing.Size(256, 23);
             this.handlerButton.TabIndex = 8;
             this.handlerButton.Text = "Register URL handler";
             this.handlerButton.UseVisualStyleBackColor = true;
@@ -147,7 +157,7 @@
             this.seeOnGameBananaToolStripMenuItem,
             this.uninstallToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 92);
             // 
             // openFolderToolStripMenuItem
             // 
@@ -162,6 +172,13 @@
             this.infoToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.infoToolStripMenuItem.Text = "Info";
             this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
+            // 
+            // seeOnGameBananaToolStripMenuItem
+            // 
+            this.seeOnGameBananaToolStripMenuItem.Name = "seeOnGameBananaToolStripMenuItem";
+            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.seeOnGameBananaToolStripMenuItem.Text = "See on GameBanana";
+            this.seeOnGameBananaToolStripMenuItem.Click += new System.EventHandler(this.seeOnGameBananaToolStripMenuItem_Click);
             // 
             // uninstallToolStripMenuItem
             // 
@@ -178,7 +195,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(511, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(506, 24);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -248,7 +265,8 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gitHubWikiToolStripMenuItem,
-            this.gameBananaPageToolStripMenuItem});
+            this.gameBananaPageToolStripMenuItem,
+            this.checkForUpdatesToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -256,16 +274,22 @@
             // gitHubWikiToolStripMenuItem
             // 
             this.gitHubWikiToolStripMenuItem.Name = "gitHubWikiToolStripMenuItem";
-            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubWikiToolStripMenuItem.Text = "GitHub Wiki";
             this.gitHubWikiToolStripMenuItem.Click += new System.EventHandler(this.gitHubWikiToolStripMenuItem_Click);
             // 
             // gameBananaPageToolStripMenuItem
             // 
             this.gameBananaPageToolStripMenuItem.Name = "gameBananaPageToolStripMenuItem";
-            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gameBananaPageToolStripMenuItem.Text = "GameBanana Page";
             this.gameBananaPageToolStripMenuItem.Click += new System.EventHandler(this.gameBananaPageToolStripMenuItem_Click);
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
             // 
             // listView1
             // 
@@ -277,10 +301,10 @@
             this.columnHeader4});
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 27);
+            this.listView1.Location = new System.Drawing.Point(8, 6);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(487, 335);
+            this.listView1.Size = new System.Drawing.Size(465, 407);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Descending;
             this.listView1.TabIndex = 10;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -291,43 +315,98 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 144;
+            this.columnHeader1.Width = 177;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Version";
+            this.columnHeader2.Width = 71;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Author";
-            this.columnHeader3.Width = 116;
+            this.columnHeader3.Width = 132;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "Loader";
-            this.columnHeader4.Width = 162;
+            this.columnHeader4.Width = 80;
             // 
-            // seeOnGameBananaToolStripMenuItem
+            // tabControl1
             // 
-            this.seeOnGameBananaToolStripMenuItem.Name = "seeOnGameBananaToolStripMenuItem";
-            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.seeOnGameBananaToolStripMenuItem.Text = "See on GameBanana";
-            this.seeOnGameBananaToolStripMenuItem.Click += new System.EventHandler(this.seeOnGameBananaToolStripMenuItem_Click);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(12, 27);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(482, 521);
+            this.tabControl1.TabIndex = 11;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.listView1);
+            this.tabPage1.Controls.Add(this.modInstall);
+            this.tabPage1.Controls.Add(this.refresh);
+            this.tabPage1.Controls.Add(this.setup);
+            this.tabPage1.Controls.Add(this.melonButton);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(474, 495);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Mods";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.groupBox3);
+            this.tabPage2.Controls.Add(this.groupBox2);
+            this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(474, 495);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Configuration";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(8, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(460, 104);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(8, 116);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(460, 113);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "groupBox2";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Location = new System.Drawing.Point(8, 235);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(460, 100);
+            this.groupBox3.TabIndex = 0;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "groupBox3";
             // 
             // FreedomManager
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 475);
-            this.Controls.Add(this.listView1);
+            this.ClientSize = new System.Drawing.Size(506, 589);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.handlerButton);
-            this.Controls.Add(this.melonButton);
-            this.Controls.Add(this.refresh);
-            this.Controls.Add(this.modInstall);
             this.Controls.Add(this.exit);
-            this.Controls.Add(this.setup);
             this.Controls.Add(this.savePlay);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -339,6 +418,9 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -375,6 +457,13 @@
         private System.Windows.Forms.ToolStripMenuItem installModToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem seeOnGameBananaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 
