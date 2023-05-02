@@ -64,14 +64,21 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // savePlay
@@ -141,7 +148,7 @@
             // 
             // handlerButton
             // 
-            this.handlerButton.Location = new System.Drawing.Point(149, 554);
+            this.handlerButton.Location = new System.Drawing.Point(8, 341);
             this.handlerButton.Name = "handlerButton";
             this.handlerButton.Size = new System.Drawing.Size(256, 23);
             this.handlerButton.TabIndex = 8;
@@ -215,7 +222,7 @@
             this.bepInExToolStripMenuItem,
             this.melonLoaderToolStripMenuItem});
             this.openModsFolderToolStripMenuItem.Name = "openModsFolderToolStripMenuItem";
-            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.openModsFolderToolStripMenuItem.Text = "Open Mods Folder";
             // 
             // bepInExToolStripMenuItem
@@ -235,14 +242,14 @@
             // installModToolStripMenuItem
             // 
             this.installModToolStripMenuItem.Name = "installModToolStripMenuItem";
-            this.installModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.installModToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.installModToolStripMenuItem.Text = "Install Mod";
             this.installModToolStripMenuItem.Click += new System.EventHandler(this.installModToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -257,7 +264,7 @@
             // enableConsoleToolStripMenuItem
             // 
             this.enableConsoleToolStripMenuItem.Name = "enableConsoleToolStripMenuItem";
-            this.enableConsoleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enableConsoleToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.enableConsoleToolStripMenuItem.Text = "Enable Console";
             this.enableConsoleToolStripMenuItem.Click += new System.EventHandler(this.enableConsoleToolStripMenuItem_Click);
             // 
@@ -274,21 +281,21 @@
             // gitHubWikiToolStripMenuItem
             // 
             this.gitHubWikiToolStripMenuItem.Name = "gitHubWikiToolStripMenuItem";
-            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.gitHubWikiToolStripMenuItem.Text = "GitHub Wiki";
             this.gitHubWikiToolStripMenuItem.Click += new System.EventHandler(this.gitHubWikiToolStripMenuItem_Click);
             // 
             // gameBananaPageToolStripMenuItem
             // 
             this.gameBananaPageToolStripMenuItem.Name = "gameBananaPageToolStripMenuItem";
-            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.gameBananaPageToolStripMenuItem.Text = "GameBanana Page";
             this.gameBananaPageToolStripMenuItem.Click += new System.EventHandler(this.gameBananaPageToolStripMenuItem_Click);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
             // 
             // listView1
@@ -301,10 +308,10 @@
             this.columnHeader4});
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(8, 6);
+            this.listView1.Location = new System.Drawing.Point(6, 6);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(465, 407);
+            this.listView1.Size = new System.Drawing.Size(462, 407);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Descending;
             this.listView1.TabIndex = 10;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -325,7 +332,7 @@
             // columnHeader3
             // 
             this.columnHeader3.Text = "Author";
-            this.columnHeader3.Width = 132;
+            this.columnHeader3.Width = 130;
             // 
             // columnHeader4
             // 
@@ -362,6 +369,7 @@
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Controls.Add(this.handlerButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -369,24 +377,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Location = new System.Drawing.Point(8, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(460, 104);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Location = new System.Drawing.Point(8, 116);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(460, 113);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
             // 
             // groupBox3
             // 
@@ -397,6 +387,90 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "groupBox3";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(8, 101);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(460, 128);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Manager Settings";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.checkBox6);
+            this.groupBox1.Controls.Add(this.checkBox5);
+            this.groupBox1.Controls.Add(this.checkBox4);
+            this.groupBox1.Controls.Add(this.checkBox3);
+            this.groupBox1.Controls.Add(this.checkBox2);
+            this.groupBox1.Controls.Add(this.checkBox1);
+            this.groupBox1.Location = new System.Drawing.Point(8, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(460, 89);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "BepInEx Settings";
+            // 
+            // checkBox6
+            // 
+            this.checkBox6.AutoSize = true;
+            this.checkBox6.Location = new System.Drawing.Point(237, 65);
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.Size = new System.Drawing.Size(126, 17);
+            this.checkBox6.TabIndex = 5;
+            this.checkBox6.Text = "Do not overwrite logs";
+            this.checkBox6.UseVisualStyleBackColor = true;
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(237, 42);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(136, 17);
+            this.checkBox5.TabIndex = 4;
+            this.checkBox5.Text = "Add Unity logs to logfile";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(237, 19);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(96, 17);
+            this.checkBox4.TabIndex = 3;
+            this.checkBox4.Text = "Write log to file";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(6, 65);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(97, 17);
+            this.checkBox3.TabIndex = 2;
+            this.checkBox3.Text = "Hide Unity logs";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(6, 42);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(151, 17);
+            this.checkBox2.TabIndex = 1;
+            this.checkBox2.Text = "Prevent closing of console";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(6, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(100, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Enable Console";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -405,7 +479,6 @@
             this.ClientSize = new System.Drawing.Size(506, 589);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.handlerButton);
             this.Controls.Add(this.exit);
             this.Controls.Add(this.savePlay);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -421,6 +494,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -464,6 +539,12 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

@@ -163,12 +163,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ModDetails.Designer.cs">
-      <DependentUpon>ModDetails.cs</DependentUpon>
-    </Compile>
     <Compile Include="ModInfo.cs" />
     <Compile Include="FreedomManager.cs">
       <SubType>Form</SubType>
