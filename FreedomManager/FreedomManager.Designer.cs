@@ -64,8 +64,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
@@ -73,17 +75,21 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // savePlay
             // 
-            this.savePlay.Location = new System.Drawing.Point(24, 554);
+            this.savePlay.Location = new System.Drawing.Point(12, 554);
             this.savePlay.Name = "savePlay";
             this.savePlay.Size = new System.Drawing.Size(119, 23);
             this.savePlay.TabIndex = 1;
@@ -93,9 +99,9 @@
             // 
             // setup
             // 
-            this.setup.Location = new System.Drawing.Point(133, 419);
+            this.setup.Location = new System.Drawing.Point(128, 419);
             this.setup.Name = "setup";
-            this.setup.Size = new System.Drawing.Size(256, 70);
+            this.setup.Size = new System.Drawing.Size(249, 70);
             this.setup.TabIndex = 2;
             this.setup.Text = "Install BepInEx";
             this.setup.UseVisualStyleBackColor = true;
@@ -103,7 +109,7 @@
             // 
             // exit
             // 
-            this.exit.Location = new System.Drawing.Point(411, 554);
+            this.exit.Location = new System.Drawing.Point(416, 554);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(78, 23);
             this.exit.TabIndex = 3;
@@ -113,7 +119,7 @@
             // 
             // modInstall
             // 
-            this.modInstall.Location = new System.Drawing.Point(8, 457);
+            this.modInstall.Location = new System.Drawing.Point(3, 457);
             this.modInstall.Name = "modInstall";
             this.modInstall.Size = new System.Drawing.Size(119, 32);
             this.modInstall.TabIndex = 4;
@@ -128,7 +134,7 @@
             // 
             // refresh
             // 
-            this.refresh.Location = new System.Drawing.Point(8, 419);
+            this.refresh.Location = new System.Drawing.Point(3, 419);
             this.refresh.Name = "refresh";
             this.refresh.Size = new System.Drawing.Size(119, 32);
             this.refresh.TabIndex = 6;
@@ -138,9 +144,9 @@
             // 
             // melonButton
             // 
-            this.melonButton.Location = new System.Drawing.Point(395, 419);
+            this.melonButton.Location = new System.Drawing.Point(383, 419);
             this.melonButton.Name = "melonButton";
-            this.melonButton.Size = new System.Drawing.Size(78, 70);
+            this.melonButton.Size = new System.Drawing.Size(85, 70);
             this.melonButton.TabIndex = 7;
             this.melonButton.Text = "Install MelonLoader Compat";
             this.melonButton.UseVisualStyleBackColor = true;
@@ -150,7 +156,7 @@
             // 
             this.handlerButton.Location = new System.Drawing.Point(8, 341);
             this.handlerButton.Name = "handlerButton";
-            this.handlerButton.Size = new System.Drawing.Size(256, 23);
+            this.handlerButton.Size = new System.Drawing.Size(157, 65);
             this.handlerButton.TabIndex = 8;
             this.handlerButton.Text = "Register URL handler";
             this.handlerButton.UseVisualStyleBackColor = true;
@@ -366,6 +372,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Controls.Add(this.groupBox1);
@@ -378,14 +385,27 @@
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(8, 412);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(157, 65);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "Check for Updates";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.checkBox8);
+            this.groupBox3.Controls.Add(this.checkBox7);
             this.groupBox3.Location = new System.Drawing.Point(8, 235);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(460, 100);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "groupBox3";
+            this.groupBox3.Text = "Automatic updates";
             // 
             // groupBox2
             // 
@@ -395,6 +415,16 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Manager Settings";
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.Location = new System.Drawing.Point(8, 19);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.Size = new System.Drawing.Size(252, 17);
+            this.checkBox7.TabIndex = 13;
+            this.checkBox7.Text = "Check for Freedom Manager updates on startup";
+            this.checkBox7.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -471,6 +501,35 @@
             this.checkBox1.Text = "Enable Console";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.Location = new System.Drawing.Point(8, 42);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(206, 17);
+            this.checkBox8.TabIndex = 14;
+            this.checkBox8.Text = "Check for BepInEx updates on startup";
+            this.checkBox8.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 66);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(127, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Current Manager Version:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.label2.Location = new System.Drawing.Point(142, 66);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(36, 13);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "2.0.0";
+            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -494,6 +553,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -545,6 +606,11 @@
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBox8;
     }
 }
 
