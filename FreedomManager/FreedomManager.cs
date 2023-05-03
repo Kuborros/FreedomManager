@@ -36,7 +36,7 @@ namespace FreedomManager
             None
         }
 
-        public FreedomManager(string[] args)
+        public FreedomManager(string[] args,bool alreadyRunning)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
