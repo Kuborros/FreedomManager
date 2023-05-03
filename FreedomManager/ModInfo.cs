@@ -13,6 +13,18 @@ namespace FreedomManager
 	    "HasAssets":false
     }
     */
+
+    /*
+    {
+        "ManifestVer":2,
+        "Name":"",
+        "Author":"",
+        "Version":"",
+        "GameBananaID":"",
+        "AssetDir":"",
+        ""
+    }
+    */
     public class ModInfo
     {
         public int ManifestVer { get; set; }
