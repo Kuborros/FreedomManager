@@ -10,15 +10,15 @@ namespace FreedomManager
 {
     internal static class Program
     {
-        private const string pipeName = "fp2-mod-manager";
-        private const string protocol = "fp2mm:";
+        public const string pipeName = "fp2-mod-manager";
+        public const string protocol = "fp2mm:";
         private static readonly Mutex mutex = new Mutex(true, pipeName);
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(String[] args)
+        static void Main(string[] args)
         {
 
             bool alreadyRunning;
@@ -28,11 +28,6 @@ namespace FreedomManager
             if (args.Length > 1 && args[0] == "run-update")
             {
 
-            }
-
-            if (!alreadyRunning)
-            {
-               
             }
 
             List<string> uris = args
@@ -52,10 +47,12 @@ namespace FreedomManager
                     }
                     writer.Flush();
                 }
-                return;
             }
 
-
+            if (alreadyRunning)
+            {
+                return;
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

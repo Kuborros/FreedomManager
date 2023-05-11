@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -22,10 +23,11 @@ namespace FreedomManager
         bool bepisPresent = false;
         bool fp2Found = false;
         bool melonPresent = false;
-        bool exists = false;
         string rootDir = "";
         int columnIndex = 0;
         List<ModInfo> mods = new List<ModInfo>();
+
+        static BepinConfig bepinConfig;
 
         public enum ArchiveType
         {
@@ -36,7 +38,7 @@ namespace FreedomManager
             None
         }
 
-        public FreedomManager(List<String> uris)
+        public FreedomManager(List<string> uris)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
@@ -56,8 +58,7 @@ namespace FreedomManager
                 MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                Application.Exit();
-                
+                Environment.Exit(1);
             }
 
             if (fp2Found && !bepisPresent)
@@ -84,9 +85,25 @@ namespace FreedomManager
                 if (current != null) { handlerButton.Text = "Unregister URL handler"; }
             }
 
+            if (uris.Count > 0) handleGBUri(uris[0]);
+
+            if (bepisPresent)
+            {
+                bepinConfig = new BepinConfig();
+
+                enableConsoleToolStripMenuItem.Checked = bepinConfig.ShowConsole;
+                enableConsoleCheckBox.Checked = bepinConfig.ShowConsole;
+
+            }
+            RenderList(mods);
+            OneClickServer();
+        }
+
+        private void handleGBUri(string uri)
+        {
             try
             {
-                string[] gblink = uris[0].Replace("fp2mm://", string.Empty).Replace("fp2mm:", string.Empty).Split(',');
+                string[] gblink = uri.Replace("fp2mm://", string.Empty).Replace("fp2mm:", string.Empty).Split(',');
                 if (gblink.Length == 1)
                 {
                     DownloadMod(new Uri(gblink[0]), "", "");
@@ -104,20 +121,30 @@ namespace FreedomManager
             {
                 Console.WriteLine(ex.Message);
             }
+        }
 
-            if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+        private async void OneClickServer()
+        {
+            try
             {
-                string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
-                for (int i = 0; i < lines.Length; i++)
+                using (var pipeServer = new NamedPipeServerStream(Program.pipeName, PipeDirection.In))
                 {
-                    if (lines[i].Contains("Enabled ="))
+                    await pipeServer.WaitForConnectionAsync();
+
+                    var sr = new StreamReader(pipeServer);
+                    string temp;
+                    while ((temp = sr.ReadLine()) != null)
                     {
-                        if (lines[i].Contains("Enabled = true")) enableConsoleToolStripMenuItem.Checked = true;
-                        break;
+                        Console.WriteLine("Received from server: {0}", temp);
+                        handleGBUri(temp);
                     }
                 }
             }
-            RenderList(mods);
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            OneClickServer();
         }
 
         private void RenderList()
@@ -134,6 +161,8 @@ namespace FreedomManager
             }
             DeduplicateMods();
         }
+
+
         private void RenderList(List<ModInfo> modInfos)
         {
             listView1.Items.Clear();
@@ -930,32 +959,16 @@ namespace FreedomManager
 
         private void enableConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (enableConsoleToolStripMenuItem.Checked && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            if (enableConsoleToolStripMenuItem.Checked)
             {
-                string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    if (lines[i].Contains("Enabled = true"))
-                    {
-                        lines[i] = "Enabled = false";
-                        break;
-                    }
-                }
-                File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
+                bepinConfig.ShowConsole = false;
+                bepinConfig.writeConfig();
                 enableConsoleToolStripMenuItem.Checked = false;
             }
-            else if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
+            else if (bepisPresent)
             {
-                string[] lines = File.ReadAllLines("BepInEx\\config\\BepInEx.cfg");
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    if (lines[i].Contains("Enabled = false"))
-                    {
-                        lines[i] = "Enabled = true";
-                        break;
-                    }
-                }
-                File.WriteAllLines("BepInEx\\config\\BepInEx.cfg", lines);
+                bepinConfig.ShowConsole = true;
+                bepinConfig.writeConfig();
                 enableConsoleToolStripMenuItem.Checked = true;
             }
         }
