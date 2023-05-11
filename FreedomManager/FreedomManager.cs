@@ -36,7 +36,7 @@ namespace FreedomManager
             None
         }
 
-        public FreedomManager(string[] args,bool alreadyRunning)
+        public FreedomManager(List<String> uris)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
@@ -45,7 +45,6 @@ namespace FreedomManager
 
             InitializeComponent();
             rootDir = typeof(FreedomManager).Assembly.Location.Replace(Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location), "");
-            exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
             Directory.SetCurrentDirectory(rootDir);
             bepisPresent = File.Exists("winhttp.dll");
             fp2Found = File.Exists("FP2.exe");
@@ -53,6 +52,7 @@ namespace FreedomManager
 
             if (!fp2Found)
             {
+                //No FP2, no loader.
                 MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -86,7 +86,7 @@ namespace FreedomManager
 
             try
             {
-                string[] gblink = args[1].Replace("fp2mm://", string.Empty).Replace("fp2mm:", string.Empty).Split(',');
+                string[] gblink = uris[0].Replace("fp2mm://", string.Empty).Replace("fp2mm:", string.Empty).Split(',');
                 if (gblink.Length == 1)
                 {
                     DownloadMod(new Uri(gblink[0]), "", "");
@@ -103,12 +103,6 @@ namespace FreedomManager
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }
-
-            if (exists)
-            {
-                if (args.Length < 2) MessageBox.Show("Only one instance can be running at the time!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Process.GetCurrentProcess().Kill();
             }
 
             if (bepisPresent && File.Exists("BepInEx\\config\\BepInEx.cfg"))
