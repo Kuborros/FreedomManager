@@ -64,6 +64,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.fp2resComboBox = new System.Windows.Forms.ComboBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -86,6 +90,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -159,7 +164,7 @@
             // 
             this.handlerButton.Location = new System.Drawing.Point(8, 341);
             this.handlerButton.Name = "handlerButton";
-            this.handlerButton.Size = new System.Drawing.Size(157, 65);
+            this.handlerButton.Size = new System.Drawing.Size(157, 74);
             this.handlerButton.TabIndex = 8;
             this.handlerButton.Text = "Register URL handler";
             this.handlerButton.UseVisualStyleBackColor = true;
@@ -375,6 +380,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox2);
@@ -388,9 +394,57 @@
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.button2);
+            this.groupBox4.Controls.Add(this.fp2resComboBox);
+            this.groupBox4.Controls.Add(this.checkBox1);
+            this.groupBox4.Location = new System.Drawing.Point(171, 341);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(297, 74);
+            this.groupBox4.TabIndex = 13;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Internal Resolution Patch";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(168, 19);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(123, 46);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Patch";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // fp2resComboBox
+            // 
+            this.fp2resComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.fp2resComboBox.FormattingEnabled = true;
+            this.fp2resComboBox.Items.AddRange(new object[] {
+            "640x360",
+            "1280x720",
+            "1920x1080",
+            "2560x1440",
+            "3200x1800",
+            "3840x2160",
+            "4480x2520"});
+            this.fp2resComboBox.Location = new System.Drawing.Point(6, 42);
+            this.fp2resComboBox.Name = "fp2resComboBox";
+            this.fp2resComboBox.Size = new System.Drawing.Size(151, 21);
+            this.fp2resComboBox.TabIndex = 1;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(6, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(65, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Enabled";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(8, 412);
+            this.button1.Location = new System.Drawing.Point(8, 424);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(157, 65);
             this.button1.TabIndex = 12;
@@ -581,6 +635,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -642,6 +698,10 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ComboBox fp2resComboBox;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
