@@ -50,8 +50,6 @@
             this.melonLoaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.installModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubWikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameBananaPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,9 +63,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.resPatchButton = new System.Windows.Forms.Button();
             this.fp2resComboBox = new System.Windows.Forms.ComboBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -77,14 +75,16 @@
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.appendLogCheckBox = new System.Windows.Forms.CheckBox();
+            this.unityFileCheckBox = new System.Windows.Forms.CheckBox();
+            this.logfileCheckBox = new System.Windows.Forms.CheckBox();
+            this.hideLogsCheckBox = new System.Windows.Forms.CheckBox();
+            this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.saveButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -92,6 +92,7 @@
             this.tabPage2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,7 +102,7 @@
             this.savePlay.Name = "savePlay";
             this.savePlay.Size = new System.Drawing.Size(119, 23);
             this.savePlay.TabIndex = 1;
-            this.savePlay.Text = "Play";
+            this.savePlay.Text = "Save and Play";
             this.savePlay.UseVisualStyleBackColor = true;
             this.savePlay.Click += new System.EventHandler(this.savePlay_Click);
             // 
@@ -179,6 +180,7 @@
             this.uninstallToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(183, 92);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // openFolderToolStripMenuItem
             // 
@@ -212,7 +214,6 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.settingsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -266,21 +267,6 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.enableConsoleToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // enableConsoleToolStripMenuItem
-            // 
-            this.enableConsoleToolStripMenuItem.Name = "enableConsoleToolStripMenuItem";
-            this.enableConsoleToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.enableConsoleToolStripMenuItem.Text = "Enable Console";
-            this.enableConsoleToolStripMenuItem.Click += new System.EventHandler(this.enableConsoleToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -396,9 +382,9 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.button2);
+            this.groupBox4.Controls.Add(this.resPatchButton);
             this.groupBox4.Controls.Add(this.fp2resComboBox);
-            this.groupBox4.Controls.Add(this.checkBox1);
+            this.groupBox4.Controls.Add(this.fp2resCheckBox);
             this.groupBox4.Location = new System.Drawing.Point(171, 341);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(297, 74);
@@ -406,14 +392,15 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Internal Resolution Patch";
             // 
-            // button2
+            // resPatchButton
             // 
-            this.button2.Location = new System.Drawing.Point(168, 19);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(123, 46);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Patch";
-            this.button2.UseVisualStyleBackColor = true;
+            this.resPatchButton.Location = new System.Drawing.Point(168, 19);
+            this.resPatchButton.Name = "resPatchButton";
+            this.resPatchButton.Size = new System.Drawing.Size(123, 46);
+            this.resPatchButton.TabIndex = 2;
+            this.resPatchButton.Text = "Patch";
+            this.resPatchButton.UseVisualStyleBackColor = true;
+            this.resPatchButton.Click += new System.EventHandler(this.resPatchButton_Click);
             // 
             // fp2resComboBox
             // 
@@ -431,16 +418,18 @@
             this.fp2resComboBox.Name = "fp2resComboBox";
             this.fp2resComboBox.Size = new System.Drawing.Size(151, 21);
             this.fp2resComboBox.TabIndex = 1;
+            this.fp2resComboBox.SelectedIndexChanged += new System.EventHandler(this.fp2resComboBox_SelectedIndexChanged);
             // 
-            // checkBox1
+            // fp2resCheckBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 19);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(65, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Enabled";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.fp2resCheckBox.AutoSize = true;
+            this.fp2resCheckBox.Location = new System.Drawing.Point(6, 19);
+            this.fp2resCheckBox.Name = "fp2resCheckBox";
+            this.fp2resCheckBox.Size = new System.Drawing.Size(65, 17);
+            this.fp2resCheckBox.TabIndex = 0;
+            this.fp2resCheckBox.Text = "Enabled";
+            this.fp2resCheckBox.UseVisualStyleBackColor = true;
+            this.fp2resCheckBox.CheckedChanged += new System.EventHandler(this.fp2resCheckBox_CheckedChanged);
             // 
             // button1
             // 
@@ -526,20 +515,31 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.saveRedirecCheckBox);
             this.groupBox2.Location = new System.Drawing.Point(8, 101);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(460, 128);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Manager Settings";
+            this.groupBox2.Text = "Manager / FP2Lib Settings";
+            // 
+            // saveRedirecCheckBox
+            // 
+            this.saveRedirecCheckBox.AutoSize = true;
+            this.saveRedirecCheckBox.Location = new System.Drawing.Point(6, 19);
+            this.saveRedirecCheckBox.Name = "saveRedirecCheckBox";
+            this.saveRedirecCheckBox.Size = new System.Drawing.Size(119, 17);
+            this.saveRedirecCheckBox.TabIndex = 0;
+            this.saveRedirecCheckBox.Text = "Save file redirection";
+            this.saveRedirecCheckBox.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkBox6);
-            this.groupBox1.Controls.Add(this.checkBox5);
-            this.groupBox1.Controls.Add(this.checkBox4);
-            this.groupBox1.Controls.Add(this.checkBox3);
-            this.groupBox1.Controls.Add(this.checkBox2);
+            this.groupBox1.Controls.Add(this.appendLogCheckBox);
+            this.groupBox1.Controls.Add(this.unityFileCheckBox);
+            this.groupBox1.Controls.Add(this.logfileCheckBox);
+            this.groupBox1.Controls.Add(this.hideLogsCheckBox);
+            this.groupBox1.Controls.Add(this.noConsoleCloseCheckBox);
             this.groupBox1.Controls.Add(this.enableConsoleCheckBox);
             this.groupBox1.Location = new System.Drawing.Point(8, 6);
             this.groupBox1.Name = "groupBox1";
@@ -548,55 +548,60 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "BepInEx Settings";
             // 
-            // checkBox6
+            // appendLogCheckBox
             // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(237, 65);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(126, 17);
-            this.checkBox6.TabIndex = 5;
-            this.checkBox6.Text = "Do not overwrite logs";
-            this.checkBox6.UseVisualStyleBackColor = true;
+            this.appendLogCheckBox.AutoSize = true;
+            this.appendLogCheckBox.Location = new System.Drawing.Point(237, 65);
+            this.appendLogCheckBox.Name = "appendLogCheckBox";
+            this.appendLogCheckBox.Size = new System.Drawing.Size(126, 17);
+            this.appendLogCheckBox.TabIndex = 5;
+            this.appendLogCheckBox.Text = "Do not overwrite logs";
+            this.appendLogCheckBox.UseVisualStyleBackColor = true;
+            this.appendLogCheckBox.CheckedChanged += new System.EventHandler(this.appendLogCheckBox_CheckedChanged);
             // 
-            // checkBox5
+            // unityFileCheckBox
             // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(237, 42);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(136, 17);
-            this.checkBox5.TabIndex = 4;
-            this.checkBox5.Text = "Add Unity logs to logfile";
-            this.checkBox5.UseVisualStyleBackColor = true;
+            this.unityFileCheckBox.AutoSize = true;
+            this.unityFileCheckBox.Location = new System.Drawing.Point(237, 42);
+            this.unityFileCheckBox.Name = "unityFileCheckBox";
+            this.unityFileCheckBox.Size = new System.Drawing.Size(136, 17);
+            this.unityFileCheckBox.TabIndex = 4;
+            this.unityFileCheckBox.Text = "Add Unity logs to logfile";
+            this.unityFileCheckBox.UseVisualStyleBackColor = true;
+            this.unityFileCheckBox.CheckedChanged += new System.EventHandler(this.unityFileCheckBox_CheckedChanged);
             // 
-            // checkBox4
+            // logfileCheckBox
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(237, 19);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(96, 17);
-            this.checkBox4.TabIndex = 3;
-            this.checkBox4.Text = "Write log to file";
-            this.checkBox4.UseVisualStyleBackColor = true;
+            this.logfileCheckBox.AutoSize = true;
+            this.logfileCheckBox.Location = new System.Drawing.Point(237, 19);
+            this.logfileCheckBox.Name = "logfileCheckBox";
+            this.logfileCheckBox.Size = new System.Drawing.Size(96, 17);
+            this.logfileCheckBox.TabIndex = 3;
+            this.logfileCheckBox.Text = "Write log to file";
+            this.logfileCheckBox.UseVisualStyleBackColor = true;
+            this.logfileCheckBox.CheckedChanged += new System.EventHandler(this.logfileCheckBox_CheckedChanged);
             // 
-            // checkBox3
+            // hideLogsCheckBox
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(6, 65);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(97, 17);
-            this.checkBox3.TabIndex = 2;
-            this.checkBox3.Text = "Hide Unity logs";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.hideLogsCheckBox.AutoSize = true;
+            this.hideLogsCheckBox.Location = new System.Drawing.Point(6, 65);
+            this.hideLogsCheckBox.Name = "hideLogsCheckBox";
+            this.hideLogsCheckBox.Size = new System.Drawing.Size(97, 17);
+            this.hideLogsCheckBox.TabIndex = 2;
+            this.hideLogsCheckBox.Text = "Hide Unity logs";
+            this.hideLogsCheckBox.UseVisualStyleBackColor = true;
+            this.hideLogsCheckBox.CheckedChanged += new System.EventHandler(this.hideLogsCheckBox_CheckedChanged);
             // 
-            // checkBox2
+            // noConsoleCloseCheckBox
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(6, 42);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(151, 17);
-            this.checkBox2.TabIndex = 1;
-            this.checkBox2.Text = "Prevent closing of console";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.noConsoleCloseCheckBox.AutoSize = true;
+            this.noConsoleCloseCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.noConsoleCloseCheckBox.Name = "noConsoleCloseCheckBox";
+            this.noConsoleCloseCheckBox.Size = new System.Drawing.Size(151, 17);
+            this.noConsoleCloseCheckBox.TabIndex = 1;
+            this.noConsoleCloseCheckBox.Text = "Prevent closing of console";
+            this.noConsoleCloseCheckBox.UseVisualStyleBackColor = true;
+            this.noConsoleCloseCheckBox.CheckedChanged += new System.EventHandler(this.noConsoleCloseCheckBox_CheckedChanged);
             // 
             // enableConsoleCheckBox
             // 
@@ -607,10 +612,21 @@
             this.enableConsoleCheckBox.TabIndex = 0;
             this.enableConsoleCheckBox.Text = "Enable Console";
             this.enableConsoleCheckBox.UseVisualStyleBackColor = true;
+            this.enableConsoleCheckBox.CheckedChanged += new System.EventHandler(this.enableConsoleCheckBox_CheckedChanged);
             // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
+            // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(137, 554);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(119, 23);
+            this.saveButton.TabIndex = 12;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // FreedomManager
             // 
@@ -618,6 +634,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(506, 589);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.exit);
@@ -639,6 +656,8 @@
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -660,7 +679,6 @@
         private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -669,7 +687,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ToolStripMenuItem gitHubWikiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gameBananaPageToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem enableConsoleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModsFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bepInExToolStripMenuItem;
@@ -684,11 +701,11 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox checkBox6;
-        private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox appendLogCheckBox;
+        private System.Windows.Forms.CheckBox unityFileCheckBox;
+        private System.Windows.Forms.CheckBox logfileCheckBox;
+        private System.Windows.Forms.CheckBox hideLogsCheckBox;
+        private System.Windows.Forms.CheckBox noConsoleCloseCheckBox;
         private System.Windows.Forms.CheckBox enableConsoleCheckBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBox7;
@@ -699,9 +716,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button resPatchButton;
         private System.Windows.Forms.ComboBox fp2resComboBox;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox fp2resCheckBox;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.CheckBox saveRedirecCheckBox;
     }
 }
 

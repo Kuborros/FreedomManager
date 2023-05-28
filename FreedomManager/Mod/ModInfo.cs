@@ -1,5 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using static FreedomManager.FreedomManager;
+﻿using FreedomManager.Mod;
+using System.Text.Json.Serialization;
+using static FreedomManager.Mod.ModHandler;
 
 namespace FreedomManager
 {
@@ -59,7 +60,7 @@ namespace FreedomManager
 
             if (!archiveType.HasValue)
             {
-                ArchiveType = FreedomManager.ArchiveType.BepinDir;
+                ArchiveType = ModHandler.ArchiveType.BepinDir;
             }
             else ArchiveType = archiveType;
 
@@ -78,9 +79,9 @@ namespace FreedomManager
             Author = "N/A";
             Version = "N/A";
 
-            if (archiveType == FreedomManager.ArchiveType.BepinDir) Loader = "BepInEx";
-            else if (archiveType == FreedomManager.ArchiveType.DllDir) Loader = "BepInEx (Loose DLL)";
-            else if (archiveType == FreedomManager.ArchiveType.MelonDir) Loader = "MelonLoader";
+            if (archiveType == ModHandler.ArchiveType.BepinDir) Loader = "BepInEx";
+            else if (archiveType == ModHandler.ArchiveType.DllDir) Loader = "BepInEx (Loose DLL)";
+            else if (archiveType == ModHandler.ArchiveType.MelonDir) Loader = "MelonLoader";
             else Loader = "Unknown";
 
             HasAssets = true;

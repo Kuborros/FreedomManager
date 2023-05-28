@@ -12,6 +12,7 @@ namespace FreedomManager
     {
         public const string pipeName = "fp2-mod-manager";
         public const string protocol = "fp2mm:";
+        private static string rootDir = "";
         private static readonly Mutex mutex = new Mutex(true, pipeName);
 
         /// <summary>
@@ -20,6 +21,9 @@ namespace FreedomManager
         [STAThread]
         static void Main(string[] args)
         {
+
+            rootDir = typeof(FreedomManager).Assembly.Location.Replace(Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location), "");
+            Directory.SetCurrentDirectory(rootDir);
 
             bool alreadyRunning;
             try { alreadyRunning = !mutex.WaitOne(0, true); }
