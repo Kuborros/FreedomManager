@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms.VisualStyles;
 
 namespace FreedomManager.Patches
 {
+
+    //Based on original work by @JohnnyonFlame on FP2res (https://github.com/JohnnyonFlame/fp2res)
+
     internal class ResolutionPatchController
     {
 
@@ -25,7 +25,6 @@ namespace FreedomManager.Patches
         3840x2160
         4480x2520
         */
-
 
         public enum Resolution
         {
