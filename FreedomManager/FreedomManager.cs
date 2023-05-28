@@ -11,10 +11,8 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Threading;
 using System.Windows.Forms;
 using static FreedomManager.Mod.ModHandler;
-using File = System.IO.File;
 
 namespace FreedomManager
 {
@@ -81,6 +79,11 @@ namespace FreedomManager
                 bepinConfig = new BepinConfig();
 
                 enableConsoleCheckBox.Checked = bepinConfig.ShowConsole;
+                noConsoleCloseCheckBox.Checked = bepinConfig.ConsolePreventClose;
+                logfileCheckBox.Checked = bepinConfig.FileLog;
+                hideLogsCheckBox.Checked = bepinConfig.UnityLogListening;
+                unityFileCheckBox.Checked = bepinConfig.WriteUnityLog;              
+                appendLogCheckBox.Checked = bepinConfig.AppendLog;
 
             }
 

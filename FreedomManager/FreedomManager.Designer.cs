@@ -433,6 +433,7 @@
             // 
             // button1
             // 
+            this.button1.Enabled = false;
             this.button1.Location = new System.Drawing.Point(8, 424);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(157, 65);
@@ -461,9 +462,9 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
             this.label4.Location = new System.Drawing.Point(328, 66);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(36, 13);
+            this.label4.Size = new System.Drawing.Size(30, 13);
             this.label4.TabIndex = 18;
-            this.label4.Text = "0.1.0";
+            this.label4.Text = "N/A";
             // 
             // label3
             // 
@@ -496,6 +497,7 @@
             // checkBox8
             // 
             this.checkBox8.AutoSize = true;
+            this.checkBox8.Enabled = false;
             this.checkBox8.Location = new System.Drawing.Point(8, 42);
             this.checkBox8.Name = "checkBox8";
             this.checkBox8.Size = new System.Drawing.Size(199, 17);
@@ -506,6 +508,7 @@
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
+            this.checkBox7.Enabled = false;
             this.checkBox7.Location = new System.Drawing.Point(8, 19);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(252, 17);
@@ -526,6 +529,7 @@
             // saveRedirecCheckBox
             // 
             this.saveRedirecCheckBox.AutoSize = true;
+            this.saveRedirecCheckBox.Enabled = false;
             this.saveRedirecCheckBox.Location = new System.Drawing.Point(6, 19);
             this.saveRedirecCheckBox.Name = "saveRedirecCheckBox";
             this.saveRedirecCheckBox.Size = new System.Drawing.Size(119, 17);
