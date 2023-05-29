@@ -56,6 +56,8 @@ namespace FreedomManager.Patches
             byte[] bytes = File.ReadAllBytes("FP2_Data/sharedassets0.assets");
 
             int index = FindPattern(bytes, pattern);
+            if (index == -1) return Resolution.x360;
+
             int resolution = BitConverter.ToInt32(bytes, index);
 
             Resolution res = (Resolution)((resolution / 640) - 1);
@@ -64,9 +66,9 @@ namespace FreedomManager.Patches
 
         }
 
-        public void setIntResolution(Resolution res)
+        public bool setIntResolution(Resolution res)
         {
-            if (res == currentRes) return;
+            if (res == currentRes) return true;
 
             byte[] newW = BitConverter.GetBytes(baseW * ((int)res + 1));
             byte[] newH = BitConverter.GetBytes(baseH * ((int)res + 1));
@@ -75,26 +77,24 @@ namespace FreedomManager.Patches
 
             byte[] replace = newW.Concat(newH).ToArray();
 
-                int index = FindPattern(bytes, pattern);
-                for (int i = index, replaceIndex = 0; i < bytes.Length && replaceIndex < replace.Length; i++, replaceIndex++)
-                {
-                    bytes[i] = replace[replaceIndex];
-                }
-                File.WriteAllBytes("FP2_Data/sharedassets0.assets", bytes);
-                Console.WriteLine("Pattern found at offset {0} and replaced.", index);
+            int index = FindPattern(bytes, pattern);
+            if (index == -1) return false;
+
+            for (int i = index, replaceIndex = 0; i < bytes.Length && replaceIndex < replace.Length; i++, replaceIndex++)
+            {
+                bytes[i] = replace[replaceIndex];
+            }
+
+            File.WriteAllBytes("FP2_Data/sharedassets0.assets", bytes);
+            Console.WriteLine("Pattern found at offset {0} and replaced.", index);
+
+            return true;
 
         }
 
         private static int FindPattern(byte[] source, byte[] pattern)
         {
-            for (int i = 1113300; i < source.Length; i++)
-            {
-                if (source.Skip(i).Take(pattern.Length).SequenceEqual(pattern))
-                {
-                    return i + pattern.Length;
-                }
-            }
-            return 0;
+            return source.AsSpan().IndexOf(pattern) + pattern.Length;
         }
 
         private static byte[] ConvertHexStringToByteArray(string hexString)

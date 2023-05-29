@@ -1,4 +1,5 @@
-﻿using FreedomManager.Mod;
+﻿using FreedomManager.Config;
+using FreedomManager.Mod;
 using FreedomManager.Patches;
 using Microsoft.Win32;
 using System;
@@ -25,6 +26,7 @@ namespace FreedomManager
         string tempname;
 
         static BepinConfig bepinConfig;
+        static FP2LibConfig fP2LibConfig;
         static ResolutionPatchController resolutionPatchController;
         public static ModHandler modHandler;
         public static LoaderHandler loaderHandler;
@@ -74,10 +76,9 @@ namespace FreedomManager
 
             if (uris.Count > 0) handleGBUri(uris[0]);
 
-            if (bepisPresent)
+            bepinConfig = new BepinConfig();
+            if (bepinConfig.confExists)
             {
-                bepinConfig = new BepinConfig();
-
                 enableConsoleCheckBox.Checked = bepinConfig.ShowConsole;
                 noConsoleCloseCheckBox.Checked = bepinConfig.ConsolePreventClose;
                 logfileCheckBox.Checked = bepinConfig.FileLog;
@@ -85,6 +86,15 @@ namespace FreedomManager
                 unityFileCheckBox.Checked = bepinConfig.WriteUnityLog;              
                 appendLogCheckBox.Checked = bepinConfig.AppendLog;
 
+            } 
+            else
+            {
+                enableConsoleCheckBox.Enabled = false;
+                noConsoleCloseCheckBox.Enabled = false;
+                logfileCheckBox.Enabled = false;
+                hideLogsCheckBox.Enabled = false;
+                unityFileCheckBox.Enabled = false;
+                appendLogCheckBox.Enabled = false;
             }
 
             resolutionPatchController = new ResolutionPatchController();
@@ -99,6 +109,10 @@ namespace FreedomManager
                 fp2resComboBox.SelectedIndex = 0;
                 fp2resCheckBox.Checked = false;
             }
+
+            fP2LibConfig = new FP2LibConfig();
+
+
 
             RenderList(modHandler.modList);
             OneClickServer();
@@ -652,7 +666,17 @@ namespace FreedomManager
 
         private void resPatchButton_Click(object sender, EventArgs e)
         {
-            resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
+            if (resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex))
+            {
+                MessageBox.Show("Resolution patch successfull!",
+                "Internal Resolution Patch", MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Resolution patch failed!\n\n" +
+                "Patch offset could not be located, did the game update recently?",
+                "Internal Resolution Patch", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

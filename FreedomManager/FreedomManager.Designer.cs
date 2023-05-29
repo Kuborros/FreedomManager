@@ -85,6 +85,9 @@
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.saveButton = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -518,6 +521,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.saveRedirecCheckBox);
             this.groupBox2.Location = new System.Drawing.Point(8, 101);
             this.groupBox2.Name = "groupBox2";
@@ -632,6 +638,43 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Default",
+            "Profile 1",
+            "Profile 2",
+            "Profile 3",
+            "Profile 4",
+            "Profile 5",
+            "Profile 6",
+            "Profile 7",
+            "Profile 8",
+            "Profile 9"});
+            this.comboBox1.Location = new System.Drawing.Point(6, 55);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(151, 21);
+            this.comboBox1.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 39);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Profile:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 79);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(214, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Each profile allows for separate set of saves";
+            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -725,6 +768,9 @@
         private System.Windows.Forms.CheckBox fp2resCheckBox;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.CheckBox saveRedirecCheckBox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

@@ -3,13 +3,10 @@ using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Text.Json.Nodes;
 using System.Text.Json;
 using System.Windows.Forms;
 using SharpCompress.Archives;
 using SharpCompress.Common;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace FreedomManager.Mod
 {
