@@ -42,8 +42,7 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.ToString());
                 }
-            }
-            confExists = false;
+            } else confExists = false;
         }
 
         public void writeConfig()
