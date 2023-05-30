@@ -71,12 +71,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.managerVersionLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.fp2libAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
+            this.managerAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.saveProfileComboBox = new System.Windows.Forms.ComboBox();
             this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.appendLogCheckBox = new System.Windows.Forms.CheckBox();
@@ -443,8 +443,8 @@
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.managerVersionLabel);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.checkBox8);
-            this.groupBox3.Controls.Add(this.checkBox7);
+            this.groupBox3.Controls.Add(this.fp2libAutoUpdateCheckBox);
+            this.groupBox3.Controls.Add(this.managerAutoUpdateCheckBox);
             this.groupBox3.Location = new System.Drawing.Point(8, 235);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(460, 100);
@@ -490,34 +490,33 @@
             this.label1.TabIndex = 15;
             this.label1.Text = "Current Manager Version:";
             // 
-            // checkBox8
+            // fp2libAutoUpdateCheckBox
             // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.Enabled = false;
-            this.checkBox8.Location = new System.Drawing.Point(6, 42);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(199, 17);
-            this.checkBox8.TabIndex = 14;
-            this.checkBox8.Text = "Check for FP2Lib updates on startup";
-            this.checkBox8.UseVisualStyleBackColor = true;
+            this.fp2libAutoUpdateCheckBox.AutoSize = true;
+            this.fp2libAutoUpdateCheckBox.Enabled = false;
+            this.fp2libAutoUpdateCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.fp2libAutoUpdateCheckBox.Name = "fp2libAutoUpdateCheckBox";
+            this.fp2libAutoUpdateCheckBox.Size = new System.Drawing.Size(199, 17);
+            this.fp2libAutoUpdateCheckBox.TabIndex = 14;
+            this.fp2libAutoUpdateCheckBox.Text = "Check for FP2Lib updates on startup";
+            this.fp2libAutoUpdateCheckBox.UseVisualStyleBackColor = true;
             // 
-            // checkBox7
+            // managerAutoUpdateCheckBox
             // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Enabled = false;
-            this.checkBox7.Location = new System.Drawing.Point(6, 19);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(252, 17);
-            this.checkBox7.TabIndex = 13;
-            this.checkBox7.Text = "Check for Freedom Manager updates on startup";
-            this.checkBox7.UseVisualStyleBackColor = true;
+            this.managerAutoUpdateCheckBox.AutoSize = true;
+            this.managerAutoUpdateCheckBox.Location = new System.Drawing.Point(6, 19);
+            this.managerAutoUpdateCheckBox.Name = "managerAutoUpdateCheckBox";
+            this.managerAutoUpdateCheckBox.Size = new System.Drawing.Size(252, 17);
+            this.managerAutoUpdateCheckBox.TabIndex = 13;
+            this.managerAutoUpdateCheckBox.Text = "Check for Freedom Manager updates on startup";
+            this.managerAutoUpdateCheckBox.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.fancyJsonCheckBox);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.comboBox1);
+            this.groupBox2.Controls.Add(this.saveProfileComboBox);
             this.groupBox2.Controls.Add(this.saveRedirecCheckBox);
             this.groupBox2.Location = new System.Drawing.Point(8, 101);
             this.groupBox2.Name = "groupBox2";
@@ -544,11 +543,11 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Profile:";
             // 
-            // comboBox1
+            // saveProfileComboBox
             // 
-            this.comboBox1.Enabled = false;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.saveProfileComboBox.Enabled = false;
+            this.saveProfileComboBox.FormattingEnabled = true;
+            this.saveProfileComboBox.Items.AddRange(new object[] {
             "Default",
             "Profile 1",
             "Profile 2",
@@ -559,10 +558,10 @@
             "Profile 7",
             "Profile 8",
             "Profile 9"});
-            this.comboBox1.Location = new System.Drawing.Point(6, 79);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(151, 21);
-            this.comboBox1.TabIndex = 3;
+            this.saveProfileComboBox.Location = new System.Drawing.Point(6, 79);
+            this.saveProfileComboBox.Name = "saveProfileComboBox";
+            this.saveProfileComboBox.Size = new System.Drawing.Size(151, 21);
+            this.saveProfileComboBox.TabIndex = 3;
             // 
             // saveRedirecCheckBox
             // 
@@ -760,10 +759,10 @@
         private System.Windows.Forms.CheckBox noConsoleCloseCheckBox;
         private System.Windows.Forms.CheckBox enableConsoleCheckBox;
         private System.Windows.Forms.Button updateCheckButton;
-        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.CheckBox managerAutoUpdateCheckBox;
         private System.Windows.Forms.Label managerVersionLabel;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.CheckBox fp2libAutoUpdateCheckBox;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Label fp2libVersionLabel;
         private System.Windows.Forms.Label label3;
@@ -775,7 +774,7 @@
         private System.Windows.Forms.CheckBox saveRedirecCheckBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox saveProfileComboBox;
         private System.Windows.Forms.CheckBox fancyJsonCheckBox;
     }
 }

@@ -122,10 +122,18 @@ namespace FreedomManager
             if (fP2LibConfig.saveRedirectEnabled)
             {
                 saveRedirecCheckBox.Checked = true;
+                saveProfileComboBox.SelectedIndex = fP2LibConfig.saveRedirectProfile;
+            } else
+            {
+                saveProfileComboBox.SelectedIndex = 0;
             }
+
 
             RenderList(modHandler.modList);
             OneClickServer();
+
+            managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
+            fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
 
             if (managerConfig.autoUpdateManager)
             {

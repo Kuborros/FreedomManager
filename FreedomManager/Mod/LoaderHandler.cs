@@ -20,7 +20,7 @@ namespace FreedomManager.Mod
             fp2Found = File.Exists("FP2.exe");
             bepinInstalled = File.Exists("winhttp.dll");
             melonInstalled = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
-            fp2libInstalled = File.Exists("BepInEx\\plugins\\lib\\fp2lib.dll");
+            fp2libInstalled = File.Exists("BepInEx\\plugins\\lib\\fp2lib.json");
 
             if (fp2libInstalled)
             {
