@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
 
 namespace FreedomManager.Mod
 {
@@ -14,13 +13,24 @@ namespace FreedomManager.Mod
 
         public bool fp2libInstalled;
         public string fp2libVersion;
+        private ModInfo fp2libInfo;
 
         public LoaderHandler()
         {
-
             fp2Found = File.Exists("FP2.exe");
             bepinInstalled = File.Exists("winhttp.dll");
             melonInstalled = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
+            fp2libInstalled = File.Exists("BepInEx\\plugins\\lib\\fp2lib.dll");
+
+            if (fp2libInstalled)
+            {
+                fp2libInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText("BepInEx\\plugins\\lib\\fp2lib.json"));
+                fp2libInfo.Dirname = "lib";
+                fp2libVersion = fp2libInfo.Version;
+            } else
+            {
+                fp2libVersion = "Not Installed";
+            }
         }
 
         internal bool installBepinLoader()
@@ -62,7 +72,7 @@ namespace FreedomManager.Mod
             if (!fp2libInstalled)
             {
                 WebClient client = new WebClient();
-                client.DownloadFile(new Uri("PLACEHOLDER"), "Fp2lib.zip");
+                client.DownloadFile(new Uri("https://fp2mods.info/fp2lib/fp2lib.zip"), "Fp2lib.zip");
                 FreedomManager.modHandler.InstallMod("Fp2lib.zip", true);
                 fp2libInstalled = true;
                 fp2libVersion = "Test";
@@ -75,7 +85,5 @@ namespace FreedomManager.Mod
             }
             return fp2libInstalled;
         }
-
-
     }
 }

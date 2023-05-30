@@ -2,6 +2,8 @@
 using FreedomManager.Mod;
 using FreedomManager.Patches;
 using Microsoft.Win32;
+using Onova;
+using Onova.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +14,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static FreedomManager.Mod.ModHandler;
 
@@ -25,8 +28,11 @@ namespace FreedomManager
         int columnIndex = 0;
         string tempname;
 
+        private readonly IUpdateManager _updateManager = new UpdateManager(new WebPackageResolver("https://fp2mods.info/fp2mm/versions.manifest"), new ZipPackageExtractor());
+
         static BepinConfig bepinConfig;
         static FP2LibConfig fP2LibConfig;
+        static ManagerConfig managerConfig;
         static ResolutionPatchController resolutionPatchController;
         public static ModHandler modHandler;
         public static LoaderHandler loaderHandler;
@@ -42,6 +48,7 @@ namespace FreedomManager
 
             loaderHandler = new LoaderHandler();
             modHandler = new ModHandler();
+            managerConfig = new ManagerConfig();
 
             bepisPresent = loaderHandler.bepinInstalled;
             melonPresent = loaderHandler.melonInstalled;
@@ -112,10 +119,22 @@ namespace FreedomManager
 
             fP2LibConfig = new FP2LibConfig();
 
-
+            if (fP2LibConfig.saveRedirectEnabled)
+            {
+                saveRedirecCheckBox.Checked = true;
+            }
 
             RenderList(modHandler.modList);
             OneClickServer();
+
+            if (managerConfig.autoUpdateManager)
+            {
+                Task.Run(() => CheckForUpdatesAsync(true));
+            }
+
+            managerVersionLabel.Text = Application.ProductVersion;
+            fp2libVersionLabel.Text = loaderHandler.fp2libVersion;
+
         }
 
         private void handleGBUri(string uri)
@@ -230,6 +249,27 @@ namespace FreedomManager
                 "Error info: " + ex.Message,
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 return;
+            }
+        }
+
+        private async void CheckForUpdatesAsync(bool showNoUpdates)
+        {
+            var check = await _updateManager.CheckForUpdatesAsync();
+
+            if (!check.CanUpdate)
+            {
+                if (!showNoUpdates) MessageBox.Show("There are no new updates available.","Update",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show("New Freedom Manager update is available!\n Version: " + check.LastVersion + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                await _updateManager.PrepareUpdateAsync(check.LastVersion);
+
+                _updateManager.LaunchUpdater(check.LastVersion,true, "--post-update");
+                Application.Exit();
             }
         }
 
@@ -677,6 +717,11 @@ namespace FreedomManager
                 "Patch offset could not be located, did the game update recently?",
                 "Internal Resolution Patch", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void updateCheckButton_Click(object sender, EventArgs e)
+        {
+            Task.Run(() => CheckForUpdatesAsync(false));
         }
     }
 }

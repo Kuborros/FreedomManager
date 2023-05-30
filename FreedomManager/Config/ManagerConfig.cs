@@ -8,5 +8,9 @@ namespace FreedomManager.Config
 {
     internal class ManagerConfig
     {
+        public bool autoUpdateManager = false;
+        public bool autoUpdateFP2Lib = false;
+
+        public ManagerConfig() { }
     }
 }

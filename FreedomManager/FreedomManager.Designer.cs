@@ -53,7 +53,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubWikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameBananaPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -66,15 +65,18 @@
             this.resPatchButton = new System.Windows.Forms.Button();
             this.fp2resComboBox = new System.Windows.Forms.ComboBox();
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.updateCheckButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.fp2libVersionLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.managerVersionLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.appendLogCheckBox = new System.Windows.Forms.CheckBox();
@@ -85,9 +87,7 @@
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.saveButton = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.fancyJsonCheckBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -275,8 +275,7 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gitHubWikiToolStripMenuItem,
-            this.gameBananaPageToolStripMenuItem,
-            this.checkForUpdatesToolStripMenuItem});
+            this.gameBananaPageToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -294,12 +293,6 @@
             this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.gameBananaPageToolStripMenuItem.Text = "GameBanana Page";
             this.gameBananaPageToolStripMenuItem.Click += new System.EventHandler(this.gameBananaPageToolStripMenuItem_Click);
-            // 
-            // checkForUpdatesToolStripMenuItem
-            // 
-            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
             // 
             // listView1
             // 
@@ -370,7 +363,7 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.groupBox4);
-            this.tabPage2.Controls.Add(this.button1);
+            this.tabPage2.Controls.Add(this.updateCheckButton);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Controls.Add(this.groupBox1);
@@ -434,21 +427,21 @@
             this.fp2resCheckBox.UseVisualStyleBackColor = true;
             this.fp2resCheckBox.CheckedChanged += new System.EventHandler(this.fp2resCheckBox_CheckedChanged);
             // 
-            // button1
+            // updateCheckButton
             // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(8, 424);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(157, 65);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "Check for Updates";
-            this.button1.UseVisualStyleBackColor = true;
+            this.updateCheckButton.Location = new System.Drawing.Point(8, 424);
+            this.updateCheckButton.Name = "updateCheckButton";
+            this.updateCheckButton.Size = new System.Drawing.Size(157, 65);
+            this.updateCheckButton.TabIndex = 12;
+            this.updateCheckButton.Text = "Check for Updates";
+            this.updateCheckButton.UseVisualStyleBackColor = true;
+            this.updateCheckButton.Click += new System.EventHandler(this.updateCheckButton_Click);
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.fp2libVersionLabel);
             this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.managerVersionLabel);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.checkBox8);
             this.groupBox3.Controls.Add(this.checkBox7);
@@ -459,15 +452,15 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Automatic updates";
             // 
-            // label4
+            // fp2libVersionLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            this.label4.Location = new System.Drawing.Point(328, 66);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(30, 13);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "N/A";
+            this.fp2libVersionLabel.AutoSize = true;
+            this.fp2libVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.fp2libVersionLabel.Location = new System.Drawing.Point(328, 66);
+            this.fp2libVersionLabel.Name = "fp2libVersionLabel";
+            this.fp2libVersionLabel.Size = new System.Drawing.Size(30, 13);
+            this.fp2libVersionLabel.TabIndex = 18;
+            this.fp2libVersionLabel.Text = "N/A";
             // 
             // label3
             // 
@@ -478,20 +471,20 @@
             this.label3.TabIndex = 17;
             this.label3.Text = "Current FP2Lib Version:";
             // 
-            // label2
+            // managerVersionLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            this.label2.Location = new System.Drawing.Point(142, 66);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(36, 13);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "2.0.0";
+            this.managerVersionLabel.AutoSize = true;
+            this.managerVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.managerVersionLabel.Location = new System.Drawing.Point(142, 66);
+            this.managerVersionLabel.Name = "managerVersionLabel";
+            this.managerVersionLabel.Size = new System.Drawing.Size(36, 13);
+            this.managerVersionLabel.TabIndex = 16;
+            this.managerVersionLabel.Text = "2.0.0";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 66);
+            this.label1.Location = new System.Drawing.Point(3, 66);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(127, 13);
             this.label1.TabIndex = 15;
@@ -501,7 +494,7 @@
             // 
             this.checkBox8.AutoSize = true;
             this.checkBox8.Enabled = false;
-            this.checkBox8.Location = new System.Drawing.Point(8, 42);
+            this.checkBox8.Location = new System.Drawing.Point(6, 42);
             this.checkBox8.Name = "checkBox8";
             this.checkBox8.Size = new System.Drawing.Size(199, 17);
             this.checkBox8.TabIndex = 14;
@@ -512,7 +505,7 @@
             // 
             this.checkBox7.AutoSize = true;
             this.checkBox7.Enabled = false;
-            this.checkBox7.Location = new System.Drawing.Point(8, 19);
+            this.checkBox7.Location = new System.Drawing.Point(6, 19);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(252, 17);
             this.checkBox7.TabIndex = 13;
@@ -521,6 +514,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.fancyJsonCheckBox);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.comboBox1);
@@ -531,6 +525,44 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Manager / FP2Lib Settings";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 103);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(214, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Each profile allows for separate set of saves";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 63);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Profile:";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Enabled = false;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Default",
+            "Profile 1",
+            "Profile 2",
+            "Profile 3",
+            "Profile 4",
+            "Profile 5",
+            "Profile 6",
+            "Profile 7",
+            "Profile 8",
+            "Profile 9"});
+            this.comboBox1.Location = new System.Drawing.Point(6, 79);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(151, 21);
+            this.comboBox1.TabIndex = 3;
             // 
             // saveRedirecCheckBox
             // 
@@ -638,42 +670,16 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // comboBox1
+            // fancyJsonCheckBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Default",
-            "Profile 1",
-            "Profile 2",
-            "Profile 3",
-            "Profile 4",
-            "Profile 5",
-            "Profile 6",
-            "Profile 7",
-            "Profile 8",
-            "Profile 9"});
-            this.comboBox1.Location = new System.Drawing.Point(6, 55);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(151, 21);
-            this.comboBox1.TabIndex = 3;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 39);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Profile:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 79);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(214, 13);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "Each profile allows for separate set of saves";
+            this.fancyJsonCheckBox.AutoSize = true;
+            this.fancyJsonCheckBox.Enabled = false;
+            this.fancyJsonCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.fancyJsonCheckBox.Name = "fancyJsonCheckBox";
+            this.fancyJsonCheckBox.Size = new System.Drawing.Size(117, 17);
+            this.fancyJsonCheckBox.TabIndex = 6;
+            this.fancyJsonCheckBox.Text = "Fancy JSON saves";
+            this.fancyJsonCheckBox.UseVisualStyleBackColor = true;
             // 
             // FreedomManager
             // 
@@ -741,7 +747,6 @@
         private System.Windows.Forms.ToolStripMenuItem installModToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem seeOnGameBananaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -754,13 +759,13 @@
         private System.Windows.Forms.CheckBox hideLogsCheckBox;
         private System.Windows.Forms.CheckBox noConsoleCloseCheckBox;
         private System.Windows.Forms.CheckBox enableConsoleCheckBox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button updateCheckButton;
         private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label managerVersionLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox8;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label fp2libVersionLabel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button resPatchButton;
@@ -771,6 +776,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.CheckBox fancyJsonCheckBox;
     }
 }
 

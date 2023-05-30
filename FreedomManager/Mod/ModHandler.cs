@@ -323,7 +323,7 @@ namespace FreedomManager.Mod
                 {
                     string modname = Path.GetFileName(d);
                     hasManifest = false;
-                    if (modname != "BepInEx.MelonLoader.Loader")
+                    if (modname != "BepInEx.MelonLoader.Loader" || modname != "lib")
                     {
                         foreach (string js in Directory.GetFiles(d))
                         {

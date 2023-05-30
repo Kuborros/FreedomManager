@@ -8,5 +8,8 @@ namespace FreedomManager.Config
 {
     internal class FP2LibConfig
     {
+        public bool saveRedirectEnabled = false;
+
+        public FP2LibConfig() { }
     }
 }

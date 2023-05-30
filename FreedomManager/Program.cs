@@ -29,7 +29,7 @@ namespace FreedomManager
             try { alreadyRunning = !mutex.WaitOne(0, true); }
             catch (AbandonedMutexException) { alreadyRunning = false; }
 
-            if (args.Length > 1 && args[0] == "run-update")
+            if (args.Length > 1 && args[0] == "--post-update")
             {
 
             }
