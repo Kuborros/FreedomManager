@@ -31,7 +31,7 @@ namespace FreedomManager
 
             if (args.Length > 1 && args[0] == "--post-update")
             {
-
+                
             }
 
             List<string> uris = args

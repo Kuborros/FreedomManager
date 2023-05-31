@@ -28,7 +28,10 @@ namespace FreedomManager
         int columnIndex = 0;
         string tempname;
 
-        private readonly IUpdateManager _updateManager = new UpdateManager(new WebPackageResolver("https://fp2mods.info/fp2mm/versions.manifest"), new ZipPackageExtractor());
+        private readonly IUpdateManager _updateManager = new UpdateManager(
+            //new WebPackageResolver("https://fp2mods.info/fp2mm/versions.manifest"),
+            new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager*.zip"),
+            new ZipPackageExtractor());
 
         static BepinConfig bepinConfig;
         static FP2LibConfig fP2LibConfig;
@@ -263,6 +266,8 @@ namespace FreedomManager
         private async void CheckForUpdatesAsync(bool showNoUpdates)
         {
             var check = await _updateManager.CheckForUpdatesAsync();
+
+            Console.WriteLine(check.LastVersion);
 
             if (!check.CanUpdate)
             {
