@@ -29,8 +29,8 @@ namespace FreedomManager
         string tempname;
 
         private readonly IUpdateManager _updateManager = new UpdateManager(
-            //new WebPackageResolver("https://fp2mods.info/fp2mm/versions.manifest"),
-            new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager*.zip"),
+            //new WebPackageResolver("https://fp2mods.info/fp2mm/versions.manifest"), //Cool but insecure - if i were to loose the domain anyone could spoof updates.
+            new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager*.zip"), //Lame but secure - needs _specific_ update name syntax to deem them worthy
             new ZipPackageExtractor());
 
         static BepinConfig bepinConfig;
@@ -99,12 +99,7 @@ namespace FreedomManager
             } 
             else
             {
-                enableConsoleCheckBox.Enabled = false;
-                noConsoleCloseCheckBox.Enabled = false;
-                logfileCheckBox.Enabled = false;
-                hideLogsCheckBox.Enabled = false;
-                unityFileCheckBox.Enabled = false;
-                appendLogCheckBox.Enabled = false;
+                bepinGroupBox.Enabled = false;
             }
 
             resolutionPatchController = new ResolutionPatchController();
@@ -122,13 +117,21 @@ namespace FreedomManager
 
             fP2LibConfig = new FP2LibConfig();
 
-            if (fP2LibConfig.saveRedirectEnabled)
+            if (fP2LibConfig.configExists)
             {
-                saveRedirecCheckBox.Checked = true;
-                saveProfileComboBox.SelectedIndex = fP2LibConfig.saveRedirectProfile;
-            } else
+                if (fP2LibConfig.saveRedirectEnabled)
+                {
+                    saveRedirecCheckBox.Checked = true;
+                    saveProfileComboBox.SelectedIndex = fP2LibConfig.saveRedirectProfile;
+                }
+                else
+                {
+                    saveProfileComboBox.SelectedIndex = 0;
+                }
+            } 
+            else
             {
-                saveProfileComboBox.SelectedIndex = 0;
+                fp2libGroupBox.Enabled = false;
             }
 
 
@@ -136,7 +139,9 @@ namespace FreedomManager
             OneClickServer();
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
+
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
+            fp2libAutoUpdateCheckBox.Enabled = loaderHandler.fp2libInstalled;
 
             if (managerConfig.autoUpdateManager)
             {
@@ -267,8 +272,6 @@ namespace FreedomManager
         {
             var check = await _updateManager.CheckForUpdatesAsync();
 
-            Console.WriteLine(check.LastVersion);
-
             if (!check.CanUpdate)
             {
                 if (!showNoUpdates) MessageBox.Show("There are no new updates available.","Update",MessageBoxButtons.OK,MessageBoxIcon.Information);
@@ -332,6 +335,7 @@ namespace FreedomManager
         private void savePlay_Click(object sender, EventArgs e)
         {
             bepinConfig.writeConfig();
+            managerConfig.writeConfig();
             if (fp2Found) Process.Start("FP2.exe");
         }
 
@@ -624,79 +628,38 @@ namespace FreedomManager
 
         private void enableConsoleCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (enableConsoleCheckBox.Checked) 
-            {
-                bepinConfig.ShowConsole = true;
-            }
-            else
-            {
-                bepinConfig.ShowConsole = false;
-            }
+            bepinConfig.ShowConsole = enableConsoleCheckBox.Checked;
         }
 
         private void noConsoleCloseCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (noConsoleCloseCheckBox.Checked)
-            {
-                bepinConfig.ConsolePreventClose = true;
-            }
-            else
-            {
-                bepinConfig.ConsolePreventClose = false;
-            }
+            bepinConfig.ConsolePreventClose = noConsoleCloseCheckBox.Checked;
         }
 
         private void hideLogsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (hideLogsCheckBox.Checked)
-            {
-                bepinConfig.UnityLogListening = true;
-            }
-            else
-            {
-                bepinConfig.UnityLogListening = false;
-            }
+            bepinConfig.UnityLogListening = hideLogsCheckBox.Checked;
         }
 
         private void logfileCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (logfileCheckBox.Checked)
-            {
-                bepinConfig.FileLog = true;
-            }
-            else
-            {
-                bepinConfig.FileLog = false;
-            }
+            bepinConfig.FileLog = logfileCheckBox.Checked;
         }
 
         private void unityFileCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (unityFileCheckBox.Checked)
-            {
-                bepinConfig.WriteUnityLog = true;
-            }
-            else
-            {
-                bepinConfig.WriteUnityLog = false;
-            }
+            bepinConfig.WriteUnityLog = unityFileCheckBox.Checked;
         }
 
         private void appendLogCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (enableConsoleCheckBox.Checked)
-            {
-                bepinConfig.AppendLog = true;
-            }
-            else
-            {
-                bepinConfig.AppendLog = false;
-            }
+            bepinConfig.AppendLog = enableConsoleCheckBox.Checked;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             bepinConfig.writeConfig();
+            managerConfig.writeConfig();
         }
 
         private void fp2resCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -735,6 +698,16 @@ namespace FreedomManager
         private void updateCheckButton_Click(object sender, EventArgs e)
         {
             Task.Run(() => CheckForUpdatesAsync(false));
+        }
+
+        private void fp2libAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            managerConfig.autoUpdateManager = managerAutoUpdateCheckBox.Checked;
+        }
+
+        private void managerAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            managerConfig.autoUpdateFP2Lib = fp2libAutoUpdateCheckBox.Checked;
         }
     }
 }

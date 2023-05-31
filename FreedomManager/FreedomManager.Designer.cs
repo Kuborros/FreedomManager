@@ -73,12 +73,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.fp2libAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.managerAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.fp2libGroupBox = new System.Windows.Forms.GroupBox();
+            this.fancyJsonCheckBox = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.saveProfileComboBox = new System.Windows.Forms.ComboBox();
             this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bepinGroupBox = new System.Windows.Forms.GroupBox();
             this.appendLogCheckBox = new System.Windows.Forms.CheckBox();
             this.unityFileCheckBox = new System.Windows.Forms.CheckBox();
             this.logfileCheckBox = new System.Windows.Forms.CheckBox();
@@ -87,7 +88,6 @@
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.saveButton = new System.Windows.Forms.Button();
-            this.fancyJsonCheckBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -95,8 +95,8 @@
             this.tabPage2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.fp2libGroupBox.SuspendLayout();
+            this.bepinGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // savePlay
@@ -318,12 +318,12 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 177;
+            this.columnHeader1.Width = 158;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Version";
-            this.columnHeader2.Width = 71;
+            this.columnHeader2.Width = 59;
             // 
             // columnHeader3
             // 
@@ -333,7 +333,7 @@
             // columnHeader4
             // 
             this.columnHeader4.Text = "Loader";
-            this.columnHeader4.Width = 80;
+            this.columnHeader4.Width = 102;
             // 
             // tabControl1
             // 
@@ -365,8 +365,8 @@
             this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.updateCheckButton);
             this.tabPage2.Controls.Add(this.groupBox3);
-            this.tabPage2.Controls.Add(this.groupBox2);
-            this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Controls.Add(this.fp2libGroupBox);
+            this.tabPage2.Controls.Add(this.bepinGroupBox);
             this.tabPage2.Controls.Add(this.handlerButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -493,13 +493,13 @@
             // fp2libAutoUpdateCheckBox
             // 
             this.fp2libAutoUpdateCheckBox.AutoSize = true;
-            this.fp2libAutoUpdateCheckBox.Enabled = false;
             this.fp2libAutoUpdateCheckBox.Location = new System.Drawing.Point(6, 42);
             this.fp2libAutoUpdateCheckBox.Name = "fp2libAutoUpdateCheckBox";
             this.fp2libAutoUpdateCheckBox.Size = new System.Drawing.Size(199, 17);
             this.fp2libAutoUpdateCheckBox.TabIndex = 14;
             this.fp2libAutoUpdateCheckBox.Text = "Check for FP2Lib updates on startup";
             this.fp2libAutoUpdateCheckBox.UseVisualStyleBackColor = true;
+            this.fp2libAutoUpdateCheckBox.CheckedChanged += new System.EventHandler(this.fp2libAutoUpdateCheckBox_CheckedChanged);
             // 
             // managerAutoUpdateCheckBox
             // 
@@ -510,20 +510,31 @@
             this.managerAutoUpdateCheckBox.TabIndex = 13;
             this.managerAutoUpdateCheckBox.Text = "Check for Freedom Manager updates on startup";
             this.managerAutoUpdateCheckBox.UseVisualStyleBackColor = true;
+            this.managerAutoUpdateCheckBox.CheckedChanged += new System.EventHandler(this.managerAutoUpdateCheckBox_CheckedChanged);
             // 
-            // groupBox2
+            // fp2libGroupBox
             // 
-            this.groupBox2.Controls.Add(this.fancyJsonCheckBox);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.saveProfileComboBox);
-            this.groupBox2.Controls.Add(this.saveRedirecCheckBox);
-            this.groupBox2.Location = new System.Drawing.Point(8, 101);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(460, 128);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Manager / FP2Lib Settings";
+            this.fp2libGroupBox.Controls.Add(this.fancyJsonCheckBox);
+            this.fp2libGroupBox.Controls.Add(this.label6);
+            this.fp2libGroupBox.Controls.Add(this.label5);
+            this.fp2libGroupBox.Controls.Add(this.saveProfileComboBox);
+            this.fp2libGroupBox.Controls.Add(this.saveRedirecCheckBox);
+            this.fp2libGroupBox.Location = new System.Drawing.Point(8, 101);
+            this.fp2libGroupBox.Name = "fp2libGroupBox";
+            this.fp2libGroupBox.Size = new System.Drawing.Size(460, 128);
+            this.fp2libGroupBox.TabIndex = 0;
+            this.fp2libGroupBox.TabStop = false;
+            this.fp2libGroupBox.Text = "FP2Lib Settings";
+            // 
+            // fancyJsonCheckBox
+            // 
+            this.fancyJsonCheckBox.AutoSize = true;
+            this.fancyJsonCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.fancyJsonCheckBox.Name = "fancyJsonCheckBox";
+            this.fancyJsonCheckBox.Size = new System.Drawing.Size(117, 17);
+            this.fancyJsonCheckBox.TabIndex = 6;
+            this.fancyJsonCheckBox.Text = "Fancy JSON saves";
+            this.fancyJsonCheckBox.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -545,7 +556,6 @@
             // 
             // saveProfileComboBox
             // 
-            this.saveProfileComboBox.Enabled = false;
             this.saveProfileComboBox.FormattingEnabled = true;
             this.saveProfileComboBox.Items.AddRange(new object[] {
             "Default",
@@ -566,7 +576,6 @@
             // saveRedirecCheckBox
             // 
             this.saveRedirecCheckBox.AutoSize = true;
-            this.saveRedirecCheckBox.Enabled = false;
             this.saveRedirecCheckBox.Location = new System.Drawing.Point(6, 19);
             this.saveRedirecCheckBox.Name = "saveRedirecCheckBox";
             this.saveRedirecCheckBox.Size = new System.Drawing.Size(119, 17);
@@ -574,20 +583,20 @@
             this.saveRedirecCheckBox.Text = "Save file redirection";
             this.saveRedirecCheckBox.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // bepinGroupBox
             // 
-            this.groupBox1.Controls.Add(this.appendLogCheckBox);
-            this.groupBox1.Controls.Add(this.unityFileCheckBox);
-            this.groupBox1.Controls.Add(this.logfileCheckBox);
-            this.groupBox1.Controls.Add(this.hideLogsCheckBox);
-            this.groupBox1.Controls.Add(this.noConsoleCloseCheckBox);
-            this.groupBox1.Controls.Add(this.enableConsoleCheckBox);
-            this.groupBox1.Location = new System.Drawing.Point(8, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(460, 89);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "BepInEx Settings";
+            this.bepinGroupBox.Controls.Add(this.appendLogCheckBox);
+            this.bepinGroupBox.Controls.Add(this.unityFileCheckBox);
+            this.bepinGroupBox.Controls.Add(this.logfileCheckBox);
+            this.bepinGroupBox.Controls.Add(this.hideLogsCheckBox);
+            this.bepinGroupBox.Controls.Add(this.noConsoleCloseCheckBox);
+            this.bepinGroupBox.Controls.Add(this.enableConsoleCheckBox);
+            this.bepinGroupBox.Location = new System.Drawing.Point(8, 6);
+            this.bepinGroupBox.Name = "bepinGroupBox";
+            this.bepinGroupBox.Size = new System.Drawing.Size(460, 89);
+            this.bepinGroupBox.TabIndex = 0;
+            this.bepinGroupBox.TabStop = false;
+            this.bepinGroupBox.Text = "BepInEx Settings";
             // 
             // appendLogCheckBox
             // 
@@ -669,17 +678,6 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // fancyJsonCheckBox
-            // 
-            this.fancyJsonCheckBox.AutoSize = true;
-            this.fancyJsonCheckBox.Enabled = false;
-            this.fancyJsonCheckBox.Location = new System.Drawing.Point(6, 42);
-            this.fancyJsonCheckBox.Name = "fancyJsonCheckBox";
-            this.fancyJsonCheckBox.Size = new System.Drawing.Size(117, 17);
-            this.fancyJsonCheckBox.TabIndex = 6;
-            this.fancyJsonCheckBox.Text = "Fancy JSON saves";
-            this.fancyJsonCheckBox.UseVisualStyleBackColor = true;
-            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -708,10 +706,10 @@
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.fp2libGroupBox.ResumeLayout(false);
+            this.fp2libGroupBox.PerformLayout();
+            this.bepinGroupBox.ResumeLayout(false);
+            this.bepinGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -750,8 +748,8 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox fp2libGroupBox;
+        private System.Windows.Forms.GroupBox bepinGroupBox;
         private System.Windows.Forms.CheckBox appendLogCheckBox;
         private System.Windows.Forms.CheckBox unityFileCheckBox;
         private System.Windows.Forms.CheckBox logfileCheckBox;
