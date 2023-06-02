@@ -7,7 +7,7 @@ namespace FreedomManager.Config
 
     internal class ManagerConfig
     {
-        private const string confFile = "config.json";
+        private const string confFile = "fp2mmConfig.json";
         private bool configExists = false;
 
         //Json contents
