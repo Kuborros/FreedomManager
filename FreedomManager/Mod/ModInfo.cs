@@ -23,7 +23,7 @@ namespace FreedomManager
         "Version":"",
         "GameBananaID":"",
         "AssetDir":"",
-        ""
+        "NeedFP2Lib":""
     }
     */
     public class ModInfo
@@ -38,13 +38,14 @@ namespace FreedomManager
         public ArchiveType? ArchiveType { get; set; }
         public string Dirname { get; set; }
         public bool Enabled { get; set; }
+        public bool HasIndex { get; set; }
 
 
-
+        //V1
         [JsonConstructor]
         public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ArchiveType? archiveType, int? gBID)
         {
-            Name = name;
+            Name = SpecialNames(name);
             Author = author;
             Version = version;
 
@@ -75,12 +76,12 @@ namespace FreedomManager
 
         public ModInfo(string name, ArchiveType archiveType)
         {
-            Name = name;
+            Name = SpecialNames(name);
             Author = "N/A";
             Version = "N/A";
 
             if (archiveType == ModHandler.ArchiveType.BepinDir) Loader = "BepInEx";
-            else if (archiveType == ModHandler.ArchiveType.DllDir) Loader = "BepInEx (Loose DLL)";
+            else if (archiveType == ModHandler.ArchiveType.DllDir) Loader = "BepInEx (DLL)";
             else if (archiveType == ModHandler.ArchiveType.MelonDir) Loader = "MelonLoader";
             else Loader = "Unknown";
 
@@ -91,6 +92,19 @@ namespace FreedomManager
             Enabled = true;
         }
 
+        private string SpecialNames(string name)
+        {
+            switch (name)
+            {
+                case "XUnity.ResourceRedirector":
+                    return "Resource Redirector";
+                case "sinai-dev-UnityExplorer":
+                    return "Unity Explorer";
+                case "ConfigurationManager":
+                    return "Configuration Manager";
+                default:
+                    return name;
+            }
+        }
     }
-
 }

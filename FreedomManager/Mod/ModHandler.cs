@@ -21,6 +21,12 @@ namespace FreedomManager.Mod
             None
         }
 
+        //private readonly string dirEnabled = "BepInEx\\plugins";
+        //private readonly string dirDisabled = "BepInEx\\plugins-disabled";
+        //private readonly string dirEnabledM = "MLLoader\\Mods";
+        //private readonly string dirDisabledM = "MLLoader\\Mods-disabled";
+
+
         public List<ModInfo> modList {get;}
 
 
@@ -243,6 +249,11 @@ namespace FreedomManager.Mod
                         }
                     }
             }
+        }
+
+        private void GenerateModIndex()
+        {
+
         }
 
         private void DeduplicateMods()

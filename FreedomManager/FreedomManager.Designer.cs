@@ -86,7 +86,6 @@
             this.hideLogsCheckBox = new System.Windows.Forms.CheckBox();
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.saveButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -333,7 +332,7 @@
             // columnHeader4
             // 
             this.columnHeader4.Text = "Loader";
-            this.columnHeader4.Width = 102;
+            this.columnHeader4.Width = 114;
             // 
             // tabControl1
             // 
@@ -664,10 +663,6 @@
             this.enableConsoleCheckBox.UseVisualStyleBackColor = true;
             this.enableConsoleCheckBox.CheckedChanged += new System.EventHandler(this.enableConsoleCheckBox_CheckedChanged);
             // 
-            // backgroundWorker1
-            // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            // 
             // saveButton
             // 
             this.saveButton.Location = new System.Drawing.Point(137, 554);
@@ -761,7 +756,6 @@
         private System.Windows.Forms.Label managerVersionLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox fp2libAutoUpdateCheckBox;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Label fp2libVersionLabel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox4;

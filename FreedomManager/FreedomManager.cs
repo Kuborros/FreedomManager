@@ -282,6 +282,8 @@ namespace FreedomManager
 
             if (dialogResult == DialogResult.Yes)
             {
+                bepinConfig.writeConfig();
+                managerConfig.writeConfig();
                 await _updateManager.PrepareUpdateAsync(check.LastVersion);
 
                 _updateManager.LaunchUpdater(check.LastVersion,true, "--post-update");
@@ -375,6 +377,7 @@ namespace FreedomManager
             {
                 string file = modFileDialog.FileName;
                 modHandler.InstallMod(file,false);
+                RenderList();
             }
         }
 
@@ -495,6 +498,7 @@ namespace FreedomManager
                 try
                 {
                     modHandler.InstallMod(files[0],false);
+                    RenderList();
                 }
                 catch (Exception ex)
                 {
@@ -608,6 +612,7 @@ namespace FreedomManager
             {
                 string file = modFileDialog.FileName;
                 modHandler.InstallMod(file, false);
+                RenderList();
             }
         }
 
@@ -702,12 +707,12 @@ namespace FreedomManager
 
         private void fp2libAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            managerConfig.autoUpdateManager = managerAutoUpdateCheckBox.Checked;
+            managerConfig.autoUpdateFP2Lib = fp2libAutoUpdateCheckBox.Checked;
         }
 
         private void managerAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            managerConfig.autoUpdateFP2Lib = fp2libAutoUpdateCheckBox.Checked;
+            managerConfig.autoUpdateManager = managerAutoUpdateCheckBox.Checked;
         }
     }
 }
