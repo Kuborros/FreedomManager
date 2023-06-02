@@ -128,6 +128,8 @@ namespace FreedomManager
                 {
                     saveProfileComboBox.SelectedIndex = 0;
                 }
+
+                fancyJsonCheckBox.Checked = fP2LibConfig.saveFancyJson;
             } 
             else
             {
