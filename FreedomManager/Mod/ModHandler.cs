@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Windows.Forms;
 using SharpCompress.Archives;
 using SharpCompress.Common;
+using Microsoft.Build.Utilities;
 
 namespace FreedomManager.Mod
 {
@@ -334,7 +335,7 @@ namespace FreedomManager.Mod
                 {
                     string modname = Path.GetFileName(d);
                     hasManifest = false;
-                    if (modname != "BepInEx.MelonLoader.Loader" || modname != "lib")
+                    if (modname != "BepInEx.MelonLoader.Loader" && modname != "lib")
                     {
                         foreach (string js in Directory.GetFiles(d))
                         {
@@ -382,7 +383,7 @@ namespace FreedomManager.Mod
                 {
                     string modname = Path.GetFileName(d);
                     hasManifest = false;
-                    if (modname != "BepInEx.MelonLoader.Loader" || modname != "lib")
+                    if (modname != "BepInEx.MelonLoader.Loader")
                     {
                         foreach (string js in Directory.GetFiles(d))
                         {

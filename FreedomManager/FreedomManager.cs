@@ -284,6 +284,7 @@ namespace FreedomManager
             {
                 bepinConfig.writeConfig();
                 managerConfig.writeConfig();
+                fP2LibConfig.writeConfig();
                 await _updateManager.PrepareUpdateAsync(check.LastVersion);
 
                 _updateManager.LaunchUpdater(check.LastVersion,true, "--post-update");
@@ -338,6 +339,7 @@ namespace FreedomManager
         {
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
+            fP2LibConfig.writeConfig();
             if (fp2Found) Process.Start("FP2.exe");
         }
 
@@ -665,6 +667,7 @@ namespace FreedomManager
         {
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
+            fP2LibConfig.writeConfig();
         }
 
         private void fp2resCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -713,6 +716,21 @@ namespace FreedomManager
         private void managerAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             managerConfig.autoUpdateManager = managerAutoUpdateCheckBox.Checked;
+        }
+
+        private void fancyJsonCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            fP2LibConfig.saveFancyJson = fancyJsonCheckBox.Checked;
+        }
+
+        private void saveRedirecCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            fP2LibConfig.saveRedirectEnabled = saveRedirecCheckBox.Checked;
+        }
+
+        private void saveProfileComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fP2LibConfig.saveRedirectProfile = saveProfileComboBox.SelectedIndex;
         }
     }
 }

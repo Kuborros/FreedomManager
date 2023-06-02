@@ -534,6 +534,7 @@
             this.fancyJsonCheckBox.TabIndex = 6;
             this.fancyJsonCheckBox.Text = "Fancy JSON saves";
             this.fancyJsonCheckBox.UseVisualStyleBackColor = true;
+            this.fancyJsonCheckBox.CheckedChanged += new System.EventHandler(this.fancyJsonCheckBox_CheckedChanged);
             // 
             // label6
             // 
@@ -571,6 +572,7 @@
             this.saveProfileComboBox.Name = "saveProfileComboBox";
             this.saveProfileComboBox.Size = new System.Drawing.Size(151, 21);
             this.saveProfileComboBox.TabIndex = 3;
+            this.saveProfileComboBox.SelectedIndexChanged += new System.EventHandler(this.saveProfileComboBox_SelectedIndexChanged);
             // 
             // saveRedirecCheckBox
             // 
@@ -581,6 +583,7 @@
             this.saveRedirecCheckBox.TabIndex = 0;
             this.saveRedirecCheckBox.Text = "Save file redirection";
             this.saveRedirecCheckBox.UseVisualStyleBackColor = true;
+            this.saveRedirecCheckBox.CheckedChanged += new System.EventHandler(this.saveRedirecCheckBox_CheckedChanged);
             // 
             // bepinGroupBox
             // 
