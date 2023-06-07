@@ -1,7 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Security.Policy;
 using System.Text.Json;
+using System.Windows.Forms.VisualStyles;
 
 namespace FreedomManager.Mod
 {
@@ -67,23 +71,20 @@ namespace FreedomManager.Mod
             return melonInstalled;
         }
 
-        internal bool installFP2Lib()
+        internal void checkFP2Lib()
         {
-            if (!fp2libInstalled)
+            if (File.Exists("BepInEx\\plugins\\lib\\fp2lib.json"))
             {
-                WebClient client = new WebClient();
-                client.DownloadFile(new Uri("https://fp2mods.info/fp2lib/fp2lib.zip"), "Fp2lib.zip");
-                FreedomManager.modHandler.InstallMod("Fp2lib.zip", true);
                 fp2libInstalled = true;
-                fp2libVersion = "Test";
+                fp2libInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText("BepInEx\\plugins\\lib\\fp2lib.json"));
+                fp2libInfo.Dirname = "lib";
+                fp2libVersion = fp2libInfo.Version;
             }
             else
             {
-                File.Delete("BepInEx\\plugins\\libs\\fp2lib.dll");
                 fp2libInstalled = false;
                 fp2libVersion = "Not Installed";
             }
-            return fp2libInstalled;
         }
     }
 }

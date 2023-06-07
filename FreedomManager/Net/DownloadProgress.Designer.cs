@@ -59,6 +59,6 @@
 
         #endregion
 
-        private System.Windows.Forms.ProgressBar progressBar1;
+        internal System.Windows.Forms.ProgressBar progressBar1;
     }
 }

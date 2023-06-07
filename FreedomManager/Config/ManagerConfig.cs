@@ -51,8 +51,8 @@ namespace FreedomManager.Config
             }
             else 
             {
-                autoUpdateManager = false;
-                autoUpdateFP2Lib = false;
+                autoUpdateManager = true;
+                autoUpdateFP2Lib = true;
                 writeConfig(); 
             }
             

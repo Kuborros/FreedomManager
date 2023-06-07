@@ -1,5 +1,7 @@
 ﻿using FreedomManager.Config;
 using FreedomManager.Mod;
+using FreedomManager.Net;
+using FreedomManager.Net.GitHub;
 using FreedomManager.Patches;
 using Microsoft.Win32;
 using Onova;
@@ -11,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -87,20 +90,8 @@ namespace FreedomManager
             if (uris.Count > 0) handleGBUri(uris[0]);
 
             bepinConfig = new BepinConfig();
-            if (bepinConfig.confExists)
-            {
-                enableConsoleCheckBox.Checked = bepinConfig.ShowConsole;
-                noConsoleCloseCheckBox.Checked = bepinConfig.ConsolePreventClose;
-                logfileCheckBox.Checked = bepinConfig.FileLog;
-                hideLogsCheckBox.Checked = bepinConfig.UnityLogListening;
-                unityFileCheckBox.Checked = bepinConfig.WriteUnityLog;              
-                appendLogCheckBox.Checked = bepinConfig.AppendLog;
-
-            } 
-            else
-            {
-                bepinGroupBox.Enabled = false;
-            }
+            fP2LibConfig = new FP2LibConfig();
+            updateConfigUi();
 
             resolutionPatchController = new ResolutionPatchController();
 
@@ -115,7 +106,41 @@ namespace FreedomManager
                 fp2resCheckBox.Checked = false;
             }
 
+            RenderList(modHandler.modList);
+            OneClickServer();
+
+            if (managerConfig.autoUpdateManager)
+            {
+                Task.Run(() => CheckForUpdatesAsync(true));
+            }
+            if (managerConfig.autoUpdateFP2Lib)
+            {
+                checkForFP2LibUpdatesAsync(true);
+            }
+
+            managerVersionLabel.Text = Application.ProductVersion;
+
+        }
+
+        private void updateConfigUi()
+        {
             fP2LibConfig = new FP2LibConfig();
+            bepinConfig = new BepinConfig();
+
+            if (bepinConfig.confExists)
+            {
+                enableConsoleCheckBox.Checked = bepinConfig.ShowConsole;
+                noConsoleCloseCheckBox.Checked = bepinConfig.ConsolePreventClose;
+                logfileCheckBox.Checked = bepinConfig.FileLog;
+                hideLogsCheckBox.Checked = bepinConfig.UnityLogListening;
+                unityFileCheckBox.Checked = bepinConfig.WriteUnityLog;
+                appendLogCheckBox.Checked = bepinConfig.AppendLog;
+
+            }
+            else
+            {
+                bepinGroupBox.Enabled = false;
+            }
 
             if (fP2LibConfig.configExists)
             {
@@ -130,30 +155,19 @@ namespace FreedomManager
                 }
 
                 fancyJsonCheckBox.Checked = fP2LibConfig.saveFancyJson;
-            } 
+            }
             else
             {
                 fp2libGroupBox.Enabled = false;
             }
 
-
-            RenderList(modHandler.modList);
-            OneClickServer();
-
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
 
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
             fp2libAutoUpdateCheckBox.Enabled = loaderHandler.fp2libInstalled;
-
-            if (managerConfig.autoUpdateManager)
-            {
-                Task.Run(() => CheckForUpdatesAsync(true));
-            }
-
-            managerVersionLabel.Text = Application.ProductVersion;
             fp2libVersionLabel.Text = loaderHandler.fp2libVersion;
-
         }
+
 
         private void handleGBUri(string uri)
         {
@@ -239,15 +253,72 @@ namespace FreedomManager
 
             if (dialogResult == DialogResult.Yes)
             {
-                AsyncModDownload(new Uri(uri[0]));
+                AsyncModDownloadGbanana(new Uri(uri[0]));
             }
         }
 
-        internal void AsyncModDownload(Uri url)
+        private async void CheckForUpdatesAsync(bool hideNoUpdates)
+        {
+            var check = await _updateManager.CheckForUpdatesAsync();
+
+            if (!check.CanUpdate)
+            {
+                if (!hideNoUpdates) MessageBox.Show("There are no new Freedom Manager updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show("New Freedom Manager update is available!\n Version: " + check.LastVersion + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                bepinConfig.writeConfig();
+                managerConfig.writeConfig();
+                fP2LibConfig.writeConfig();
+                await _updateManager.PrepareUpdateAsync(check.LastVersion);
+
+                _updateManager.LaunchUpdater(check.LastVersion, true, "--post-update");
+                Application.Exit();
+            }
+        }
+
+        async void checkForFP2LibUpdatesAsync(bool hideNoUpdates)
+        {
+            WebClient client = new WebClient();
+
+            client.Headers["Accept"] = "application/vnd.github+json";
+            client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
+            client.Headers["user-agent"] = "FreedomManager";
+            try 
+            {
+                string response = await client.DownloadStringTaskAsync(new Uri("https://api.github.com/repos/Kuborros/FP2Lib/releases/latest"));
+
+                GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
+
+                string localVersion = "0.0.0";
+                if (loaderHandler.fp2libInstalled) 
+                {
+                    localVersion = loaderHandler.fp2libVersion;
+                }
+                Version local = new Version(localVersion);
+
+                string remoteVersion = release.tag_name.Split('-')[0];
+                Version remote = new Version(remoteVersion);
+
+                if (remote > local) AsyncModDownloadGitHub(new Uri(release.downloadUrl));         
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+        }
+
+        internal void AsyncModDownloadGbanana(Uri url)
         {
             try
             {
                 WebClient client = new WebClient();
+                client.Headers["user-agent"] = "FreedomManager";
 
                 client.OpenRead(url);
                 string format = client.ResponseHeaders.Get("Content-Type").Split('/')[1];
@@ -270,27 +341,35 @@ namespace FreedomManager
             }
         }
 
-        private async void CheckForUpdatesAsync(bool showNoUpdates)
+        internal void AsyncModDownloadGitHub(Uri url)
         {
-            var check = await _updateManager.CheckForUpdatesAsync();
+            try
+            {          
+                WebClient client = new WebClient();
+                client.Headers["user-agent"] = "FreedomManager";
+                client.Headers["accept"] = "*/*";
 
-            if (!check.CanUpdate)
-            {
-                if (!showNoUpdates) MessageBox.Show("There are no new updates available.","Update",MessageBoxButtons.OK,MessageBoxIcon.Information);
-                return;
+                client.OpenRead(url);
+                string filename = client.ResponseHeaders.Get("content-disposition").Split(';')[1].Trim().Replace("filename=", "");
+                tempname = filename;
+
+                DownloadProgress progress = new DownloadProgress
+                {
+                    Text = "FP2Lib Update"
+                };
+
+                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
+                client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
+                client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                progress.Show();
+                client.DownloadFileTaskAsync(url, filename);
             }
-
-            DialogResult dialogResult = MessageBox.Show("New Freedom Manager update is available!\n Version: " + check.LastVersion + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
+            catch (Exception ex)
             {
-                bepinConfig.writeConfig();
-                managerConfig.writeConfig();
-                fP2LibConfig.writeConfig();
-                await _updateManager.PrepareUpdateAsync(check.LastVersion);
-
-                _updateManager.LaunchUpdater(check.LastVersion,true, "--post-update");
-                Application.Exit();
+                MessageBox.Show(this, "Download failed!\n\n" +
+                "Error info: " + ex.Message,
+                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                return;
             }
         }
 
@@ -299,12 +378,16 @@ namespace FreedomManager
                 if (modHandler.InstallMod(tempname, true))
                 {
                     RenderList();
+                    loaderHandler.checkFP2Lib();
+                    updateConfigUi();
                 }
                 else
                 {
                     MessageBox.Show(this, "Mod unpacking failed!\n\n",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 }
+
+
         }
 
         private void RenderList()
@@ -388,6 +471,7 @@ namespace FreedomManager
         private void refresh_Click(object sender, EventArgs e)
         {
             RenderList();
+            updateConfigUi();
         }
 
         private void melonButton_Click(object sender, EventArgs e)
