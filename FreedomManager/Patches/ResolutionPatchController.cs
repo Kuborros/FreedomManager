@@ -88,6 +88,7 @@ namespace FreedomManager.Patches
             File.WriteAllBytes("FP2_Data/sharedassets0.assets", bytes);
             Console.WriteLine("Pattern found at offset {0} and replaced.", index);
 
+            currentRes = res;
             return true;
 
         }

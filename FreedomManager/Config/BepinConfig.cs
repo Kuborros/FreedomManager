@@ -7,7 +7,7 @@ namespace FreedomManager
 {
     internal class BepinConfig
     {
-        public bool confExists = true;
+        public readonly bool confExists = true;
         //[Logging]
         public bool UnityLogListening = true, LogConsoleToUnityLog = false;
         //[Logging.Console]

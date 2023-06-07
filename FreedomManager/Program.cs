@@ -39,13 +39,13 @@ namespace FreedomManager
                 {
                     pipe.Connect(3600);
 
-                    var writer = new StreamWriter(pipe);
-                    foreach (string s in uris)
-                    {
-                        writer.WriteLine(s);
+                    using (var writer = new StreamWriter(pipe)) {
+                        foreach (string s in uris)
+                        {
+                            writer.WriteLine(s);
+                        }
+                        writer.Flush();
                     }
-                    writer.Flush();
-                    writer.Dispose();
                 }
             }
 

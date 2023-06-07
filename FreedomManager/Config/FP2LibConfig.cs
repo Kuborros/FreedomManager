@@ -9,7 +9,7 @@ namespace FreedomManager.Config
     {
         private const string confPath = "BepInEx\\config\\000.kuborro.libraries.fp2.fp2lib.cfg";
 
-        public bool configExists = false;
+        public readonly bool configExists = false;
         public bool saveRedirectEnabled = false;
         public bool saveFancyJson = false;
         public int saveRedirectProfile = 0;
@@ -32,7 +32,7 @@ namespace FreedomManager.Config
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine(ex);
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace FreedomManager.Config
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine(ex);
                 }
             }
         }
