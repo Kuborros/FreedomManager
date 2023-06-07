@@ -22,10 +22,19 @@ On initial startup, you will be prompted to install BepInEx - simply click on th
 From there you can use `Install Mod` button to select a zipfile to install.  
 The files are checked for basic validity (containing a BepInEx folder in its root, A MelonLoader Mods folder or a mod manifest json).  
 Mods using mod_overrides are also properly extracted.  
-If you wish to install a MelonLoader compatible mod instead, you must install the MelonLoader compatibility layer with the `Install MelonLoader Compat` button before running any MelonLoader mods.  
+If you wish to install an old MelonLoader compatible mod instead, you must install the MelonLoader compatibility layer with the `Install MelonLoader Compat` button before running any MelonLoader mods. You do **NOT** need it for normal use. 
 
-Loader also offers a basic list of currently installed mods. Enabling or disabling of them. Support for enabling a debug console and 1-click integration on GameBanana!    
-![NewFreedomManager](https://user-images.githubusercontent.com/33236735/198375013-8b22fc3e-3289-4663-9f09-666083393670.png)  
+Loader also offers a list of currently installed mods, enabling or disabling of them, support for enabling a debug console and 1-click integration on GameBanana!    
+![image](https://github.com/Kuborros/FreedomManager/assets/22860063/9793599a-8221-4a55-8161-5119f36f53cd)  
+
+Mod manager supports automatic updates for itself, as well as its support library [FP2Lib](https://github.com/Kuborros/FP2Lib).
+
+## Configuration options:
+
+Configuration tab allows you to edit most of BepInEx settings, as well as controll features of FP2Lib and Automatic Updates.
+You can also change the game's internal resolution here.
+
+![image](https://github.com/Kuborros/FreedomManager/assets/22860063/38f7ef0f-056c-463f-bf65-8143a2cce1d9)
 
 ## Notes:
 
@@ -35,11 +44,14 @@ Visual Studio 2022 will happily load and set it all up for you.
 
 Additionally, here is the VirusTotal scan result: [Here](https://www.virustotal.com/gui/file/0910a97edddff134e20a00a1ad43b973428c57b45db60d5e194becdb5112ef3b). I know MaxSecure shows it as "sus" (literaly), but if you check online its a common issue, like in [this example](https://www.reddit.com/r/antivirus/comments/qo9vus/is_this_safe_and_false_positive_from_virustotal/). And their 'report false positive' webpage 404s me.  
 
+As for Theta, let their official site speak for itself:
+"Bitdefender Theta: All detections are based on **machine learning** which do not include detection created by malware researchers. *High chances of false positive.*"
+
 ## For modders:
 
-This mod manager installs any bepinex mod as long as it has a proper directory structure, as recommended by BepInEx devs and gamebanana (so main directory of the zip maps to main game directory)  
+This mod manager installs any BepInEx mod as long as it has a proper directory structure, as recommended by BepInEx devs and GameBanana (so main directory of the zip maps to main game directory)  
 
-MelonLoader mods can be supported, however as of now every mod out there has different directory stucture in its zipfile, which complicates things.  
+MelonLoader mods can be supported, if they implement a valid directory structure. Using these mods is however not recommended.
 
 Please read our Wiki documentation on making mods [here](https://github.com/Kuborros/FreedomManager/wiki)!  
 
