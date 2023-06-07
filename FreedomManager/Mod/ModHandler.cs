@@ -251,11 +251,6 @@ namespace FreedomManager.Mod
             }
         }
 
-        private void GenerateModIndex()
-        {
-
-        }
-
         private void DeduplicateMods()
         {
 

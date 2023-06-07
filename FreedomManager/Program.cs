@@ -29,11 +29,6 @@ namespace FreedomManager
             try { alreadyRunning = !mutex.WaitOne(0, true); }
             catch (AbandonedMutexException) { alreadyRunning = false; }
 
-            if (args.Length > 1 && args[0] == "--post-update")
-            {
-
-            }
-
             List<string> uris = args
                 .Where(x => x.Length > protocol.Length && x.StartsWith(protocol, StringComparison.Ordinal))
                 .ToList();
@@ -50,6 +45,7 @@ namespace FreedomManager
                         writer.WriteLine(s);
                     }
                     writer.Flush();
+                    writer.Dispose();
                 }
             }
 

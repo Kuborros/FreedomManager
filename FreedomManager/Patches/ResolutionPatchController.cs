@@ -37,7 +37,7 @@ namespace FreedomManager.Patches
             x2520
         }
 
-        byte[] pattern = ConvertHexStringToByteArray("506978656C2041727420427566666572"); //Pixel Art Buffer
+        readonly byte[] pattern = ConvertHexStringToByteArray("506978656C2041727420427566666572"); //Pixel Art Buffer
 
 
         public ResolutionPatchController()

@@ -25,8 +25,8 @@ namespace FreedomManager
 {
     public partial class FreedomManager : Form
     {
-        bool bepisPresent = false;
-        bool fp2Found = false;
+        readonly bool bepisPresent = false;
+        readonly bool fp2Found = false;
         bool melonPresent = false;
         int columnIndex = 0;
         internal string tempname;
@@ -104,7 +104,7 @@ namespace FreedomManager
 
             if (resolutionPatchController.enabled)
             {
-                fp2resComboBox.SelectedIndex = (int)resolutionPatchController.currentRes;
+                fp2resComboBox.SelectedIndex = Math.Min((int)resolutionPatchController.currentRes,9);
                 fp2resCheckBox.Checked = true;
             }
             else
@@ -222,8 +222,7 @@ namespace FreedomManager
         private async void modDownloadWindow(string[] uri, UrlType type)
         {
             string name = "Unknown", author = "Unknown", gBananFileName = "";
-            DialogResult dialogResult = DialogResult.None;
-
+            DialogResult dialogResult;
             if (type == UrlType.GBANANA && uri.Length == 3)
             {
                 string apiCall = string.Format("https://api.gamebanana.com/Core/Item/Data?itemid={0}&itemtype={1}&fields=name,Owner().name,Files().aFiles()", uri[2], uri[1]);

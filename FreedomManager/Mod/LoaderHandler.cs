@@ -38,10 +38,11 @@ namespace FreedomManager.Mod
         {
             if (!bepinInstalled)
             {
-                WebClient client = new WebClient();
-                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
-                FreedomManager.modHandler.InstallMod("BepInEx.zip", true);
-                bepinInstalled = true;
+                using (WebClient client = new WebClient()) {
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
+                    FreedomManager.modHandler.InstallMod("BepInEx.zip", true);
+                    bepinInstalled = true;
+                }
             }
             else
             {
@@ -55,10 +56,12 @@ namespace FreedomManager.Mod
         {
             if (!melonInstalled)
             {
-                WebClient client = new WebClient();
-                client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), "Melon.zip");
-                FreedomManager.modHandler.InstallMod("Melon.zip", true);
-                melonInstalled = true;
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), "Melon.zip");
+                    FreedomManager.modHandler.InstallMod("Melon.zip", true);
+                    melonInstalled = true;
+                }
             }
             else
             {
