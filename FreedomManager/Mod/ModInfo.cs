@@ -59,7 +59,7 @@ namespace FreedomManager
             }
             else HasAssets = hasAssets;
 
-            if (!archiveType.HasValue)
+            if (!archiveType.HasValue || archiveType == null)
             {
                 ArchiveType = ModHandler.ArchiveType.BepinDir;
             }

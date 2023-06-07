@@ -43,12 +43,12 @@ namespace FreedomManager
             new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager*.zip"), //Lame but secure - needs _specific_ update name syntax to deem them worthy
             new ZipPackageExtractor());
 
-        static BepinConfig bepinConfig;
-        static FP2LibConfig fP2LibConfig;
-        static ManagerConfig managerConfig;
-        static ResolutionPatchController resolutionPatchController;
-        public static ModHandler modHandler;
-        public static LoaderHandler loaderHandler;
+        BepinConfig bepinConfig;
+        FP2LibConfig fP2LibConfig;
+        ManagerConfig managerConfig;
+        ResolutionPatchController resolutionPatchController;
+        public ModHandler modHandler;
+        public LoaderHandler loaderHandler;
 
         public FreedomManager(List<string> uris)
         {
@@ -72,7 +72,7 @@ namespace FreedomManager
                 //No FP2, no loader.
                 MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                "",MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 Environment.Exit(1);
             }
 
@@ -80,7 +80,7 @@ namespace FreedomManager
             {
                 MessageBox.Show("BepInEx not Found!.\n\n" +
                         "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
             else setup.Text = "Uninstall BepInEx";
 
@@ -203,12 +203,14 @@ namespace FreedomManager
                 {
                     await pipeServer.WaitForConnectionAsync();
 
-                    var sr = new StreamReader(pipeServer);
-                    string temp;
-                    while ((temp = sr.ReadLine()) != null)
+                    using (var sr = new StreamReader(pipeServer))
                     {
-                        Console.WriteLine("Received from client: {0}", temp);
-                        handleGBUri(temp);
+                        string temp;
+                        while ((temp = sr.ReadLine()) != null)
+                        {
+                            Console.WriteLine("Received from client: {0}", temp);
+                            handleGBUri(temp);
+                        }
                     }
                 }
             }
