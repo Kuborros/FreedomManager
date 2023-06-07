@@ -1,13 +1,12 @@
-﻿using SharpCompress.Archives.SevenZip;
+﻿using SharpCompress.Archives;
+using SharpCompress.Archives.SevenZip;
+using SharpCompress.Common;
 using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
-using SharpCompress.Archives;
-using SharpCompress.Common;
-using Microsoft.Build.Utilities;
 
 namespace FreedomManager.Mod
 {
@@ -28,10 +27,10 @@ namespace FreedomManager.Mod
         //private readonly string dirDisabledM = "MLLoader\\Mods-disabled";
 
 
-        public List<ModInfo> modList {get;}
+        public List<ModInfo> modList { get; }
 
 
-        public ModHandler() 
+        public ModHandler()
         {
             modList = new List<ModInfo>();
             UpdateModList();
@@ -154,13 +153,13 @@ namespace FreedomManager.Mod
             }
         }
 
-        public bool InstallMod(string filename,bool delete) 
+        public bool InstallMod(string filename, bool delete)
         {
             ArchiveType archiveType = CheckArchive(filename);
             if (archiveType != ArchiveType.None)
             {
                 ExtractMod(filename, archiveType);
-                if(delete) File.Delete(filename);
+                if (delete) File.Delete(filename);
                 return true;
             }
             return false;
@@ -192,7 +191,7 @@ namespace FreedomManager.Mod
                         if (modInfo.Enabled)
                             File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
                         else
-                            File.Delete("MLLoader\\mods-disabled\\" + modInfo.Dirname + ".dll"); 
+                            File.Delete("MLLoader\\mods-disabled\\" + modInfo.Dirname + ".dll");
                     }
                 }
             }

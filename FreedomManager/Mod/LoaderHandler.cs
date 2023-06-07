@@ -1,11 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Security.Policy;
 using System.Text.Json;
-using System.Windows.Forms.VisualStyles;
 
 namespace FreedomManager.Mod
 {
@@ -31,7 +27,8 @@ namespace FreedomManager.Mod
                 fp2libInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText("BepInEx\\plugins\\lib\\fp2lib.json"));
                 fp2libInfo.Dirname = "lib";
                 fp2libVersion = fp2libInfo.Version;
-            } else
+            }
+            else
             {
                 fp2libVersion = "Not Installed";
             }
@@ -60,7 +57,7 @@ namespace FreedomManager.Mod
             {
                 WebClient client = new WebClient();
                 client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MelonLoader.Loader/releases/download/v2.0.0/BepInEx.MelonLoader.Loader.UnityMono_BepInEx5_2.0.0.zip"), "Melon.zip");
-                FreedomManager.modHandler.InstallMod("Melon.zip",true);
+                FreedomManager.modHandler.InstallMod("Melon.zip", true);
                 melonInstalled = true;
             }
             else

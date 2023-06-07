@@ -1,6 +1,5 @@
 ﻿using FreedomManager.Config;
 using FreedomManager.Mod;
-using FreedomManager.Net;
 using FreedomManager.Net.GitHub;
 using FreedomManager.Patches;
 using Microsoft.Win32;
@@ -13,7 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -135,7 +133,6 @@ namespace FreedomManager
                 hideLogsCheckBox.Checked = bepinConfig.UnityLogListening;
                 unityFileCheckBox.Checked = bepinConfig.WriteUnityLog;
                 appendLogCheckBox.Checked = bepinConfig.AppendLog;
-
             }
             else
             {
@@ -201,7 +198,7 @@ namespace FreedomManager
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -288,14 +285,14 @@ namespace FreedomManager
             client.Headers["Accept"] = "application/vnd.github+json";
             client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
             client.Headers["user-agent"] = "FreedomManager";
-            try 
+            try
             {
                 string response = await client.DownloadStringTaskAsync(new Uri("https://api.github.com/repos/Kuborros/FP2Lib/releases/latest"));
 
                 GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
 
                 string localVersion = "0.0.0";
-                if (loaderHandler.fp2libInstalled) 
+                if (loaderHandler.fp2libInstalled)
                 {
                     localVersion = loaderHandler.fp2libVersion;
                 }
@@ -304,8 +301,8 @@ namespace FreedomManager
                 string remoteVersion = release.tag_name.Split('-')[0];
                 Version remote = new Version(remoteVersion);
 
-                if (remote > local) AsyncModDownloadGitHub(new Uri(release.downloadUrl));         
-            } 
+                if (remote > local) AsyncModDownloadGitHub(new Uri(release.downloadUrl));
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
@@ -330,8 +327,8 @@ namespace FreedomManager
                 client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
                 client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
                 progress.Show();
-                client.DownloadFileAsync(url,filename);
-            } 
+                client.DownloadFileAsync(url, filename);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Download failed!\n\n" +
@@ -344,7 +341,7 @@ namespace FreedomManager
         internal void AsyncModDownloadGitHub(Uri url)
         {
             try
-            {          
+            {
                 WebClient client = new WebClient();
                 client.Headers["user-agent"] = "FreedomManager";
                 client.Headers["accept"] = "*/*";
@@ -375,17 +372,17 @@ namespace FreedomManager
 
         private void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-                if (modHandler.InstallMod(tempname, true))
-                {
-                    RenderList();
-                    loaderHandler.checkFP2Lib();
-                    updateConfigUi();
-                }
-                else
-                {
-                    MessageBox.Show(this, "Mod unpacking failed!\n\n",
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                }
+            if (modHandler.InstallMod(tempname, true))
+            {
+                RenderList();
+                loaderHandler.checkFP2Lib();
+                updateConfigUi();
+            }
+            else
+            {
+                MessageBox.Show(this, "Mod unpacking failed!\n\n",
+                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            }
 
 
         }
@@ -431,14 +428,14 @@ namespace FreedomManager
         private void setup_Click(object sender, EventArgs e)
         {
             try
-            { 
+            {
                 if (loaderHandler.installBepinLoader())
                 {
-                   MessageBox.Show(this, "BepInEx installed!.\n\n" +
-                   "The game is now ready for modding.",
-                   Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                   setup.Text = "Uninstall BepInEx";
-                } 
+                    MessageBox.Show(this, "BepInEx installed!.\n\n" +
+                    "The game is now ready for modding.",
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    setup.Text = "Uninstall BepInEx";
+                }
                 else
                 {
                     MessageBox.Show(this, "BepInEx hook removed!.\n\n" +
@@ -463,7 +460,7 @@ namespace FreedomManager
             if (modFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string file = modFileDialog.FileName;
-                modHandler.InstallMod(file,false);
+                modHandler.InstallMod(file, false);
                 RenderList();
             }
         }
@@ -498,7 +495,8 @@ namespace FreedomManager
                     melonButton.Text = "Install MelonLoader Compat";
                     RenderList();
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(this, "Unpacking MelonLoader failed!.\n\n" +
                 "Error info: " + ex.Message,
@@ -585,7 +583,7 @@ namespace FreedomManager
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 try
                 {
-                    modHandler.InstallMod(files[0],false);
+                    modHandler.InstallMod(files[0], false);
                     RenderList();
                 }
                 catch (Exception ex)
@@ -758,7 +756,7 @@ namespace FreedomManager
 
         private void fp2resCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (fp2resCheckBox.Checked) 
+            if (fp2resCheckBox.Checked)
             {
                 resolutionPatchController.enabled = true;
                 resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
@@ -779,7 +777,7 @@ namespace FreedomManager
             if (resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex))
             {
                 MessageBox.Show("Resolution patch successfull!",
-                "Internal Resolution Patch", MessageBoxButtons.OK,MessageBoxIcon.Information);
+                "Internal Resolution Patch", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {

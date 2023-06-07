@@ -19,7 +19,8 @@ namespace FreedomManager
 
         public void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            this.BeginInvoke((MethodInvoker)delegate {
+            this.BeginInvoke((MethodInvoker)delegate
+            {
                 double bytesIn = double.Parse(e.BytesReceived.ToString());
                 double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
                 double percentage = bytesIn / totalBytes * 100;
@@ -28,7 +29,8 @@ namespace FreedomManager
         }
         public void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            this.BeginInvoke((MethodInvoker)delegate {
+            this.BeginInvoke((MethodInvoker)delegate
+            {
                 this.Hide();
             });
         }

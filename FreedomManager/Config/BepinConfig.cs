@@ -14,9 +14,10 @@ namespace FreedomManager
         public bool ShowConsole = false, ConsolePreventClose = false;
         public string LogLevels = "Fatal, Error, Warning, Message";
         //[Logging.Disk]
-        public bool WriteUnityLog = true,AppendLog = false,FileLog = true;
+        public bool WriteUnityLog = true, AppendLog = false, FileLog = true;
 
-        public BepinConfig() {
+        public BepinConfig()
+        {
 
             //If there is no file, we default to nothing
             if (File.Exists("BepInEx\\config\\BepInEx.cfg"))
@@ -42,7 +43,8 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.ToString());
                 }
-            } else confExists = false;
+            }
+            else confExists = false;
         }
 
         public void writeConfig()

@@ -14,7 +14,7 @@ namespace FreedomManager.Config
         public bool autoUpdateManager { get; set; }
         public bool autoUpdateFP2Lib { get; set; }
 
-        public ManagerConfig() 
+        public ManagerConfig()
         {
             configExists = File.Exists(confFile);
             readConfig();
@@ -28,7 +28,7 @@ namespace FreedomManager.Config
         */
 
         [JsonConstructor]
-        public ManagerConfig(bool autoUpdateManager,bool autoUpdateFP2Lib)
+        public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib)
         {
             this.autoUpdateFP2Lib = autoUpdateFP2Lib;
             this.autoUpdateManager = autoUpdateManager;
@@ -47,15 +47,15 @@ namespace FreedomManager.Config
             {
                 ManagerConfig conf = JsonSerializer.Deserialize<ManagerConfig>(File.ReadAllText(confFile));
                 autoUpdateFP2Lib = conf.autoUpdateFP2Lib;
-                autoUpdateManager = conf.autoUpdateManager;             
+                autoUpdateManager = conf.autoUpdateManager;
             }
-            else 
+            else
             {
                 autoUpdateManager = true;
                 autoUpdateFP2Lib = true;
-                writeConfig(); 
+                writeConfig();
             }
-            
+
         }
     }
 }

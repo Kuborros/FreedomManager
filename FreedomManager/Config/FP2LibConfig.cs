@@ -14,7 +14,7 @@ namespace FreedomManager.Config
         public bool saveFancyJson = false;
         public int saveRedirectProfile = 0;
 
-        public FP2LibConfig() 
+        public FP2LibConfig()
         {
             configExists = File.Exists(confPath);
 
