@@ -190,7 +190,6 @@
       <DependentUpon>FreedomManager.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Net\GbApi.cs" />
     <Compile Include="Net\GitHub\GitHubAsset.cs" />
     <Compile Include="Net\GitHub\GitHubRelease.cs" />
     <Compile Include="Net\GitHub\GitHubUploader.cs" />

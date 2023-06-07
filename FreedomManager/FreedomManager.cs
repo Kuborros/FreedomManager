@@ -12,9 +12,11 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Net;
+using System.Net.Cache;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static FreedomManager.Mod.ModHandler;
@@ -27,7 +29,14 @@ namespace FreedomManager
         bool fp2Found = false;
         bool melonPresent = false;
         int columnIndex = 0;
-        string tempname;
+        internal string tempname;
+
+        private enum UrlType
+        {
+            GBANANA,
+            GITHUB,
+            GENERIC
+        }
 
         private readonly IUpdateManager _updateManager = new UpdateManager(
             //new WebPackageResolver("https://fp2mods.info/fp2mm/versions.manifest"), //Cool but insecure - if i were to loose the domain anyone could spoof updates.
@@ -113,7 +122,10 @@ namespace FreedomManager
             }
             if (managerConfig.autoUpdateFP2Lib)
             {
-                checkForFP2LibUpdatesAsync(true);
+                if (loaderHandler.bepinInstalled)
+                {
+                    checkForFP2LibUpdatesAsync(true);
+                }
             }
 
             managerVersionLabel.Text = Application.ProductVersion;
@@ -168,12 +180,14 @@ namespace FreedomManager
 
         private void handleGBUri(string uri)
         {
-            bool gban = false;
+            UrlType type;
             try
             {
                 string[] gblink = uri.Replace("fp2mm://", string.Empty).Replace("fp2mm:", string.Empty).Split(',');
-                if (gblink[0].Contains("gamebanana.com")) gban = true;
-                modDownloadWindow(gblink, gban);
+                if (gblink[0].Contains("gamebanana.com")) type = UrlType.GBANANA;
+                else if (gblink[0].Contains("github.com")) type = UrlType.GITHUB;
+                else type = UrlType.GENERIC;
+                modDownloadWindow(gblink, type);
             }
             catch (Exception ex)
             {
@@ -205,20 +219,20 @@ namespace FreedomManager
             OneClickServer();
         }
 
-        private void modDownloadWindow(string[] uri, bool gbanana)
+        private async void modDownloadWindow(string[] uri, UrlType type)
         {
-            string name = "Unknown", author = "Unknown";
+            string name = "Unknown", author = "Unknown", gBananFileName = "";
             DialogResult dialogResult = DialogResult.None;
 
-            if (gbanana && uri.Length == 3)
+            if (type == UrlType.GBANANA && uri.Length == 3)
             {
-                string apiCall = string.Format("https://api.gamebanana.com/Core/Item/Data?itemid={0}&itemtype={1}&fields=name,Owner().name", uri[2], uri[1]);
+                string apiCall = string.Format("https://api.gamebanana.com/Core/Item/Data?itemid={0}&itemtype={1}&fields=name,Owner().name,Files().aFiles()", uri[2], uri[1]);
 
                 try
                 {
                     using (WebClient client = new WebClient())
                     {
-                        string response = client.DownloadString(apiCall);
+                        string response = await client.DownloadStringTaskAsync(new Uri(apiCall));
                         using (JsonDocument document = JsonDocument.Parse(response))
                         {
                             if (document.RootElement.GetType().Equals(typeof(JsonObject)))
@@ -230,6 +244,13 @@ namespace FreedomManager
                             name = jName.GetString();
                             JsonElement jAuthor = document.RootElement[1];
                             author = jAuthor.GetString();
+
+                            string fileID = Regex.Match(uri[0], @"\d+").Value;
+
+                            JsonElement jFiles = document.RootElement[2];
+                            JsonElement jCurrFile = jFiles.GetProperty(fileID);
+                            gBananFileName = jCurrFile.GetProperty("_sFile").GetString();
+
                         }
                     }
                 }
@@ -237,20 +258,35 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.Message);
                 }
-                dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo);
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo);
 
             }
-            else if (uri.Length == 3)
+            else 
             {
-                name = uri[1];
-                author = uri[2];
+                if (uri.Length == 3)
+                {
+                    name = uri[1];
+                    author = uri[2];
+                }
 
-                dialogResult = MessageBox.Show(this, "Do you want to install \"" + name + "\",  by: " + author + " from external site?", "Mod installation", MessageBoxButtons.YesNo);
+                string flavor = type == UrlType.GITHUB ? "GitHub" : "external site";
+
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from " + flavor + "?", "Mod installation", MessageBoxButtons.YesNo);
             }
 
             if (dialogResult == DialogResult.Yes)
             {
-                AsyncModDownloadGbanana(new Uri(uri[0]));
+                switch (type) {
+                    case UrlType.GBANANA:
+                        AsyncModDownloadGbanana(new Uri(uri[0]), gBananFileName);
+                        break;
+                    case UrlType.GITHUB:
+                        AsyncModDownloadGitHub(new Uri(uri[0]));
+                        break;
+                    default:
+                        MessageBox.Show("Link points at unsupported service.", "Mod Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                }
             }
         }
 
@@ -278,92 +314,104 @@ namespace FreedomManager
             }
         }
 
-        async void checkForFP2LibUpdatesAsync(bool hideNoUpdates)
+        private async void checkForFP2LibUpdatesAsync(bool hideNoUpdates)
         {
-            WebClient client = new WebClient();
-
-            client.Headers["Accept"] = "application/vnd.github+json";
-            client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
-            client.Headers["user-agent"] = "FreedomManager";
-            try
+            using (WebClient client = new WebClient())
             {
-                string response = await client.DownloadStringTaskAsync(new Uri("https://api.github.com/repos/Kuborros/FP2Lib/releases/latest"));
-
-                GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
-
-                string localVersion = "0.0.0";
-                if (loaderHandler.fp2libInstalled)
+                client.Headers["Accept"] = "application/vnd.github+json";
+                client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
+                client.Headers["user-agent"] = "FreedomManager";
+                try
                 {
-                    localVersion = loaderHandler.fp2libVersion;
+                    string response = await client.DownloadStringTaskAsync(new Uri("https://api.github.com/repos/Kuborros/FP2Lib/releases/latest"));
+
+                    GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
+
+                    string localVersion = "0.0.0";
+                    if (loaderHandler.fp2libInstalled)
+                    {
+                        localVersion = loaderHandler.fp2libVersion;
+                    }
+                    Version local = new Version(localVersion);
+
+                    string remoteVersion = release.tag_name.Split('-')[0];
+                    Version remote = new Version(remoteVersion);
+
+                    if (remote > local)
+                    {
+                        DialogResult dialogResult = MessageBox.Show("New FP2Lib update is available!\n Version: " + release.tag_name + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
+
+                        if (dialogResult == DialogResult.Yes)
+                            AsyncModDownloadGitHub(new Uri(release.downloadUrl));
+                    }
+                    else
+                    {
+                        if (!hideNoUpdates) MessageBox.Show("There are no new FP2Lib updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }                    
                 }
-                Version local = new Version(localVersion);
-
-                string remoteVersion = release.tag_name.Split('-')[0];
-                Version remote = new Version(remoteVersion);
-
-                if (remote > local) AsyncModDownloadGitHub(new Uri(release.downloadUrl));
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-
         }
 
-        internal void AsyncModDownloadGbanana(Uri url)
+        internal async void AsyncModDownloadGbanana(Uri url, string filename)
         {
             try
             {
-                WebClient client = new WebClient();
-                client.Headers["user-agent"] = "FreedomManager";
+                using (WebClient client = new WebClient())
+                {
+                    client.Headers["user-agent"] = "FreedomManager";
+                    client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
+                    tempname = filename;
 
-                client.OpenRead(url);
-                string format = client.ResponseHeaders.Get("Content-Type").Split('/')[1];
-                string filename = "tempmod." + format;
-                tempname = filename;
-
-                DownloadProgress progress = new DownloadProgress();
-                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
-                client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
-                client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                progress.Show();
-                client.DownloadFileAsync(url, filename);
+                    DownloadProgress progress = new DownloadProgress();
+                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
+                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
+                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                    progress.Show();
+                    await client.DownloadFileTaskAsync(url, filename);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Download failed!\n\n" +
+                MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 return;
             }
         }
 
-        internal void AsyncModDownloadGitHub(Uri url)
+        internal async void AsyncModDownloadGitHub(Uri url)
         {
             try
             {
-                WebClient client = new WebClient();
-                client.Headers["user-agent"] = "FreedomManager";
-                client.Headers["accept"] = "*/*";
-
-                client.OpenRead(url);
-                string filename = client.ResponseHeaders.Get("content-disposition").Split(';')[1].Trim().Replace("filename=", "");
-                tempname = filename;
-
-                DownloadProgress progress = new DownloadProgress
+                using (WebClient client = new WebClient())
                 {
-                    Text = "FP2Lib Update"
-                };
+                    client.Headers["user-agent"] = "FreedomManager";
+                    client.Headers["accept"] = "*/*";
+                    client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
-                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
-                client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
-                client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                progress.Show();
-                client.DownloadFileTaskAsync(url, filename);
+                    await client.OpenReadTaskAsync(url);
+                    string filename = client.ResponseHeaders.Get("content-disposition").Split(';')[1].Trim().Replace("filename=", "");
+                    tempname = filename;
+
+                    DownloadProgress progress = new DownloadProgress
+                    {
+                        Text = "FP2Lib Update"
+                    };
+
+                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
+                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
+                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                    progress.Show();
+                    await client.DownloadFileTaskAsync(url, filename);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Download failed!\n\n" +
+                MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 return;
@@ -380,11 +428,9 @@ namespace FreedomManager
             }
             else
             {
-                MessageBox.Show(this, "Mod unpacking failed!\n\n",
+                MessageBox.Show("Mod unpacking failed!\n\n",
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
-
-
         }
 
         private void RenderList()
@@ -446,6 +492,7 @@ namespace FreedomManager
 
                 }
                 RenderList();
+                checkForFP2LibUpdatesAsync(true);
             }
             catch (Exception ex)
             {
@@ -470,37 +517,46 @@ namespace FreedomManager
             RenderList();
             updateConfigUi();
         }
-
         private void melonButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (loaderHandler.installMLLoader())
-                {
-                    MessageBox.Show(this, "MelonLoader plugin installed!\n\n" +
-                    "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    melonPresent = true;
-                    RenderList();
-                    melonButton.Text = "Uninstall MelonLoader Compat";
-                }
-                else
-                {
-                    MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
-                    "",
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DialogResult dialogResult = MessageBox.Show("Important!\n\n" +
+                "MelonLoader compat is meant only to run mods requiring it.\n" +
+                "You do NOT need it, unless you want to use these specific mods.\n" +
+                "Bug reports for BepInEx mods where MelonLoader is installed will be ignored!\n\n" +
+                "Do you still want to proceed?", "MelonLoader Installation", MessageBoxButtons.YesNo,MessageBoxIcon.Question);
 
-                    melonPresent = false;
-                    melonButton.Text = "Install MelonLoader Compat";
-                    RenderList();
-                }
-            }
-            catch (Exception ex)
+            if (dialogResult == DialogResult.Yes)
             {
-                MessageBox.Show(this, "Unpacking MelonLoader failed!.\n\n" +
-                "Error info: " + ex.Message,
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    if (loaderHandler.installMLLoader())
+                    {
+                        MessageBox.Show(this, "MelonLoader plugin installed!\n\n" +
+                        "Melon Loader mods can now be installed. Please be aware that MelonLoader can be heavy on the game.",
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        melonPresent = true;
+                        RenderList();
+                        melonButton.Text = "Uninstall MelonLoader Compat";
+                    }
+                    else
+                    {
+                        MessageBox.Show(this, "MelonLoader plugin uninstalled!\n\n" +
+                        "",
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        melonPresent = false;
+                        melonButton.Text = "Install MelonLoader Compat";
+                        RenderList();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Unpacking MelonLoader failed!.\n\n" +
+                    "Error info: " + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -787,9 +843,10 @@ namespace FreedomManager
             }
         }
 
-        private void updateCheckButton_Click(object sender, EventArgs e)
+        private async void updateCheckButton_Click(object sender, EventArgs e)
         {
-            Task.Run(() => CheckForUpdatesAsync(false));
+            await Task.Run(() => CheckForUpdatesAsync(false));
+            checkForFP2LibUpdatesAsync(false);
         }
 
         private void fp2libAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
