@@ -41,7 +41,7 @@ namespace FreedomManager
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine(ex);
                 }
             }
             else confExists = false;
@@ -75,7 +75,7 @@ namespace FreedomManager
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex);
             }
         }
     }
