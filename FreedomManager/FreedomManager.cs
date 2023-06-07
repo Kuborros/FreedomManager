@@ -257,7 +257,7 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.Message);
                 }
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo);
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
             }
             else 
@@ -270,7 +270,7 @@ namespace FreedomManager
 
                 string flavor = type == UrlType.GITHUB ? "GitHub" : "external site";
 
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from " + flavor + "?", "Mod installation", MessageBoxButtons.YesNo);
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from " + flavor + "?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
 
             if (dialogResult == DialogResult.Yes)
