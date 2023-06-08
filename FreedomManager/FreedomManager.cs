@@ -13,6 +13,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Net;
 using System.Net.Cache;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -223,7 +224,7 @@ namespace FreedomManager
 
         private async void modDownloadWindow(string[] uri, UrlType type)
         {
-            string name = "Unknown", author = "Unknown", gBananFileName = "";
+            string name = "Unknown", author = "Unknown", gBananFileName = "", gitHubFileName = "";
             DialogResult dialogResult;
             if (type == UrlType.GBANANA && uri.Length == 3)
             {
@@ -262,17 +263,29 @@ namespace FreedomManager
                 dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
             }
-            else 
+            else if (type == UrlType.GITHUB)
+            {
+                try { 
+                    MatchCollection matches = Regex.Matches(uri[0],"(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
+
+                    author = matches[0].Groups[1].Value;
+                    name = matches[0].Groups[2].Value;
+                    gitHubFileName = matches[0].Groups[3].Value;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
             {
                 if (uri.Length == 3)
                 {
                     name = uri[1];
                     author = uri[2];
                 }
-
-                string flavor = type == UrlType.GITHUB ? "GitHub" : "external site";
-
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from " + flavor + "?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from external site?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
 
             if (dialogResult == DialogResult.Yes)
@@ -282,7 +295,7 @@ namespace FreedomManager
                         AsyncModDownloadGbanana(new Uri(uri[0]), gBananFileName);
                         break;
                     case UrlType.GITHUB:
-                        AsyncModDownloadGitHub(new Uri(uri[0]));
+                        AsyncModDownloadGitHub(new Uri(uri[0]), gitHubFileName);
                         break;
                     default:
                         MessageBox.Show("Link points at unsupported service.", "Mod Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -343,7 +356,7 @@ namespace FreedomManager
                         DialogResult dialogResult = MessageBox.Show("New FP2Lib update is available!\n Version: " + release.tag_name + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
 
                         if (dialogResult == DialogResult.Yes)
-                            AsyncModDownloadGitHub(new Uri(release.downloadUrl));
+                            AsyncModDownloadGitHub(new Uri(release.downloadUrl),release.filename);
                     }
                     else
                     {
@@ -379,12 +392,12 @@ namespace FreedomManager
             {
                 MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 return;
             }
         }
 
-        internal async void AsyncModDownloadGitHub(Uri url)
+        internal async void AsyncModDownloadGitHub(Uri url, string filename)
         {
             try
             {
@@ -393,16 +406,10 @@ namespace FreedomManager
                     client.Headers["user-agent"] = "FreedomManager";
                     client.Headers["accept"] = "*/*";
                     client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-
-                    await client.OpenReadTaskAsync(url);
-                    string filename = client.ResponseHeaders.Get("content-disposition").Split(';')[1].Trim().Replace("filename=", "");
                     tempname = filename;
 
-                    DownloadProgress progress = new DownloadProgress
-                    {
-                        Text = "FP2Lib Update"
-                    };
-
+                    DownloadProgress progress = new DownloadProgress();
+                    if (filename == "fp2lib.zip") progress.Text = "FP2Lib Update";
                     client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
                     client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
                     client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
@@ -414,7 +421,7 @@ namespace FreedomManager
             {
                 MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 return;
             }
         }
