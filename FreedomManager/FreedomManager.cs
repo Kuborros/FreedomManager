@@ -320,6 +320,7 @@ namespace FreedomManager
             using (WebClient client = new WebClient())
             {
                 client.Headers["Accept"] = "application/vnd.github+json";
+                client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
                 client.Headers["user-agent"] = "FreedomManager";
                 try
                 {
