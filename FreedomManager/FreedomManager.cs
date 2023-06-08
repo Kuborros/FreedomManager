@@ -72,7 +72,7 @@ namespace FreedomManager
                 //No FP2, no loader.
                 MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
                 "Please ensure the mod manager is in the main game directory.",
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                "",MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 Environment.Exit(1);
             }
 
@@ -80,7 +80,7 @@ namespace FreedomManager
             {
                 MessageBox.Show("BepInEx not Found!.\n\n" +
                         "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
             else setup.Text = "Uninstall BepInEx";
 
@@ -203,12 +203,14 @@ namespace FreedomManager
                 {
                     await pipeServer.WaitForConnectionAsync();
 
-                    var sr = new StreamReader(pipeServer);
-                    string temp;
-                    while ((temp = sr.ReadLine()) != null)
+                    using (var sr = new StreamReader(pipeServer))
                     {
-                        Console.WriteLine("Received from client: {0}", temp);
-                        handleGBUri(temp);
+                        string temp;
+                        while ((temp = sr.ReadLine()) != null)
+                        {
+                            Console.WriteLine("Received from client: {0}", temp);
+                            handleGBUri(temp);
+                        }
                     }
                 }
             }
@@ -257,7 +259,7 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.Message);
                 }
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo);
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
             }
             else 
@@ -270,7 +272,7 @@ namespace FreedomManager
 
                 string flavor = type == UrlType.GITHUB ? "GitHub" : "external site";
 
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from " + flavor + "?", "Mod installation", MessageBoxButtons.YesNo);
+                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from " + flavor + "?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
 
             if (dialogResult == DialogResult.Yes)
