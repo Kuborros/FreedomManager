@@ -43,12 +43,12 @@ namespace FreedomManager
             new GithubPackageResolver("Kuborros", "FreedomManager", "FreedomManager*.zip"), //Lame but secure - needs _specific_ update name syntax to deem them worthy
             new ZipPackageExtractor());
 
-        BepinConfig bepinConfig;
-        FP2LibConfig fP2LibConfig;
-        ManagerConfig managerConfig;
-        ResolutionPatchController resolutionPatchController;
-        public ModHandler modHandler;
-        public LoaderHandler loaderHandler;
+        static BepinConfig bepinConfig;
+        static FP2LibConfig fP2LibConfig;
+        static ManagerConfig managerConfig;
+        static ResolutionPatchController resolutionPatchController;
+        public static ModHandler modHandler;
+        public static LoaderHandler loaderHandler;
 
         public FreedomManager(List<string> uris)
         {
@@ -320,7 +320,6 @@ namespace FreedomManager
             using (WebClient client = new WebClient())
             {
                 client.Headers["Accept"] = "application/vnd.github+json";
-                client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
                 client.Headers["user-agent"] = "FreedomManager";
                 try
                 {

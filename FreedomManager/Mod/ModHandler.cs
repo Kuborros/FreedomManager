@@ -57,6 +57,7 @@ namespace FreedomManager.Mod
             {
                 using (Stream stream = File.OpenRead(path))
                 using (var reader = ReaderFactory.Open(stream))
+                {
                     while (reader.MoveToNextEntry())
                     {
                         Console.WriteLine(reader.Entry.Key.ToLower());
@@ -73,11 +74,13 @@ namespace FreedomManager.Mod
                             return ArchiveType.MelonDir;
                         }
                     }
+                }
             }
             else if (File.Exists(path) && Path.GetExtension(path) == ".7z")
             {
                 using (Stream stream = File.OpenRead(path))
                 using (var reader = SevenZipArchive.Open(stream))
+                {
                     foreach (SevenZipArchiveEntry entry in reader.Entries)
                     {
                         Console.WriteLine(entry.Key.ToLower());
@@ -94,6 +97,7 @@ namespace FreedomManager.Mod
                             return ArchiveType.MelonDir;
                         }
                     }
+                }
             }
             return ArchiveType.None;
         }
