@@ -60,10 +60,10 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
 
     - name: Restore Packages
-      run: nuget restore MySolution.sln
+      run: nuget restore FreedomManager.sln
 
     - name: Build solution
-      run: msbuild MySolution.sln -t:rebuild -property:Configuration=Release
+      run: msbuild FreedomManager.sln -t:rebuild -property:Configuration=Release
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
