@@ -380,12 +380,14 @@ namespace FreedomManager
                     client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
                     tempname = filename;
 
-                    DownloadProgress progress = new DownloadProgress();
-                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                    progress.Show();
-                    await client.DownloadFileTaskAsync(url, filename);
+                    using (DownloadProgress progress = new DownloadProgress())
+                    {
+                        client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                        progress.Show();
+                        await client.DownloadFileTaskAsync(url, filename);
+                    }
                 }
             }
             catch (Exception ex)
@@ -408,13 +410,15 @@ namespace FreedomManager
                     client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
                     tempname = filename;
 
-                    DownloadProgress progress = new DownloadProgress();
-                    if (filename == "fp2lib.zip") progress.Text = "FP2Lib Update";
-                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                    progress.Show();
-                    await client.DownloadFileTaskAsync(url, filename);
+                    using (DownloadProgress progress = new DownloadProgress())
+                    {
+                        if (filename == "fp2lib.zip") progress.Text = "FP2Lib Update";
+                        client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                        progress.Show();
+                        await client.DownloadFileTaskAsync(url, filename);
+                    }
                 }
             }
             catch (Exception ex)
