@@ -107,11 +107,15 @@ namespace FreedomManager
             {
                 fp2resComboBox.SelectedIndex = Math.Min((int)resolutionPatchController.currentRes,9);
                 fp2resCheckBox.Checked = true;
+                fp2resComboBox.Enabled = true;
+                resPatchButton.Enabled = true;
             }
             else
             {
                 fp2resComboBox.SelectedIndex = 0;
                 fp2resCheckBox.Checked = false;
+                fp2resComboBox.Enabled = false;
+                resPatchButton.Enabled = false;
             }
 
             RenderList(modHandler.modList);
@@ -826,13 +830,20 @@ namespace FreedomManager
         {
             if (fp2resCheckBox.Checked)
             {
+                fp2resComboBox.Enabled = true;
+                resPatchButton.Enabled = true;
+
                 resolutionPatchController.enabled = true;
                 resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
             }
             else
             {
+                fp2resComboBox.Enabled = false;
+                resPatchButton.Enabled = false;
+
                 resolutionPatchController.enabled = false;
                 resolutionPatchController.setIntResolution(ResolutionPatchController.Resolution.x360);
+                fp2resComboBox.SelectedIndex = 0;
             }
         }
 
@@ -842,6 +853,8 @@ namespace FreedomManager
 
         private void resPatchButton_Click(object sender, EventArgs e)
         {
+            if (!fp2resCheckBox.Checked) return;
+
             if (resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex))
             {
                 MessageBox.Show("Resolution patch successfull!",
