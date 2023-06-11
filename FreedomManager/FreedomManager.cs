@@ -834,7 +834,7 @@ namespace FreedomManager
                 resPatchButton.Enabled = true;
 
                 resolutionPatchController.enabled = true;
-                resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
+                //resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
             }
             else
             {

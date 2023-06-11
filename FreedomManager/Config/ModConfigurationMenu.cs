@@ -12,9 +12,14 @@ namespace FreedomManager.Config
 {
     public partial class ModConfigurationMenu : Form
     {
-        public ModConfigurationMenu()
+
+        ModConfig config;
+        internal ModConfigurationMenu(ModConfig config)
         {
             InitializeComponent();
+            this.config = config;   
+
+
         }
     }
 }

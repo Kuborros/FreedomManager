@@ -214,6 +214,9 @@
     <Compile Include="Net\UpdateInfo.Designer.cs">
       <DependentUpon>UpdateInfo.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Config\ModConfigurationMenu.resx">
+      <DependentUpon>ModConfigurationMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Net\DownloadProgress.resx">
       <DependentUpon>DownloadProgress.cs</DependentUpon>
     </EmbeddedResource>
