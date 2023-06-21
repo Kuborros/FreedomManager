@@ -11,7 +11,8 @@ namespace FreedomManager
 	    "Author":"",
 	    "Version":"",
 	    "Loader":"",
-	    "HasAssets":false
+	    "HasAssets":false,
+        "GBID":""
     }
     */
 
@@ -24,6 +25,8 @@ namespace FreedomManager
         "GameBananaID":"",
         "AssetDir":"",
         "NeedFP2Lib":""
+        "GitHub":"https://github.com/Author/Repo",
+        "IncompatibleMods": []
     }
     */
     public class ModInfo
@@ -39,6 +42,7 @@ namespace FreedomManager
         public string Dirname { get; set; }
         public bool Enabled { get; set; }
         public bool HasIndex { get; set; }
+        public string GitHub { get; set; }
 
 
         //V1

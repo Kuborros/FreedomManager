@@ -8,7 +8,7 @@ namespace FreedomManager
     internal class ModConfig
     {
 
-        SectionDataCollection sections { get; set; }
+        public SectionDataCollection sections { get; set; }
 
 
         public ModConfig(string filename) {

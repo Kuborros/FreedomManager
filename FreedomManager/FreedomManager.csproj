@@ -205,6 +205,8 @@
     <Compile Include="Net\GitHub\GitHubAsset.cs" />
     <Compile Include="Net\GitHub\GitHubRelease.cs" />
     <Compile Include="Net\GitHub\GitHubUploader.cs" />
+    <Compile Include="Net\ModUpdateHandler.cs" />
+    <Compile Include="Net\ModUpdateInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Patches\ResolutionPatchController.cs" />

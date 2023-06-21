@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IniParser.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +19,9 @@ namespace FreedomManager.Config
         {
             InitializeComponent();
             this.config = config;   
+
+            modConfigPropertyGrid.SelectedObject = config;
+
 
 
         }

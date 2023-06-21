@@ -16,6 +16,7 @@ namespace FreedomManager.Config
 
         public FP2LibConfig()
         {
+            //No conffile, no settings. Options for FP2Lib will be grayed out.
             configExists = File.Exists(confPath);
 
             if (configExists)
@@ -51,6 +52,7 @@ namespace FreedomManager.Config
                     data["Save Redirection"]["Fancy Json"] = saveFancyJson.ToString();
                     data["Save Redirection"]["Profile"] = saveRedirectProfile.ToString();
 
+                    //TODO: Maybe add same existence check as BepInConfig has
                     File.WriteAllText(confPath, data.ToString());
                 }
                 catch (Exception ex)

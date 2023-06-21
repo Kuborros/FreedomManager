@@ -23,7 +23,8 @@ namespace FreedomManager.Config
         /*
         {
         "autoUpdateManager":true,
-        "autoUpdateFP2lib":true
+        "autoUpdateFP2lib":true,
+        "autoUpdateMods":true
         }
         */
 
@@ -51,6 +52,7 @@ namespace FreedomManager.Config
             }
             else
             {
+                //Default auto-updates to ON
                 autoUpdateManager = true;
                 autoUpdateFP2Lib = true;
                 writeConfig();
