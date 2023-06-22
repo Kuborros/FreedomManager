@@ -1,6 +1,6 @@
 ﻿namespace FreedomManager.Net
 {
-    partial class UpdateInfo
+    partial class ModsUpdateInfoForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateInfo));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModsUpdateInfoForm));
             this.changelogRichTextBox = new System.Windows.Forms.RichTextBox();
             this.updateSelectedButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();

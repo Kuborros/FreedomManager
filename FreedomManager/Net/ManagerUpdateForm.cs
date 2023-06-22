@@ -16,5 +16,20 @@ namespace FreedomManager.Net
         {
             InitializeComponent();
         }
+
+        private void installButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void versionNumberLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FreedomManager.Config;
 using FreedomManager.Mod;
+using FreedomManager.Net;
 using FreedomManager.Net.GitHub;
 using FreedomManager.Patches;
 using Microsoft.Win32;
@@ -90,6 +91,9 @@ namespace FreedomManager
                 melonButton.Text = "Uninstall MelonLoader Compat";
             }
 
+            bepInExToolStripMenuItem.Enabled = bepisPresent;
+            melonLoaderToolStripMenuItem.Enabled = melonPresent;
+
             using (var current = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
             {
                 if (current != null) { handlerButton.Text = "Unregister URL handler"; }
@@ -141,6 +145,10 @@ namespace FreedomManager
         {
             fP2LibConfig = new FP2LibConfig();
             bepinConfig = new BepinConfig();
+
+            bepInExToolStripMenuItem.Enabled = bepisPresent;
+            melonLoaderToolStripMenuItem.Enabled = melonPresent;
+            openLogfileToolStripMenuItem.Enabled = File.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log"));
 
             if (bepinConfig.confExists)
             {
@@ -384,7 +392,7 @@ namespace FreedomManager
                     client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
                     tempname = filename;
 
-                    using (DownloadProgress progress = new DownloadProgress())
+                    using (DownloadProgress progress = new DownloadProgress(filename))
                     {
                         client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
                         client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
@@ -414,7 +422,7 @@ namespace FreedomManager
                     client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
                     tempname = filename;
 
-                    using (DownloadProgress progress = new DownloadProgress())
+                    using (DownloadProgress progress = new DownloadProgress(filename))
                     {
                         if (filename == "fp2lib.zip") progress.Text = "FP2Lib Update";
                         client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
@@ -484,6 +492,7 @@ namespace FreedomManager
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
             fP2LibConfig.writeConfig();
+            //While launching trough Steam would allow for achievements to register, it would exclude Itch.io users.
             if (fp2Found) Process.Start("FP2.exe");
         }
 
@@ -516,6 +525,7 @@ namespace FreedomManager
                 "Error info: " + ex.Message,
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            updateConfigUi();
         }
 
         private void modInstall_Click(object sender, EventArgs e)
@@ -573,6 +583,7 @@ namespace FreedomManager
                     "Error info: " + ex.Message,
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                updateConfigUi();
             }
         }
 
@@ -897,6 +908,12 @@ namespace FreedomManager
         private void saveProfileComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             fP2LibConfig.saveRedirectProfile = saveProfileComboBox.SelectedIndex;
+        }
+
+        private void openLogfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log")))
+                Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log"));
         }
     }
 }

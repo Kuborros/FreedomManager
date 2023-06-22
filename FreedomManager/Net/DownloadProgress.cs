@@ -7,9 +7,10 @@ namespace FreedomManager
 {
     public partial class DownloadProgress : Form
     {
-        public DownloadProgress()
+        public DownloadProgress(string name)
         {
             InitializeComponent();
+            modNameLabel.Text = name;
             CenterToParent();
         }
 

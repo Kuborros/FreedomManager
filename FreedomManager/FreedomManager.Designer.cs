@@ -87,6 +87,7 @@
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
+            this.openLogfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -227,6 +228,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openModsFolderToolStripMenuItem,
+            this.openLogfileToolStripMenuItem,
             this.installModToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -239,7 +241,7 @@
             this.bepInExToolStripMenuItem,
             this.melonLoaderToolStripMenuItem});
             this.openModsFolderToolStripMenuItem.Name = "openModsFolderToolStripMenuItem";
-            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openModsFolderToolStripMenuItem.Text = "Open Mods Folder";
             // 
             // bepInExToolStripMenuItem
@@ -259,14 +261,14 @@
             // installModToolStripMenuItem
             // 
             this.installModToolStripMenuItem.Name = "installModToolStripMenuItem";
-            this.installModToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.installModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.installModToolStripMenuItem.Text = "Install Mod";
             this.installModToolStripMenuItem.Click += new System.EventHandler(this.installModToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -282,14 +284,14 @@
             // gitHubWikiToolStripMenuItem
             // 
             this.gitHubWikiToolStripMenuItem.Name = "gitHubWikiToolStripMenuItem";
-            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubWikiToolStripMenuItem.Text = "GitHub Wiki";
             this.gitHubWikiToolStripMenuItem.Click += new System.EventHandler(this.gitHubWikiToolStripMenuItem_Click);
             // 
             // gameBananaPageToolStripMenuItem
             // 
             this.gameBananaPageToolStripMenuItem.Name = "gameBananaPageToolStripMenuItem";
-            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gameBananaPageToolStripMenuItem.Text = "GameBanana Page";
             this.gameBananaPageToolStripMenuItem.Click += new System.EventHandler(this.gameBananaPageToolStripMenuItem_Click);
             // 
@@ -676,6 +678,13 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
+            // openLogfileToolStripMenuItem
+            // 
+            this.openLogfileToolStripMenuItem.Name = "openLogfileToolStripMenuItem";
+            this.openLogfileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openLogfileToolStripMenuItem.Text = "Open Logfile";
+            this.openLogfileToolStripMenuItem.Click += new System.EventHandler(this.openLogfileToolStripMenuItem_Click);
+            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -771,6 +780,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox saveProfileComboBox;
         private System.Windows.Forms.CheckBox fancyJsonCheckBox;
+        private System.Windows.Forms.ToolStripMenuItem openLogfileToolStripMenuItem;
     }
 }
 

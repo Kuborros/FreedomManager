@@ -186,6 +186,12 @@
     <Compile Include="Config\ModConfigurationMenu.Designer.cs">
       <DependentUpon>ModConfigurationMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mod\ModInformationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mod\ModInformationForm.Designer.cs">
+      <DependentUpon>ModInformationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Net\DownloadProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -205,19 +211,28 @@
     <Compile Include="Net\GitHub\GitHubAsset.cs" />
     <Compile Include="Net\GitHub\GitHubRelease.cs" />
     <Compile Include="Net\GitHub\GitHubUploader.cs" />
+    <Compile Include="Net\ManagerUpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Net\ManagerUpdateForm.Designer.cs">
+      <DependentUpon>ManagerUpdateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Net\ModUpdateHandler.cs" />
     <Compile Include="Net\ModUpdateInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Patches\ResolutionPatchController.cs" />
-    <Compile Include="Net\UpdateInfo.cs">
+    <Compile Include="Net\ModsUpdateInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Net\UpdateInfo.Designer.cs">
-      <DependentUpon>UpdateInfo.cs</DependentUpon>
+    <Compile Include="Net\ModsUpdateInfoForm.Designer.cs">
+      <DependentUpon>ModsUpdateInfoForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Config\ModConfigurationMenu.resx">
       <DependentUpon>ModConfigurationMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mod\ModInformationForm.resx">
+      <DependentUpon>ModInformationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Net\DownloadProgress.resx">
       <DependentUpon>DownloadProgress.cs</DependentUpon>
@@ -225,8 +240,11 @@
     <EmbeddedResource Include="FreedomManager.resx">
       <DependentUpon>FreedomManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Net\UpdateInfo.resx">
-      <DependentUpon>UpdateInfo.cs</DependentUpon>
+    <EmbeddedResource Include="Net\ManagerUpdateForm.resx">
+      <DependentUpon>ManagerUpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Net\ModsUpdateInfoForm.resx">
+      <DependentUpon>ModsUpdateInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
