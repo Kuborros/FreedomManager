@@ -66,17 +66,17 @@
             this.versionNumberLabel.Size = new System.Drawing.Size(31, 13);
             this.versionNumberLabel.TabIndex = 3;
             this.versionNumberLabel.Text = "0.0.0";
-            this.versionNumberLabel.Click += new System.EventHandler(this.versionNumberLabel_Click);
             // 
             // releaseLinkLabel
             // 
             this.releaseLinkLabel.AutoSize = true;
             this.releaseLinkLabel.Location = new System.Drawing.Point(12, 39);
             this.releaseLinkLabel.Name = "releaseLinkLabel";
-            this.releaseLinkLabel.Size = new System.Drawing.Size(80, 13);
+            this.releaseLinkLabel.Size = new System.Drawing.Size(92, 13);
             this.releaseLinkLabel.TabIndex = 4;
             this.releaseLinkLabel.TabStop = true;
-            this.releaseLinkLabel.Text = "Github Release";
+            this.releaseLinkLabel.Text = "Github Changelog";
+            this.releaseLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.releaseLinkLabel_LinkClicked);
             // 
             // installButton
             // 
@@ -98,6 +98,7 @@
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // label2
             // 
@@ -107,7 +108,6 @@
             this.label2.Size = new System.Drawing.Size(81, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "FP2Lib Version:";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // fp2libVersionLabel
             // 
@@ -123,10 +123,11 @@
             this.fp2libLinkLabel.AutoSize = true;
             this.fp2libLinkLabel.Location = new System.Drawing.Point(12, 76);
             this.fp2libLinkLabel.Name = "fp2libLinkLabel";
-            this.fp2libLinkLabel.Size = new System.Drawing.Size(80, 13);
+            this.fp2libLinkLabel.Size = new System.Drawing.Size(92, 13);
             this.fp2libLinkLabel.TabIndex = 9;
             this.fp2libLinkLabel.TabStop = true;
-            this.fp2libLinkLabel.Text = "Github Release";
+            this.fp2libLinkLabel.Text = "Github Changelog";
+            this.fp2libLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.fp2libLinkLabel_LinkClicked);
             // 
             // ManagerUpdateForm
             // 
