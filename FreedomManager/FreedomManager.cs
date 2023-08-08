@@ -734,14 +734,14 @@ namespace FreedomManager
             if (modInfo != null)
             {
                 string path = "";
-                if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
+                if (modInfo.Type == ModType.BEPINMOD) //Bepin mod
                 {
                     if (modInfo.Enabled)
                         path = "BepInEx\\plugins\\" + modInfo.Dirname;
                     else
                         path = "BepInEx\\plugins-disabled\\" + modInfo.Dirname;
                 }
-                else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
+                else if (modInfo.Type == ModType.BEPINDLL) //Loose DLL bepin
                 {
                     if (modInfo.Enabled)
                         path = "BepInEx\\plugins";
@@ -750,7 +750,7 @@ namespace FreedomManager
                 }
                 else if (melonPresent)
                 {
-                    if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
+                    if (modInfo.Type == ModType.MELONMOD) //Melon mod
                     {
                         if (modInfo.Enabled)
                             path = "MLLoader\\mods";

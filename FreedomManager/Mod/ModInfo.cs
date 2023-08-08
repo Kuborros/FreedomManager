@@ -1,6 +1,5 @@
 ﻿using FreedomManager.Mod;
 using System.Text.Json.Serialization;
-using static FreedomManager.Mod.ModHandler;
 
 namespace FreedomManager
 {
@@ -16,7 +15,7 @@ namespace FreedomManager
     }
     */
 
-    /*
+    /* Updated manifest perhabs?
     {
         "ManifestVer":2,
         "Name":"",
@@ -29,6 +28,20 @@ namespace FreedomManager
         "IncompatibleMods": []
     }
     */
+
+
+    public enum ModType
+    {
+        BEPINMOD,
+        BEPINDLL,
+        MELONMOD,
+        LIBRARY,
+        JSONNPC,
+        STAGE,
+        SPECIAL
+    }
+
+
     public class ModInfo
     {
         public int ManifestVer { get; set; }
@@ -38,16 +51,15 @@ namespace FreedomManager
         public string Loader { get; set; }
         public bool? HasAssets { get; set; }
         public int? GBID { get; set; }
-        public ArchiveType? ArchiveType { get; set; }
+        public ModType? Type { get; set; }
         public string Dirname { get; set; }
         public bool Enabled { get; set; }
         public bool HasIndex { get; set; }
         public string GitHub { get; set; }
 
-
-        //V1
+        //V1 Json
         [JsonConstructor]
-        public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ArchiveType? archiveType, int? gBID)
+        public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ModType? type, int? gBID, string gitHub)
         {
             Name = SpecialNames(name);
             Author = author;
@@ -63,11 +75,11 @@ namespace FreedomManager
             }
             else HasAssets = hasAssets;
 
-            if (!archiveType.HasValue || archiveType == null)
+            if (!type.HasValue || type == null)
             {
-                ArchiveType = ModHandler.ArchiveType.BepinDir;
+                Type = ModType.BEPINMOD;
             }
-            else ArchiveType = archiveType;
+            else Type = type;
 
             if (!gBID.HasValue)
             {
@@ -78,19 +90,19 @@ namespace FreedomManager
             Enabled = true;
         }
 
-        public ModInfo(string name, ArchiveType archiveType)
+        public ModInfo(string name, ModType archiveType)
         {
             Name = SpecialNames(name);
             Author = "N/A";
             Version = "N/A";
 
-            if (archiveType == ModHandler.ArchiveType.BepinDir) Loader = "BepInEx";
-            else if (archiveType == ModHandler.ArchiveType.DllDir) Loader = "BepInEx (DLL)";
-            else if (archiveType == ModHandler.ArchiveType.MelonDir) Loader = "MelonLoader";
-            else Loader = "Unknown";
+            if (archiveType == ModType.BEPINMOD) Loader = "BepInEx";
+            else if (archiveType == ModType.BEPINDLL) Loader = "BepInEx (DLL)";
+            else if (archiveType == ModType.MELONMOD) Loader = "MelonLoader";
+            else Loader = "N/A";
 
             HasAssets = true;
-            ArchiveType = archiveType;
+            Type = archiveType;
             GBID = 0;
             Dirname = name;
             Enabled = true;

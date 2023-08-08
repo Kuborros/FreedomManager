@@ -48,6 +48,7 @@
             this.openModsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bepInExToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.melonLoaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLogfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.installModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,7 +88,6 @@
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
-            this.openLogfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -241,7 +241,7 @@
             this.bepInExToolStripMenuItem,
             this.melonLoaderToolStripMenuItem});
             this.openModsFolderToolStripMenuItem.Name = "openModsFolderToolStripMenuItem";
-            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openModsFolderToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.openModsFolderToolStripMenuItem.Text = "Open Mods Folder";
             // 
             // bepInExToolStripMenuItem
@@ -258,17 +258,24 @@
             this.melonLoaderToolStripMenuItem.Text = "MelonLoader";
             this.melonLoaderToolStripMenuItem.Click += new System.EventHandler(this.melonLoaderToolStripMenuItem_Click);
             // 
+            // openLogfileToolStripMenuItem
+            // 
+            this.openLogfileToolStripMenuItem.Name = "openLogfileToolStripMenuItem";
+            this.openLogfileToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.openLogfileToolStripMenuItem.Text = "Open Logfile";
+            this.openLogfileToolStripMenuItem.Click += new System.EventHandler(this.openLogfileToolStripMenuItem_Click);
+            // 
             // installModToolStripMenuItem
             // 
             this.installModToolStripMenuItem.Name = "installModToolStripMenuItem";
-            this.installModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.installModToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.installModToolStripMenuItem.Text = "Install Mod";
             this.installModToolStripMenuItem.Click += new System.EventHandler(this.installModToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -284,14 +291,14 @@
             // gitHubWikiToolStripMenuItem
             // 
             this.gitHubWikiToolStripMenuItem.Name = "gitHubWikiToolStripMenuItem";
-            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gitHubWikiToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.gitHubWikiToolStripMenuItem.Text = "GitHub Wiki";
             this.gitHubWikiToolStripMenuItem.Click += new System.EventHandler(this.gitHubWikiToolStripMenuItem_Click);
             // 
             // gameBananaPageToolStripMenuItem
             // 
             this.gameBananaPageToolStripMenuItem.Name = "gameBananaPageToolStripMenuItem";
-            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gameBananaPageToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.gameBananaPageToolStripMenuItem.Text = "GameBanana Page";
             this.gameBananaPageToolStripMenuItem.Click += new System.EventHandler(this.gameBananaPageToolStripMenuItem_Click);
             // 
@@ -640,9 +647,9 @@
             this.hideLogsCheckBox.AutoSize = true;
             this.hideLogsCheckBox.Location = new System.Drawing.Point(6, 65);
             this.hideLogsCheckBox.Name = "hideLogsCheckBox";
-            this.hideLogsCheckBox.Size = new System.Drawing.Size(97, 17);
+            this.hideLogsCheckBox.Size = new System.Drawing.Size(102, 17);
             this.hideLogsCheckBox.TabIndex = 2;
-            this.hideLogsCheckBox.Text = "Hide Unity logs";
+            this.hideLogsCheckBox.Text = "Show Unity logs";
             this.hideLogsCheckBox.UseVisualStyleBackColor = true;
             this.hideLogsCheckBox.CheckedChanged += new System.EventHandler(this.hideLogsCheckBox_CheckedChanged);
             // 
@@ -677,13 +684,6 @@
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // openLogfileToolStripMenuItem
-            // 
-            this.openLogfileToolStripMenuItem.Name = "openLogfileToolStripMenuItem";
-            this.openLogfileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openLogfileToolStripMenuItem.Text = "Open Logfile";
-            this.openLogfileToolStripMenuItem.Click += new System.EventHandler(this.openLogfileToolStripMenuItem_Click);
             // 
             // FreedomManager
             // 

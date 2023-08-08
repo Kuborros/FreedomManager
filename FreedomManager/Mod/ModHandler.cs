@@ -10,16 +10,18 @@ using System.Windows.Forms;
 
 namespace FreedomManager.Mod
 {
+
+    public enum ArchiveType
+    {
+        BepinDir,
+        PluginDir,
+        MelonDir,
+        DllDir,
+        None
+    }
+
     public class ModHandler
     {
-        public enum ArchiveType
-        {
-            BepinDir,
-            PluginDir,
-            MelonDir,
-            DllDir,
-            None
-        }
 
         //private readonly string dirEnabled = "BepInEx\\plugins";
         //private readonly string dirDisabled = "BepInEx\\plugins-disabled";
@@ -118,7 +120,7 @@ namespace FreedomManager.Mod
                 string destDir;
                 if (info.Enabled)
                 {
-                    if (info.ArchiveType != ArchiveType.MelonDir)
+                    if (info.Type != ModType.MELONMOD)
                     {
                         sourceDir = "BepInEx\\plugins\\";
                         destDir = "BepInEx\\plugins-disabled\\";
@@ -131,7 +133,7 @@ namespace FreedomManager.Mod
                 }
                 else
                 {
-                    if (info.ArchiveType != ArchiveType.MelonDir)
+                    if (info.Type != ModType.MELONMOD)
                     {
                         sourceDir = "BepInEx\\plugins-disabled\\";
                         destDir = "BepInEx\\plugins\\";
@@ -142,14 +144,13 @@ namespace FreedomManager.Mod
                         destDir = "MLLoader\\Mods\\";
                     }
                 }
-                switch (info.ArchiveType)
+                switch (info.Type)
                 {
-                    case ArchiveType.BepinDir:
-                    case ArchiveType.PluginDir:
+                    case ModType.BEPINMOD:
                         Directory.Move(sourceDir + info.Dirname, destDir + info.Dirname);
                         return !info.Enabled;
-                    case ArchiveType.DllDir:
-                    case ArchiveType.MelonDir:
+                    case ModType.BEPINDLL:
+                    case ModType.MELONMOD:
                         File.Move(sourceDir + info.Dirname + ".dll", destDir + info.Dirname + ".dll");
                         return !info.Enabled;
                 }
@@ -182,21 +183,21 @@ namespace FreedomManager.Mod
                 DialogResult dialogResult = MessageBox.Show(FreedomManager.ActiveForm, "Do you want to remove \"" + modInfo.Name + "\"?", "Mod uninstall", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
+                    if (modInfo.Type == ModType.BEPINMOD) //Bepin mod
                     {
                         if (modInfo.Enabled)
                             Directory.Delete("BepInEx\\plugins\\" + modInfo.Dirname, true);
                         else
                             Directory.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname, true);
                     }
-                    else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
+                    else if (modInfo.Type == ModType.BEPINDLL) //Loose DLL bepin
                     {
                         if (modInfo.Enabled)
                             File.Delete("BepInEx\\plugins\\" + modInfo.Dirname + ".dll");
                         else
                             File.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname + ".dll");
                     }
-                    if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
+                    if (modInfo.Type == ModType.MELONMOD) //Melon mod
                     {
                         if (modInfo.Enabled)
                             File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
@@ -344,7 +345,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        list.Add(new ModInfo(modname, ArchiveType.DllDir));
+                        list.Add(new ModInfo(modname, ModType.BEPINDLL));
                     }
                 }
                 foreach (string d in Directory.GetDirectories(dir))
@@ -370,7 +371,7 @@ namespace FreedomManager.Mod
                         }
                         if (!hasManifest)
                         {
-                            list.Add(new ModInfo(modname, ArchiveType.BepinDir));
+                            list.Add(new ModInfo(modname, ModType.BEPINMOD));
                         }
                     }
                 }
@@ -389,7 +390,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        ModInfo info = new ModInfo(modname, ArchiveType.DllDir)
+                        ModInfo info = new ModInfo(modname, ModType.BEPINDLL)
                         {
                             Enabled = false
                         };
@@ -420,7 +421,7 @@ namespace FreedomManager.Mod
                         }
                         if (!hasManifest)
                         {
-                            ModInfo info = new ModInfo(modname, ArchiveType.BepinDir)
+                            ModInfo info = new ModInfo(modname, ModType.BEPINMOD)
                             {
                                 Enabled = false
                             };
@@ -452,7 +453,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        list.Add(new ModInfo(modname, ArchiveType.MelonDir));
+                        list.Add(new ModInfo(modname, ModType.MELONMOD));
                     }
                 }
             }
@@ -470,7 +471,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        ModInfo info = new ModInfo(modname, ArchiveType.MelonDir)
+                        ModInfo info = new ModInfo(modname, ModType.MELONMOD)
                         {
                             Enabled = false
                         };

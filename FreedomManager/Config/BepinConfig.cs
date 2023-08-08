@@ -68,7 +68,7 @@ namespace FreedomManager
                 data["Logging.Disk"]["Enabled"] = FileLog.ToString();
 
                 //We can technically construct the file ourselves, and BepInEx will accept it.
-                //If somehow you delete the file after the check for its existence was run, this will ensure we still save it and not crash horribly.
+                //If somehow you delete the file after we loaded it, this will ensure we still save it and not crash horribly.
                 if (!File.Exists("BepInEx\\config\\BepInEx.cfg"))
                 {
                     Directory.CreateDirectory("BepInEx\\config");
