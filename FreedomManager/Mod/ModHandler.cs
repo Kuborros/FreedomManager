@@ -1,4 +1,5 @@
 ﻿using FreedomManager.Mod.Json;
+using FreedomManager.Net;
 using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;

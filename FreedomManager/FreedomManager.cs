@@ -49,6 +49,7 @@ namespace FreedomManager
         static FP2LibConfig fP2LibConfig;
         static ManagerConfig managerConfig;
         static ResolutionPatchController resolutionPatchController;
+        static ModUpdateHandler modUpdateHandler;
         public static ModHandler modHandler;
         public static LoaderHandler loaderHandler;
 
@@ -124,6 +125,8 @@ namespace FreedomManager
 
             RenderList(modHandler.modList);
             OneClickServer();
+
+            modUpdateHandler = new ModUpdateHandler();
 
             if (managerConfig.autoUpdateManager)
             {
@@ -925,6 +928,23 @@ namespace FreedomManager
         {
             if (File.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log")))
                 Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log"));
+        }
+
+        private async void checkForModUpdatesButton_Click(object sender, EventArgs e)
+        {
+            List<ModUpdateInfo> updates = await modUpdateHandler.getModsUpdates(modHandler.modList);
+            if (updates.Count > 0)
+            {
+                using (ModsUpdateInfoForm modUpdateForm = new ModsUpdateInfoForm(updates))
+                {
+                    modUpdateForm.ShowDialog();
+                }
+            }
+        }
+
+        private void modUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

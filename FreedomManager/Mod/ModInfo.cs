@@ -73,6 +73,7 @@ namespace FreedomManager
                 GBID = 0;
             }
             else GBID = gBID;
+            GitHub = gitHub;
             Dirname = "invalid-directory-to-be-set";
             Enabled = true;
         }
