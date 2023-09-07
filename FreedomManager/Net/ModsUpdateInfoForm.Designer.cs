@@ -36,8 +36,8 @@
             this.nameColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.versionColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cancelButton = new System.Windows.Forms.Button();
-            this.changelogWebBrowser = new System.Windows.Forms.WebBrowser();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.changelogRichTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // updateSelectedButton
@@ -106,18 +106,17 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // changelogWebBrowser
+            // changelogRichTextBox
             // 
-            this.changelogWebBrowser.AllowNavigation = false;
-            this.changelogWebBrowser.AllowWebBrowserDrop = false;
-            this.changelogWebBrowser.IsWebBrowserContextMenuEnabled = false;
-            this.changelogWebBrowser.Location = new System.Drawing.Point(283, 29);
-            this.changelogWebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.changelogWebBrowser.Name = "changelogWebBrowser";
-            this.changelogWebBrowser.ScriptErrorsSuppressed = true;
-            this.changelogWebBrowser.Size = new System.Drawing.Size(337, 225);
-            this.changelogWebBrowser.TabIndex = 7;
-            this.changelogWebBrowser.WebBrowserShortcutsEnabled = false;
+            this.changelogRichTextBox.AcceptsTab = true;
+            this.changelogRichTextBox.Location = new System.Drawing.Point(283, 29);
+            this.changelogRichTextBox.Name = "changelogRichTextBox";
+            this.changelogRichTextBox.ReadOnly = true;
+            this.changelogRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.changelogRichTextBox.ShortcutsEnabled = false;
+            this.changelogRichTextBox.Size = new System.Drawing.Size(337, 225);
+            this.changelogRichTextBox.TabIndex = 7;
+            this.changelogRichTextBox.Text = "";
             // 
             // ModsUpdateInfoForm
             // 
@@ -126,7 +125,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(632, 299);
-            this.Controls.Add(this.changelogWebBrowser);
+            this.Controls.Add(this.changelogRichTextBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.updatableListView);
             this.Controls.Add(this.label2);
@@ -148,9 +147,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListView updatableListView;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.WebBrowser changelogWebBrowser;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.ColumnHeader nameColumnHeader;
         private System.Windows.Forms.ColumnHeader versionColumnHeader;
+        private System.Windows.Forms.RichTextBox changelogRichTextBox;
     }
 }

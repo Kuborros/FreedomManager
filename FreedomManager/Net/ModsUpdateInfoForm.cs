@@ -65,27 +65,9 @@ namespace FreedomManager.Net
                 {
                     columnIndex = listViewHitTestInfo.Item.Index;
                     ModUpdateInfo info = (ModUpdateInfo)listViewHitTestInfo.Item.Tag;
-                    DisplayHtml(info.Description);
+                    changelogRichTextBox.Text = info.Description;
                 }
             }
-        }
-
-        private void DisplayHtml(string content)
-        {
-            changelogWebBrowser.Navigate("about:blank");
-            try
-            {
-                changelogWebBrowser.Document?.Write(string.Empty);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            content = content.Replace(Environment.NewLine, "<br>");
-
-            string html = " <!DOCTYPE html><html><head></head><style>body {font-family:'Verdana',sans-serif; font-size: 14px;}</style><body>" + content + "</body></html>";
-
-            changelogWebBrowser.DocumentText = html;
         }
     }
 }
