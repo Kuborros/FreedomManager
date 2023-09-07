@@ -1,4 +1,5 @@
-﻿using SharpCompress.Archives;
+﻿using FreedomManager.Mod.Json;
+using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
 using SharpCompress.Readers;
@@ -50,6 +51,10 @@ namespace FreedomManager.Mod
             if (FreedomManager.loaderHandler.melonInstalled)
             {
                 modList.AddRange(MelonScan());
+            }
+            if (FreedomManager.loaderHandler.fp2libInstalled)
+            {
+                modList.AddRange(NPCScan());
             }
         }
 
@@ -203,6 +208,10 @@ namespace FreedomManager.Mod
                             File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
                         else
                             File.Delete("MLLoader\\mods-disabled\\" + modInfo.Dirname + ".dll");
+                    }
+                    if (modInfo.Type == ModType.JSONNPC)
+                    {
+                        File.Delete("BepInEx\\config\\NPCLibEzNPC\\" + modInfo.Dirname);
                     }
                 }
             }
@@ -484,6 +493,32 @@ namespace FreedomManager.Mod
                 Console.WriteLine(ex.Message);
             }
 
+            return list;
+        }
+
+        public List<ModInfo> NPCScan()
+        {
+            string dir = "BepInEx\\config\\NPCLibEzNPC";
+            List<ModInfo> list = new List<ModInfo>();
+            try
+            {
+                if (Directory.Exists(dir))
+                {
+                    foreach (string f in Directory.GetFiles(dir))
+                    {
+                        if (Path.GetExtension(f) == ".json")
+                        {
+                            JsonNPC npc = JsonSerializer.Deserialize<JsonNPC>(File.ReadAllText(f));
+                            ModInfo info = new ModInfo("NPC: " + npc.name,npc.author,ModType.JSONNPC);
+                            info.Dirname = Path.GetFileName(f);
+                            list.Add(info);
+                        }
+                    }
+                }
+            } catch (Exception ex) 
+            { 
+                Console.WriteLine(ex.Message);
+            }
             return list;
         }
     }

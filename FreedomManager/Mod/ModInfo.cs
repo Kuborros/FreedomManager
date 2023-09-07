@@ -11,21 +11,8 @@ namespace FreedomManager
 	    "Version":"",
 	    "Loader":"",
 	    "HasAssets":false,
-        "GBID":""
-    }
-    */
-
-    /* Updated manifest perhabs?
-    {
-        "ManifestVer":2,
-        "Name":"",
-        "Author":"",
-        "Version":"",
-        "GameBananaID":"",
-        "AssetDir":"",
-        "NeedFP2Lib":""
-        "GitHub":"https://github.com/Author/Repo",
-        "IncompatibleMods": []
+        "GBID":"",
+        "GitHub":"https://github.com/Author/Repo"
     }
     */
 
@@ -90,15 +77,19 @@ namespace FreedomManager
             Enabled = true;
         }
 
-        public ModInfo(string name, ModType archiveType)
+        public ModInfo(string name, ModType archiveType) : this(name, "N/A", archiveType) { }
+
+        public ModInfo(string name,string author, ModType archiveType)
         {
             Name = SpecialNames(name);
-            Author = "N/A";
-            Version = "N/A";
+            Author = author;
+            Version = "0.0.0";
 
             if (archiveType == ModType.BEPINMOD) Loader = "BepInEx";
             else if (archiveType == ModType.BEPINDLL) Loader = "BepInEx (DLL)";
             else if (archiveType == ModType.MELONMOD) Loader = "MelonLoader";
+            else if (archiveType == ModType.JSONNPC) Loader = "NPC (JSON)";
+            else if (archiveType == ModType.STAGE) Loader = "Stage";
             else Loader = "N/A";
 
             HasAssets = true;

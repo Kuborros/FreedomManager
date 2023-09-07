@@ -14,7 +14,13 @@ namespace FreedomManager.Net
     {
         public ModsUpdateInfoForm()
         {
+
             InitializeComponent();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            changelogWebBrowser.DocumentText = "<html><body><h3>Test</h3><br>Aaaaa</body></html>";
         }
     }
 }

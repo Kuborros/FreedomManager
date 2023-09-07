@@ -29,25 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModsUpdateInfoForm));
-            this.changelogRichTextBox = new System.Windows.Forms.RichTextBox();
             this.updateSelectedButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.updatableListView = new System.Windows.Forms.ListView();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.changelogWebBrowser = new System.Windows.Forms.WebBrowser();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
-            // 
-            // changelogRichTextBox
-            // 
-            this.changelogRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.changelogRichTextBox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.changelogRichTextBox.Location = new System.Drawing.Point(210, 29);
-            this.changelogRichTextBox.Name = "changelogRichTextBox";
-            this.changelogRichTextBox.ReadOnly = true;
-            this.changelogRichTextBox.ShortcutsEnabled = false;
-            this.changelogRichTextBox.Size = new System.Drawing.Size(410, 225);
-            this.changelogRichTextBox.TabIndex = 0;
-            this.changelogRichTextBox.Text = "";
             // 
             // updateSelectedButton
             // 
@@ -95,20 +84,33 @@
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // UpdateInfo
+            // changelogWebBrowser
+            // 
+            this.changelogWebBrowser.AllowNavigation = false;
+            this.changelogWebBrowser.AllowWebBrowserDrop = false;
+            this.changelogWebBrowser.IsWebBrowserContextMenuEnabled = false;
+            this.changelogWebBrowser.Location = new System.Drawing.Point(210, 29);
+            this.changelogWebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.changelogWebBrowser.Name = "changelogWebBrowser";
+            this.changelogWebBrowser.Size = new System.Drawing.Size(410, 225);
+            this.changelogWebBrowser.TabIndex = 7;
+            this.changelogWebBrowser.WebBrowserShortcutsEnabled = false;
+            // 
+            // ModsUpdateInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 299);
+            this.Controls.Add(this.changelogWebBrowser);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.updatableListView);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.updateSelectedButton);
-            this.Controls.Add(this.changelogRichTextBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "UpdateInfo";
+            this.Name = "ModsUpdateInfoForm";
             this.Text = "Mod Updates";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -116,12 +118,12 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox changelogRichTextBox;
         private System.Windows.Forms.Button updateSelectedButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListView updatableListView;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.WebBrowser changelogWebBrowser;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

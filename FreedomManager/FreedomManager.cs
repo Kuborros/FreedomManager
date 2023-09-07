@@ -139,6 +139,8 @@ namespace FreedomManager
 
             managerVersionLabel.Text = Application.ProductVersion;
 
+            //ModsUpdateInfoForm formtest = new ModsUpdateInfoForm();
+            //formtest.Show();
         }
 
         private void updateConfigUi()
@@ -680,6 +682,8 @@ namespace FreedomManager
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
 
+            //Update for cooler UI
+
             StringBuilder builder = new StringBuilder();
             builder.Append("Name: ").AppendLine(modInfo.Name);
             builder.Append("Version: ").AppendLine(modInfo.Version);
@@ -722,6 +726,13 @@ namespace FreedomManager
             if (listView1.FocusedItem != null) //Prevents the initial checking of every item from firing an event
             {
                 ModInfo info = (ModInfo)e.Item.Tag;
+                if (info.Type == ModType.JSONNPC || info.Type == ModType.STAGE || info.Type == ModType.SPECIAL)
+                {
+                    //These types cannot be disabled. Winforms UI does not let you show it nicely without custom drawing, so we just force the option always on.
+                    e.Item.Checked = true;
+                    listView1.EndUpdate();
+                    return;
+                }
                 e.Item.Checked = modHandler.EnableDisableMod(info);
                 RenderList();
             }
@@ -882,7 +893,7 @@ namespace FreedomManager
         private async void updateCheckButton_Click(object sender, EventArgs e)
         {
             await Task.Run(() => CheckForUpdatesAsync(false));
-            checkForFP2LibUpdatesAsync(false);
+            checkForFP2LibUpdatesAsync(true);
         }
 
         private void fp2libAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
