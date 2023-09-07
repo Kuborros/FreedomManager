@@ -762,6 +762,10 @@ namespace FreedomManager
                     else
                         path = "BepInEx\\plugins-disabled";
                 }
+                else if (modInfo.Type == ModType.JSONNPC) //JSON NPC
+                {
+                        path = "BepInEx\\config\\NPCLibEzNPC";
+                }
                 else if (melonPresent)
                 {
                     if (modInfo.Type == ModType.MELONMOD) //Melon mod

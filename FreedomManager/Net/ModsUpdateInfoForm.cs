@@ -83,7 +83,7 @@ namespace FreedomManager.Net
             }
             content = content.Replace(Environment.NewLine, "<br>");
 
-            string html = "<html><head></head><body>" + content + "</body></html>";
+            string html = " <!DOCTYPE html><html><head></head><style>body {font-family:'Verdana',sans-serif; font-size: 14px;}</style><body>" + content + "</body></html>";
 
             changelogWebBrowser.DocumentText = html;
         }
