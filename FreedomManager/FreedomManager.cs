@@ -32,6 +32,7 @@ namespace FreedomManager
         bool melonPresent = false;
         int columnIndex = 0;
         internal string tempname;
+        internal List<ModUpdateInfo> modUpdates;
 
         private enum UrlType
         {
@@ -309,10 +310,10 @@ namespace FreedomManager
             {
                 switch (type) {
                     case UrlType.GBANANA:
-                        AsyncModDownloadGbanana(new Uri(uri[0]), gBananFileName);
+                        await AsyncModDownloadGbanana(new Uri(uri[0]), gBananFileName);
                         break;
                     case UrlType.GITHUB:
-                        AsyncModDownloadGitHub(new Uri(uri[0]), gitHubFileName);
+                        await AsyncModDownloadGitHub(new Uri(uri[0]), gitHubFileName);
                         break;
                     default:
                         MessageBox.Show("Link points at unsupported service.", "Mod Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -373,7 +374,7 @@ namespace FreedomManager
                         DialogResult dialogResult = MessageBox.Show("New FP2Lib update is available!\n Version: " + release.tag_name + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
 
                         if (dialogResult == DialogResult.Yes)
-                            AsyncModDownloadGitHub(new Uri(release.downloadUrl),release.filename);
+                            await AsyncModDownloadGitHub(new Uri(release.downloadUrl),release.filename);
                     }
                     else
                     {
@@ -387,7 +388,7 @@ namespace FreedomManager
             }
         }
 
-        internal async void AsyncModDownloadGbanana(Uri url, string filename)
+        internal async Task AsyncModDownloadGbanana(Uri url, string filename)
         {
             try
             {
@@ -416,7 +417,7 @@ namespace FreedomManager
             }
         }
 
-        internal async void AsyncModDownloadGitHub(Uri url, string filename)
+        internal async Task AsyncModDownloadGitHub(Uri url, string filename)
         {
             try
             {
@@ -936,14 +937,41 @@ namespace FreedomManager
 
         private async void checkForModUpdatesButton_Click(object sender, EventArgs e)
         {
-            List<ModUpdateInfo> updates = await modUpdateHandler.getModsUpdates(modHandler.modList);
-            if (updates.Count > 0)
+            modUpdates = new List<ModUpdateInfo>();
+            modUpdates = await modUpdateHandler.getModsUpdates(modHandler.modList);
+            if (modUpdates.Count > 0)
             {
-                using (ModsUpdateInfoForm modUpdateForm = new ModsUpdateInfoForm(updates))
+                using (ModsUpdateInfoForm modUpdateForm = new ModsUpdateInfoForm(modUpdates))
                 {
+                    modUpdateForm.updateSelectedButton.Click += new EventHandler(modUpdateInstall_Click);
                     modUpdateForm.ShowDialog();
                 }
+            } 
+            else
+            {
+                MessageBox.Show(this,"No new updates found",
+                "Mod Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        internal async void modUpdateInstall_Click(object sender, EventArgs e)
+        {
+            foreach(ModUpdateInfo modUpdate in modUpdates)
+            {
+                if (modUpdate.DoUpdate)
+                {
+                    await AsyncModDownloadGitHub(new Uri(modUpdate.DownloadLink), "modUpdate.zip");
+                }
+            }
+            
+            Button butt = (Button)sender;
+            ModsUpdateInfoForm form = (ModsUpdateInfoForm)butt.Parent;
+
+            MessageBox.Show("Mod updates installed!",
+                "Mod Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            form.Close();
+            //RenderList();
         }
 
         private void modUpdateCheckBox_CheckedChanged(object sender, EventArgs e)

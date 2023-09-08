@@ -1,4 +1,6 @@
-﻿namespace FreedomManager.Net
+﻿using System.Windows.Forms;
+
+namespace FreedomManager.Net
 {
     partial class ModsUpdateInfoForm
     {
@@ -142,7 +144,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button updateSelectedButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListView updatableListView;
@@ -151,5 +152,6 @@
         private System.Windows.Forms.ColumnHeader nameColumnHeader;
         private System.Windows.Forms.ColumnHeader versionColumnHeader;
         private System.Windows.Forms.RichTextBox changelogRichTextBox;
+        internal Button updateSelectedButton;
     }
 }
