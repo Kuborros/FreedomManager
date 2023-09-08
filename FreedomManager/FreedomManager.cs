@@ -14,14 +14,12 @@ using System.IO;
 using System.IO.Pipes;
 using System.Net;
 using System.Net.Cache;
-using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static FreedomManager.Mod.ModHandler;
 
 namespace FreedomManager
 {
@@ -140,11 +138,12 @@ namespace FreedomManager
                     checkForFP2LibUpdatesAsync(true);
                 }
             }
+            if (managerConfig.autoUpdateMods)
+            {
+                checkForModUpdatesAsync(false);
+            }
 
             managerVersionLabel.Text = Application.ProductVersion;
-
-            //ModsUpdateInfoForm formtest = new ModsUpdateInfoForm();
-            //formtest.Show();
         }
 
         private void updateConfigUi()
@@ -190,6 +189,7 @@ namespace FreedomManager
             }
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
+            modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
 
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
             fp2libAutoUpdateCheckBox.Enabled = loaderHandler.fp2libInstalled;
@@ -322,7 +322,7 @@ namespace FreedomManager
             }
         }
 
-        private async void CheckForUpdatesAsync(bool hideNoUpdates)
+        private async Task CheckForUpdatesAsync(bool hideNoUpdates)
         {
             var check = await _updateManager.CheckForUpdatesAsync();
 
@@ -346,7 +346,7 @@ namespace FreedomManager
             }
         }
 
-        private async void checkForFP2LibUpdatesAsync(bool hideNoUpdates)
+        private async Task checkForFP2LibUpdatesAsync(bool hideNoUpdates)
         {
             using (WebClient client = new WebClient())
             {
@@ -385,6 +385,25 @@ namespace FreedomManager
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                 }
+            }
+        }
+
+        private async Task checkForModUpdatesAsync(bool showOnNoUpdates)
+        {
+            modUpdates = new List<ModUpdateInfo>();
+            modUpdates = await modUpdateHandler.getModsUpdates(modHandler.modList);
+            if (modUpdates.Count > 0)
+            {
+                using (ModsUpdateInfoForm modUpdateForm = new ModsUpdateInfoForm(modUpdates))
+                {
+                    modUpdateForm.updateSelectedButton.Click += new EventHandler(modUpdateInstall_Click);
+                    modUpdateForm.ShowDialog();
+                }
+            }
+            else if (showOnNoUpdates)
+            {
+                MessageBox.Show(this, "No new updates found",
+                "Mod Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -901,7 +920,7 @@ namespace FreedomManager
         private async void updateCheckButton_Click(object sender, EventArgs e)
         {
             await Task.Run(() => CheckForUpdatesAsync(false));
-            checkForFP2LibUpdatesAsync(true);
+            await checkForFP2LibUpdatesAsync(true);
         }
 
         private void fp2libAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -937,21 +956,7 @@ namespace FreedomManager
 
         private async void checkForModUpdatesButton_Click(object sender, EventArgs e)
         {
-            modUpdates = new List<ModUpdateInfo>();
-            modUpdates = await modUpdateHandler.getModsUpdates(modHandler.modList);
-            if (modUpdates.Count > 0)
-            {
-                using (ModsUpdateInfoForm modUpdateForm = new ModsUpdateInfoForm(modUpdates))
-                {
-                    modUpdateForm.updateSelectedButton.Click += new EventHandler(modUpdateInstall_Click);
-                    modUpdateForm.ShowDialog();
-                }
-            } 
-            else
-            {
-                MessageBox.Show(this,"No new updates found",
-                "Mod Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            await checkForModUpdatesAsync(true);
         }
 
         internal async void modUpdateInstall_Click(object sender, EventArgs e)
@@ -971,12 +976,12 @@ namespace FreedomManager
                 "Mod Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             form.Close();
-            //RenderList();
+            RenderList();
         }
 
         private void modUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-
+            managerConfig.autoUpdateMods = modUpdateCheckBox.Checked;
         }
     }
 }
