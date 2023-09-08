@@ -1,0 +1,38 @@
+name: .NET Compile
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.2.0
+      
+    - uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+  
+    - name: Restore Packages
+      run: nuget restore FreedomManager.sln
+
+    - name: Build solution
+      run: msbuild FreedomManager.sln -t:rebuild -property:Configuration=Release
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release build
+        path: D:\a\FreedomManager\FreedomManager\FreedomManager\bin\Release\FreedomManager.exe
