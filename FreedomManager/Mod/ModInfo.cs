@@ -62,7 +62,7 @@ namespace FreedomManager
             }
             else HasAssets = hasAssets;
 
-            if (!type.HasValue || type == null)
+            if (!type.HasValue)
             {
                 Type = ModType.BEPINMOD;
             }

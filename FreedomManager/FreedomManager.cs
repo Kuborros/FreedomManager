@@ -240,7 +240,7 @@ namespace FreedomManager
             OneClickServer();
         }
 
-        private async void modDownloadWindow(string[] uri, UrlType type)
+        private async Task modDownloadWindow(string[] uri, UrlType type)
         {
             string name = "Unknown", author = "Unknown", gBananFileName = "", gitHubFileName = "";
             DialogResult dialogResult;
@@ -278,7 +278,8 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.Message);
                 }
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                //Cursed way to display window topmost - create a new form and make it a parent of the messagebox. Microsoft, why?
+                dialogResult = MessageBox.Show(new Form { TopMost = true }, "Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1);
 
             }
             else if (type == UrlType.GITHUB)
@@ -294,7 +295,7 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.Message);
                 }
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                dialogResult = MessageBox.Show(new Form { TopMost = true}, "Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             }
             else
             {
@@ -303,7 +304,7 @@ namespace FreedomManager
                     name = uri[1];
                     author = uri[2];
                 }
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from external site?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                dialogResult = MessageBox.Show(new Form { TopMost = true }, "Do you want to install \"" + name + "\",  by: " + author + " from external site?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             }
 
             if (dialogResult == DialogResult.Yes)
@@ -432,7 +433,6 @@ namespace FreedomManager
                 MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
                 "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                return;
             }
         }
 
@@ -463,7 +463,6 @@ namespace FreedomManager
                 MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
                 "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                return;
             }
         }
 
