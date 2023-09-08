@@ -62,23 +62,25 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.checkForModUpdatesButton = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.resPatchButton = new System.Windows.Forms.Button();
             this.fp2resComboBox = new System.Windows.Forms.ComboBox();
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.updateCheckButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.modUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.fp2libVersionLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.managerVersionLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.fp2libAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.managerAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.fp2libGroupBox = new System.Windows.Forms.GroupBox();
             this.fancyJsonCheckBox = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.saveProfileComboBox = new System.Windows.Forms.ComboBox();
+            this.fp2libAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
             this.bepinGroupBox = new System.Windows.Forms.GroupBox();
             this.appendLogCheckBox = new System.Windows.Forms.CheckBox();
@@ -88,8 +90,6 @@
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
-            this.modUpdateCheckBox = new System.Windows.Forms.CheckBox();
-            this.checkForModUpdatesButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -387,6 +387,16 @@
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // checkForModUpdatesButton
+            // 
+            this.checkForModUpdatesButton.Location = new System.Drawing.Point(311, 424);
+            this.checkForModUpdatesButton.Name = "checkForModUpdatesButton";
+            this.checkForModUpdatesButton.Size = new System.Drawing.Size(157, 65);
+            this.checkForModUpdatesButton.TabIndex = 14;
+            this.checkForModUpdatesButton.Text = "Check for Mod Updates";
+            this.checkForModUpdatesButton.UseVisualStyleBackColor = true;
+            this.checkForModUpdatesButton.Click += new System.EventHandler(this.checkForModUpdatesButton_Click);
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.resPatchButton);
@@ -454,6 +464,7 @@
             this.groupBox3.Controls.Add(this.fp2libVersionLabel);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.managerVersionLabel);
+            this.groupBox3.Controls.Add(this.fp2libAutoUpdateCheckBox);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.managerAutoUpdateCheckBox);
             this.groupBox3.Location = new System.Drawing.Point(8, 235);
@@ -462,6 +473,17 @@
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Automatic updates";
+            // 
+            // modUpdateCheckBox
+            // 
+            this.modUpdateCheckBox.AutoSize = true;
+            this.modUpdateCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.modUpdateCheckBox.Name = "modUpdateCheckBox";
+            this.modUpdateCheckBox.Size = new System.Drawing.Size(187, 17);
+            this.modUpdateCheckBox.TabIndex = 19;
+            this.modUpdateCheckBox.Text = "Check for Mod updates on startup";
+            this.modUpdateCheckBox.UseVisualStyleBackColor = true;
+            this.modUpdateCheckBox.CheckedChanged += new System.EventHandler(this.modUpdateCheckBox_CheckedChanged);
             // 
             // fp2libVersionLabel
             // 
@@ -501,17 +523,6 @@
             this.label1.TabIndex = 15;
             this.label1.Text = "Current Manager Version:";
             // 
-            // fp2libAutoUpdateCheckBox
-            // 
-            this.fp2libAutoUpdateCheckBox.AutoSize = true;
-            this.fp2libAutoUpdateCheckBox.Location = new System.Drawing.Point(237, 19);
-            this.fp2libAutoUpdateCheckBox.Name = "fp2libAutoUpdateCheckBox";
-            this.fp2libAutoUpdateCheckBox.Size = new System.Drawing.Size(199, 17);
-            this.fp2libAutoUpdateCheckBox.TabIndex = 14;
-            this.fp2libAutoUpdateCheckBox.Text = "Check for FP2Lib updates on startup";
-            this.fp2libAutoUpdateCheckBox.UseVisualStyleBackColor = true;
-            this.fp2libAutoUpdateCheckBox.CheckedChanged += new System.EventHandler(this.fp2libAutoUpdateCheckBox_CheckedChanged);
-            // 
             // managerAutoUpdateCheckBox
             // 
             this.managerAutoUpdateCheckBox.AutoSize = true;
@@ -529,7 +540,6 @@
             this.fp2libGroupBox.Controls.Add(this.label6);
             this.fp2libGroupBox.Controls.Add(this.label5);
             this.fp2libGroupBox.Controls.Add(this.saveProfileComboBox);
-            this.fp2libGroupBox.Controls.Add(this.fp2libAutoUpdateCheckBox);
             this.fp2libGroupBox.Controls.Add(this.saveRedirecCheckBox);
             this.fp2libGroupBox.Location = new System.Drawing.Point(8, 101);
             this.fp2libGroupBox.Name = "fp2libGroupBox";
@@ -586,6 +596,17 @@
             this.saveProfileComboBox.Size = new System.Drawing.Size(151, 21);
             this.saveProfileComboBox.TabIndex = 3;
             this.saveProfileComboBox.SelectedIndexChanged += new System.EventHandler(this.saveProfileComboBox_SelectedIndexChanged);
+            // 
+            // fp2libAutoUpdateCheckBox
+            // 
+            this.fp2libAutoUpdateCheckBox.AutoSize = true;
+            this.fp2libAutoUpdateCheckBox.Location = new System.Drawing.Point(205, 42);
+            this.fp2libAutoUpdateCheckBox.Name = "fp2libAutoUpdateCheckBox";
+            this.fp2libAutoUpdateCheckBox.Size = new System.Drawing.Size(199, 17);
+            this.fp2libAutoUpdateCheckBox.TabIndex = 14;
+            this.fp2libAutoUpdateCheckBox.Text = "Check for FP2Lib updates on startup";
+            this.fp2libAutoUpdateCheckBox.UseVisualStyleBackColor = true;
+            this.fp2libAutoUpdateCheckBox.CheckedChanged += new System.EventHandler(this.fp2libAutoUpdateCheckBox_CheckedChanged);
             // 
             // saveRedirecCheckBox
             // 
@@ -688,27 +709,6 @@
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // modUpdateCheckBox
-            // 
-            this.modUpdateCheckBox.AutoSize = true;
-            this.modUpdateCheckBox.Location = new System.Drawing.Point(6, 42);
-            this.modUpdateCheckBox.Name = "modUpdateCheckBox";
-            this.modUpdateCheckBox.Size = new System.Drawing.Size(187, 17);
-            this.modUpdateCheckBox.TabIndex = 19;
-            this.modUpdateCheckBox.Text = "Check for Mod updates on startup";
-            this.modUpdateCheckBox.UseVisualStyleBackColor = true;
-            this.modUpdateCheckBox.CheckedChanged += new System.EventHandler(this.modUpdateCheckBox_CheckedChanged);
-            // 
-            // checkForModUpdatesButton
-            // 
-            this.checkForModUpdatesButton.Location = new System.Drawing.Point(311, 424);
-            this.checkForModUpdatesButton.Name = "checkForModUpdatesButton";
-            this.checkForModUpdatesButton.Size = new System.Drawing.Size(157, 65);
-            this.checkForModUpdatesButton.TabIndex = 14;
-            this.checkForModUpdatesButton.Text = "Check for Mod Updates";
-            this.checkForModUpdatesButton.UseVisualStyleBackColor = true;
-            this.checkForModUpdatesButton.Click += new System.EventHandler(this.checkForModUpdatesButton_Click);
             // 
             // FreedomManager
             // 
