@@ -20,6 +20,7 @@ namespace FreedomManager
         {
 
             //If there is no file, we default to nothing
+            //This will gray out all the bepin options in the manager
             if (File.Exists("BepInEx\\config\\BepInEx.cfg"))
             {
                 try
@@ -66,7 +67,8 @@ namespace FreedomManager
                 data["Logging.Disk"]["AppendLog"] = AppendLog.ToString();
                 data["Logging.Disk"]["Enabled"] = FileLog.ToString();
 
-
+                //We can technically construct the file ourselves, and BepInEx will accept it.
+                //If somehow you delete the file after we loaded it, this will ensure we still save it and not crash horribly.
                 if (!File.Exists("BepInEx\\config\\BepInEx.cfg"))
                 {
                     Directory.CreateDirectory("BepInEx\\config");

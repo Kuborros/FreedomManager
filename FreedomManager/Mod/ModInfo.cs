@@ -1,6 +1,5 @@
 ﻿using FreedomManager.Mod;
 using System.Text.Json.Serialization;
-using static FreedomManager.Mod.ModHandler;
 
 namespace FreedomManager
 {
@@ -11,21 +10,25 @@ namespace FreedomManager
 	    "Author":"",
 	    "Version":"",
 	    "Loader":"",
-	    "HasAssets":false
+	    "HasAssets":false,
+        "GBID":"",
+        "GitHub":"https://github.com/Author/Repo"
     }
     */
 
-    /*
+
+    public enum ModType
     {
-        "ManifestVer":2,
-        "Name":"",
-        "Author":"",
-        "Version":"",
-        "GameBananaID":"",
-        "AssetDir":"",
-        "NeedFP2Lib":""
+        BEPINMOD,
+        BEPINDLL,
+        MELONMOD,
+        LIBRARY,
+        JSONNPC,
+        STAGE,
+        SPECIAL
     }
-    */
+
+
     public class ModInfo
     {
         public int ManifestVer { get; set; }
@@ -35,15 +38,15 @@ namespace FreedomManager
         public string Loader { get; set; }
         public bool? HasAssets { get; set; }
         public int? GBID { get; set; }
-        public ArchiveType? ArchiveType { get; set; }
+        public ModType? Type { get; set; }
         public string Dirname { get; set; }
         public bool Enabled { get; set; }
         public bool HasIndex { get; set; }
+        public string GitHub { get; set; }
 
-
-        //V1
+        //V1 Json
         [JsonConstructor]
-        public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ArchiveType? archiveType, int? gBID)
+        public ModInfo(string name, string author, string version, string loader, bool? hasAssets, ModType? type, int? gBID, string gitHub)
         {
             Name = SpecialNames(name);
             Author = author;
@@ -59,34 +62,39 @@ namespace FreedomManager
             }
             else HasAssets = hasAssets;
 
-            if (!archiveType.HasValue || archiveType == null)
+            if (!type.HasValue)
             {
-                ArchiveType = ModHandler.ArchiveType.BepinDir;
+                Type = ModType.BEPINMOD;
             }
-            else ArchiveType = archiveType;
+            else Type = type;
 
             if (!gBID.HasValue)
             {
                 GBID = 0;
             }
             else GBID = gBID;
+            GitHub = gitHub;
             Dirname = "invalid-directory-to-be-set";
             Enabled = true;
         }
 
-        public ModInfo(string name, ArchiveType archiveType)
+        public ModInfo(string name, ModType archiveType) : this(name, "N/A", archiveType) { }
+
+        public ModInfo(string name,string author, ModType archiveType)
         {
             Name = SpecialNames(name);
-            Author = "N/A";
-            Version = "N/A";
+            Author = author;
+            Version = "0.0.0";
 
-            if (archiveType == ModHandler.ArchiveType.BepinDir) Loader = "BepInEx";
-            else if (archiveType == ModHandler.ArchiveType.DllDir) Loader = "BepInEx (DLL)";
-            else if (archiveType == ModHandler.ArchiveType.MelonDir) Loader = "MelonLoader";
-            else Loader = "Unknown";
+            if (archiveType == ModType.BEPINMOD) Loader = "BepInEx";
+            else if (archiveType == ModType.BEPINDLL) Loader = "BepInEx (DLL)";
+            else if (archiveType == ModType.MELONMOD) Loader = "MelonLoader";
+            else if (archiveType == ModType.JSONNPC) Loader = "NPC (JSON)";
+            else if (archiveType == ModType.STAGE) Loader = "Stage";
+            else Loader = "N/A";
 
             HasAssets = true;
-            ArchiveType = archiveType;
+            Type = archiveType;
             GBID = 0;
             Dirname = name;
             Enabled = true;

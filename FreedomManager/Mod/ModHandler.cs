@@ -1,4 +1,6 @@
-﻿using SharpCompress.Archives;
+﻿using FreedomManager.Mod.Json;
+using FreedomManager.Net;
+using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
 using SharpCompress.Readers;
@@ -10,16 +12,18 @@ using System.Windows.Forms;
 
 namespace FreedomManager.Mod
 {
+
+    public enum ArchiveType
+    {
+        BepinDir,
+        PluginDir,
+        MelonDir,
+        DllDir,
+        None
+    }
+
     public class ModHandler
     {
-        public enum ArchiveType
-        {
-            BepinDir,
-            PluginDir,
-            MelonDir,
-            DllDir,
-            None
-        }
 
         //private readonly string dirEnabled = "BepInEx\\plugins";
         //private readonly string dirDisabled = "BepInEx\\plugins-disabled";
@@ -49,10 +53,16 @@ namespace FreedomManager.Mod
             {
                 modList.AddRange(MelonScan());
             }
+            if (FreedomManager.loaderHandler.fp2libInstalled)
+            {
+                modList.AddRange(NPCScan());
+            }
         }
 
-        private ArchiveType CheckArchive(String path)
+        private ArchiveType CheckArchive(string path)
         {
+            //GameBanana supports only 7z, zip, and rar files. With fp2mm being GB based mod manager, these are the only supported formats.
+            //Additionaly, forcing usage of common compression methods makes it easier for end-users to manually install mods.
             if (File.Exists(path) && (Path.GetExtension(path) == ".zip" || Path.GetExtension(path) == ".rar"))
             {
                 using (Stream stream = File.OpenRead(path))
@@ -78,6 +88,7 @@ namespace FreedomManager.Mod
             }
             else if (File.Exists(path) && Path.GetExtension(path) == ".7z")
             {
+                //SharpCompress doesn't handle 7z in it's default ReaderFactory
                 using (Stream stream = File.OpenRead(path))
                 using (var reader = SevenZipArchive.Open(stream))
                 {
@@ -104,6 +115,8 @@ namespace FreedomManager.Mod
 
         public bool EnableDisableMod(ModInfo info)
         {
+            //There's no obvious easier or faster solution for this case. Zipping the mod was considered, but we would then add extra overhead when reading it's data.
+            //Mods are just a single .dll and .json (+maybe .index), so moving them around is fast and painless. AssetBundles in /mods, /mod_overrides, etc. can stay
             try
             {
                 Directory.CreateDirectory("BepInEx\\plugins-disabled");
@@ -113,7 +126,7 @@ namespace FreedomManager.Mod
                 string destDir;
                 if (info.Enabled)
                 {
-                    if (info.ArchiveType != ArchiveType.MelonDir)
+                    if (info.Type != ModType.MELONMOD)
                     {
                         sourceDir = "BepInEx\\plugins\\";
                         destDir = "BepInEx\\plugins-disabled\\";
@@ -126,7 +139,7 @@ namespace FreedomManager.Mod
                 }
                 else
                 {
-                    if (info.ArchiveType != ArchiveType.MelonDir)
+                    if (info.Type != ModType.MELONMOD)
                     {
                         sourceDir = "BepInEx\\plugins-disabled\\";
                         destDir = "BepInEx\\plugins\\";
@@ -137,14 +150,13 @@ namespace FreedomManager.Mod
                         destDir = "MLLoader\\Mods\\";
                     }
                 }
-                switch (info.ArchiveType)
+                switch (info.Type)
                 {
-                    case ArchiveType.BepinDir:
-                    case ArchiveType.PluginDir:
+                    case ModType.BEPINMOD:
                         Directory.Move(sourceDir + info.Dirname, destDir + info.Dirname);
                         return !info.Enabled;
-                    case ArchiveType.DllDir:
-                    case ArchiveType.MelonDir:
+                    case ModType.BEPINDLL:
+                    case ModType.MELONMOD:
                         File.Move(sourceDir + info.Dirname + ".dll", destDir + info.Dirname + ".dll");
                         return !info.Enabled;
                 }
@@ -171,31 +183,36 @@ namespace FreedomManager.Mod
 
         public void UnInstallMod(ModInfo modInfo)
         {
+            //TODO: Check if we can instead blindly delete both enabled and disabled dirs, in case deduplicator has missed something
             try
             {
                 DialogResult dialogResult = MessageBox.Show(FreedomManager.ActiveForm, "Do you want to remove \"" + modInfo.Name + "\"?", "Mod uninstall", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
+                    if (modInfo.Type == ModType.BEPINMOD) //Bepin mod
                     {
                         if (modInfo.Enabled)
                             Directory.Delete("BepInEx\\plugins\\" + modInfo.Dirname, true);
                         else
                             Directory.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname, true);
                     }
-                    else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
+                    else if (modInfo.Type == ModType.BEPINDLL) //Loose DLL bepin
                     {
                         if (modInfo.Enabled)
                             File.Delete("BepInEx\\plugins\\" + modInfo.Dirname + ".dll");
                         else
                             File.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname + ".dll");
                     }
-                    if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
+                    if (modInfo.Type == ModType.MELONMOD) //Melon mod
                     {
                         if (modInfo.Enabled)
                             File.Delete("MLLoader\\mods\\" + modInfo.Dirname + ".dll");
                         else
                             File.Delete("MLLoader\\mods-disabled\\" + modInfo.Dirname + ".dll");
+                    }
+                    if (modInfo.Type == ModType.JSONNPC)
+                    {
+                        File.Delete("BepInEx\\config\\NPCLibEzNPC\\" + modInfo.Dirname);
                     }
                 }
             }
@@ -210,6 +227,7 @@ namespace FreedomManager.Mod
             string path = ".";
             switch (type)
             {
+                //Path magic so files go where they should
                 case ArchiveType.MelonDir:
                     path = "MLLoader";
                     break;
@@ -219,6 +237,7 @@ namespace FreedomManager.Mod
             }
             if (Path.GetExtension(file) != ".7z")
             {
+                //All archives that aren't 7z can be handled like this. Due to GameBanana limitations (and program being Win specific) we can skip on extras like gzip compressed files.
                 using (Stream stream = File.OpenRead(file))
                 using (var reader = ReaderFactory.Open(stream))
                 {
@@ -227,6 +246,11 @@ namespace FreedomManager.Mod
                         if (!reader.Entry.IsDirectory && reader.Entry.Key != "FP2.exe")
                         {
                             Console.WriteLine(reader.Entry.Key);
+
+                            //TODO: Regex this \/, mods with modinfo should get a file index for better uninstall (to nuke extra assets and such..)
+                            //BepInEx/plugins/Modname/modinfo.json
+                            //Write to mod's dir with filename files.index, 
+
                             reader.WriteEntryToDirectory(path, new ExtractionOptions()
                             {
                                 ExtractFullPath = true,
@@ -238,6 +262,7 @@ namespace FreedomManager.Mod
             }
             else
             {
+                //SharpCompress doesn't handle 7z in it's default ReaderFactory and it requires this separate construct
                 using (Stream stream = File.OpenRead(file))
                 using (var reader = SevenZipArchive.Open(stream))
                     foreach (SevenZipArchiveEntry entry in reader.Entries)
@@ -262,6 +287,8 @@ namespace FreedomManager.Mod
             string dirDisabled = "BepInEx\\plugins-disabled";
             string dirEnabledM = "MLLoader\\Mods";
             string dirDisabledM = "MLLoader\\Mods-disabled";
+
+            //Horrible hack. Ensures that any inconsistent half-disabled mods are cleaned up if we crash. With no dupes overhead is minimal even with 100s of mods.
 
             try
             {
@@ -293,11 +320,13 @@ namespace FreedomManager.Mod
                         foreach (string js in Directory.GetFiles(dirDisabled + "\\" + modname))
                         {
                             try
-                            { //Try to copy any extra files from disabled mod. By specification none should have things there, but we should try anyways.
+                            { 
+                              //Try to copy any extra files from disabled mod. By specification none should have things there, but we should try anyways.
+                              //*Please don't keep random stuff in your plugin folder, other places exist just for that*
                                 File.Copy(js, dirDisabled + "\\" + modname + "\\" + Path.GetFileName(js), false);
                             }
                             catch (Exception ex)
-                            { //It should fail on files that alredy exist.
+                            { //It should fail on files that alredy exist. Fail is quiet since we assume files in enabled copy of the mod are the 'good' ones. Also, look above.
                                 Console.WriteLine(ex.Message);
                             }
                             File.Delete(js);
@@ -326,13 +355,14 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        list.Add(new ModInfo(modname, ArchiveType.DllDir));
+                        list.Add(new ModInfo(modname, ModType.BEPINDLL));
                     }
                 }
                 foreach (string d in Directory.GetDirectories(dir))
                 {
                     string modname = Path.GetFileName(d);
                     hasManifest = false;
+                    //FP2Lib and MelonLoader should not be listed. 
                     if (modname != "BepInEx.MelonLoader.Loader" && modname != "lib")
                     {
                         foreach (string js in Directory.GetFiles(d))
@@ -351,7 +381,7 @@ namespace FreedomManager.Mod
                         }
                         if (!hasManifest)
                         {
-                            list.Add(new ModInfo(modname, ArchiveType.BepinDir));
+                            list.Add(new ModInfo(modname, ModType.BEPINMOD));
                         }
                     }
                 }
@@ -370,7 +400,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        ModInfo info = new ModInfo(modname, ArchiveType.DllDir)
+                        ModInfo info = new ModInfo(modname, ModType.BEPINDLL)
                         {
                             Enabled = false
                         };
@@ -381,6 +411,7 @@ namespace FreedomManager.Mod
                 {
                     string modname = Path.GetFileName(d);
                     hasManifest = false;
+                    //If this triggers, how did you manage to disable melonloader lol. Stays here just in case, the deduplicator will handle it on next run when ML is installed again.
                     if (modname != "BepInEx.MelonLoader.Loader")
                     {
                         foreach (string js in Directory.GetFiles(d))
@@ -400,7 +431,7 @@ namespace FreedomManager.Mod
                         }
                         if (!hasManifest)
                         {
-                            ModInfo info = new ModInfo(modname, ArchiveType.BepinDir)
+                            ModInfo info = new ModInfo(modname, ModType.BEPINMOD)
                             {
                                 Enabled = false
                             };
@@ -420,6 +451,8 @@ namespace FreedomManager.Mod
 
         public List<ModInfo> MelonScan()
         {
+            //Separate, since we usually don't have melon mods around. No need to scan empty places.
+
             string dir = "MLLoader\\Mods";
             List<ModInfo> list = new List<ModInfo>();
             try
@@ -430,7 +463,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        list.Add(new ModInfo(modname, ArchiveType.MelonDir));
+                        list.Add(new ModInfo(modname, ModType.MELONMOD));
                     }
                 }
             }
@@ -448,7 +481,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
-                        ModInfo info = new ModInfo(modname, ArchiveType.MelonDir)
+                        ModInfo info = new ModInfo(modname, ModType.MELONMOD)
                         {
                             Enabled = false
                         };
@@ -461,6 +494,32 @@ namespace FreedomManager.Mod
                 Console.WriteLine(ex.Message);
             }
 
+            return list;
+        }
+
+        public List<ModInfo> NPCScan()
+        {
+            string dir = "BepInEx\\config\\NPCLibEzNPC";
+            List<ModInfo> list = new List<ModInfo>();
+            try
+            {
+                if (Directory.Exists(dir))
+                {
+                    foreach (string f in Directory.GetFiles(dir))
+                    {
+                        if (Path.GetExtension(f) == ".json")
+                        {
+                            JsonNPC npc = JsonSerializer.Deserialize<JsonNPC>(File.ReadAllText(f));
+                            ModInfo info = new ModInfo("NPC: " + npc.name,npc.author,ModType.JSONNPC);
+                            info.Dirname = Path.GetFileName(f);
+                            list.Add(info);
+                        }
+                    }
+                }
+            } catch (Exception ex) 
+            { 
+                Console.WriteLine(ex.Message);
+            }
             return list;
         }
     }

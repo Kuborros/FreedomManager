@@ -13,6 +13,7 @@ namespace FreedomManager.Config
         //Json contents
         public bool autoUpdateManager { get; set; }
         public bool autoUpdateFP2Lib { get; set; }
+        public bool autoUpdateMods { get; set; }
 
         public ManagerConfig()
         {
@@ -23,15 +24,17 @@ namespace FreedomManager.Config
         /*
         {
         "autoUpdateManager":true,
-        "autoUpdateFP2lib":true
+        "autoUpdateFP2lib":true,
+        "autoUpdateMods":true
         }
         */
 
         [JsonConstructor]
-        public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib)
+        public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib, bool autoUpdateMods)
         {
             this.autoUpdateFP2Lib = autoUpdateFP2Lib;
             this.autoUpdateManager = autoUpdateManager;
+            this.autoUpdateMods = autoUpdateMods;
         }
 
         public void writeConfig()
@@ -48,11 +51,14 @@ namespace FreedomManager.Config
                 ManagerConfig conf = JsonSerializer.Deserialize<ManagerConfig>(File.ReadAllText(confFile));
                 autoUpdateFP2Lib = conf.autoUpdateFP2Lib;
                 autoUpdateManager = conf.autoUpdateManager;
+                autoUpdateMods = conf.autoUpdateMods;
             }
             else
             {
+                //Default auto-updates to ON
                 autoUpdateManager = true;
                 autoUpdateFP2Lib = true;
+                autoUpdateMods = true;
                 writeConfig();
             }
 

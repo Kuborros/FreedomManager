@@ -1,5 +1,6 @@
 ﻿using FreedomManager.Config;
 using FreedomManager.Mod;
+using FreedomManager.Net;
 using FreedomManager.Net.GitHub;
 using FreedomManager.Patches;
 using Microsoft.Win32;
@@ -19,7 +20,6 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static FreedomManager.Mod.ModHandler;
 
 namespace FreedomManager
 {
@@ -30,6 +30,7 @@ namespace FreedomManager
         bool melonPresent = false;
         int columnIndex = 0;
         internal string tempname;
+        internal List<ModUpdateInfo> modUpdates;
 
         private enum UrlType
         {
@@ -47,6 +48,7 @@ namespace FreedomManager
         static FP2LibConfig fP2LibConfig;
         static ManagerConfig managerConfig;
         static ResolutionPatchController resolutionPatchController;
+        static ModUpdateHandler modUpdateHandler;
         public static ModHandler modHandler;
         public static LoaderHandler loaderHandler;
 
@@ -89,6 +91,9 @@ namespace FreedomManager
                 melonButton.Text = "Uninstall MelonLoader Compat";
             }
 
+            bepInExToolStripMenuItem.Enabled = bepisPresent;
+            melonLoaderToolStripMenuItem.Enabled = melonPresent;
+
             using (var current = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Classes\\" + "fp2mm"))
             {
                 if (current != null) { handlerButton.Text = "Unregister URL handler"; }
@@ -106,15 +111,21 @@ namespace FreedomManager
             {
                 fp2resComboBox.SelectedIndex = Math.Min((int)resolutionPatchController.currentRes,9);
                 fp2resCheckBox.Checked = true;
+                fp2resComboBox.Enabled = true;
+                resPatchButton.Enabled = true;
             }
             else
             {
                 fp2resComboBox.SelectedIndex = 0;
                 fp2resCheckBox.Checked = false;
+                fp2resComboBox.Enabled = false;
+                resPatchButton.Enabled = false;
             }
 
             RenderList(modHandler.modList);
             OneClickServer();
+
+            modUpdateHandler = new ModUpdateHandler();
 
             if (managerConfig.autoUpdateManager)
             {
@@ -127,15 +138,22 @@ namespace FreedomManager
                     checkForFP2LibUpdatesAsync(true);
                 }
             }
+            if (managerConfig.autoUpdateMods)
+            {
+                checkForModUpdatesAsync(false);
+            }
 
             managerVersionLabel.Text = Application.ProductVersion;
-
         }
 
         private void updateConfigUi()
         {
             fP2LibConfig = new FP2LibConfig();
             bepinConfig = new BepinConfig();
+
+            bepInExToolStripMenuItem.Enabled = bepisPresent;
+            melonLoaderToolStripMenuItem.Enabled = melonPresent;
+            openLogfileToolStripMenuItem.Enabled = File.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log"));
 
             if (bepinConfig.confExists)
             {
@@ -171,6 +189,7 @@ namespace FreedomManager
             }
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
+            modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
 
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
             fp2libAutoUpdateCheckBox.Enabled = loaderHandler.fp2libInstalled;
@@ -221,9 +240,9 @@ namespace FreedomManager
             OneClickServer();
         }
 
-        private async void modDownloadWindow(string[] uri, UrlType type)
+        private async Task modDownloadWindow(string[] uri, UrlType type)
         {
-            string name = "Unknown", author = "Unknown", gBananFileName = "";
+            string name = "Unknown", author = "Unknown", gBananFileName = "", gitHubFileName = "";
             DialogResult dialogResult;
             if (type == UrlType.GBANANA && uri.Length == 3)
             {
@@ -259,30 +278,46 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.Message);
                 }
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                //Cursed way to display window topmost - create a new form and make it a parent of the messagebox. Microsoft, why?
+                using (Form tempform = new Form { TopMost = true })
+                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1);
 
             }
-            else 
+            else if (type == UrlType.GITHUB)
+            {
+                try { 
+                    MatchCollection matches = Regex.Matches(uri[0],"(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
+
+                    author = matches[0].Groups[1].Value;
+                    name = matches[0].Groups[2].Value;
+                    gitHubFileName = matches[0].Groups[3].Value;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                using (Form tempform = new Form { TopMost = true })
+                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            }
+            else
             {
                 if (uri.Length == 3)
                 {
                     name = uri[1];
                     author = uri[2];
                 }
-
-                string flavor = type == UrlType.GITHUB ? "GitHub" : "external site";
-
-                dialogResult = MessageBox.Show("Do you want to install \"" + name + "\",  by: " + author + " from " + flavor + "?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                using (Form tempform = new Form { TopMost = true })
+                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\",  by: " + author + " from external site?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             }
 
             if (dialogResult == DialogResult.Yes)
             {
                 switch (type) {
                     case UrlType.GBANANA:
-                        AsyncModDownloadGbanana(new Uri(uri[0]), gBananFileName);
+                        await AsyncModDownloadGbanana(new Uri(uri[0]), gBananFileName);
                         break;
                     case UrlType.GITHUB:
-                        AsyncModDownloadGitHub(new Uri(uri[0]));
+                        await AsyncModDownloadGitHub(new Uri(uri[0]), gitHubFileName);
                         break;
                     default:
                         MessageBox.Show("Link points at unsupported service.", "Mod Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -291,7 +326,7 @@ namespace FreedomManager
             }
         }
 
-        private async void CheckForUpdatesAsync(bool hideNoUpdates)
+        private async Task CheckForUpdatesAsync(bool hideNoUpdates)
         {
             var check = await _updateManager.CheckForUpdatesAsync();
 
@@ -315,7 +350,7 @@ namespace FreedomManager
             }
         }
 
-        private async void checkForFP2LibUpdatesAsync(bool hideNoUpdates)
+        private async Task checkForFP2LibUpdatesAsync(bool hideNoUpdates)
         {
             using (WebClient client = new WebClient())
             {
@@ -343,7 +378,7 @@ namespace FreedomManager
                         DialogResult dialogResult = MessageBox.Show("New FP2Lib update is available!\n Version: " + release.tag_name + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
 
                         if (dialogResult == DialogResult.Yes)
-                            AsyncModDownloadGitHub(new Uri(release.downloadUrl));
+                            await AsyncModDownloadGitHub(new Uri(release.downloadUrl),release.filename);
                     }
                     else
                     {
@@ -357,7 +392,26 @@ namespace FreedomManager
             }
         }
 
-        internal async void AsyncModDownloadGbanana(Uri url, string filename)
+        private async Task checkForModUpdatesAsync(bool showOnNoUpdates)
+        {
+            modUpdates = new List<ModUpdateInfo>();
+            modUpdates = await modUpdateHandler.getModsUpdates(modHandler.modList);
+            if (modUpdates.Count > 0)
+            {
+                using (ModsUpdateInfoForm modUpdateForm = new ModsUpdateInfoForm(modUpdates))
+                {
+                    modUpdateForm.updateSelectedButton.Click += new EventHandler(modUpdateInstall_Click);
+                    modUpdateForm.ShowDialog();
+                }
+            }
+            else if (showOnNoUpdates)
+            {
+                MessageBox.Show(this, "No new updates found",
+                "Mod Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        internal async Task AsyncModDownloadGbanana(Uri url, string filename)
         {
             try
             {
@@ -367,24 +421,25 @@ namespace FreedomManager
                     client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
                     tempname = filename;
 
-                    DownloadProgress progress = new DownloadProgress();
-                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                    progress.Show();
-                    await client.DownloadFileTaskAsync(url, filename);
+                    using (DownloadProgress progress = new DownloadProgress(filename))
+                    {
+                        client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                        progress.Show();
+                        await client.DownloadFileTaskAsync(url, filename);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                return;
+                "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
         }
 
-        internal async void AsyncModDownloadGitHub(Uri url)
+        internal async Task AsyncModDownloadGitHub(Uri url, string filename)
         {
             try
             {
@@ -393,29 +448,24 @@ namespace FreedomManager
                     client.Headers["user-agent"] = "FreedomManager";
                     client.Headers["accept"] = "*/*";
                     client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-
-                    await client.OpenReadTaskAsync(url);
-                    string filename = client.ResponseHeaders.Get("content-disposition").Split(';')[1].Trim().Replace("filename=", "");
                     tempname = filename;
 
-                    DownloadProgress progress = new DownloadProgress
+                    using (DownloadProgress progress = new DownloadProgress(filename))
                     {
-                        Text = "FP2Lib Update"
-                    };
-
-                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
-                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                    progress.Show();
-                    await client.DownloadFileTaskAsync(url, filename);
+                        if (filename == "fp2lib.zip") progress.Text = "FP2Lib Update";
+                        client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress.client_DownloadProgressChanged);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(progress.client_DownloadFileCompleted);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                        progress.Show();
+                        await client.DownloadFileTaskAsync(url, filename);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Download failed!\n\n" +
                 "Error info: " + ex.Message,
-                Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                return;
+                "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
         }
 
@@ -469,6 +519,7 @@ namespace FreedomManager
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
             fP2LibConfig.writeConfig();
+            //While launching trough Steam would allow for achievements to register, it would exclude Itch.io users.
             if (fp2Found) Process.Start("FP2.exe");
         }
 
@@ -501,6 +552,7 @@ namespace FreedomManager
                 "Error info: " + ex.Message,
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            updateConfigUi();
         }
 
         private void modInstall_Click(object sender, EventArgs e)
@@ -558,6 +610,7 @@ namespace FreedomManager
                     "Error info: " + ex.Message,
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                updateConfigUi();
             }
         }
 
@@ -654,6 +707,8 @@ namespace FreedomManager
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
 
+            //Update for cooler UI
+
             StringBuilder builder = new StringBuilder();
             builder.Append("Name: ").AppendLine(modInfo.Name);
             builder.Append("Version: ").AppendLine(modInfo.Version);
@@ -696,6 +751,13 @@ namespace FreedomManager
             if (listView1.FocusedItem != null) //Prevents the initial checking of every item from firing an event
             {
                 ModInfo info = (ModInfo)e.Item.Tag;
+                if (info.Type == ModType.JSONNPC || info.Type == ModType.STAGE || info.Type == ModType.SPECIAL)
+                {
+                    //These types cannot be disabled. Winforms UI does not let you show it nicely without custom drawing, so we just force the option always on.
+                    e.Item.Checked = true;
+                    listView1.EndUpdate();
+                    return;
+                }
                 e.Item.Checked = modHandler.EnableDisableMod(info);
                 RenderList();
             }
@@ -708,23 +770,27 @@ namespace FreedomManager
             if (modInfo != null)
             {
                 string path = "";
-                if (modInfo.ArchiveType == ArchiveType.BepinDir || modInfo.ArchiveType == ArchiveType.PluginDir) //Bepin mod
+                if (modInfo.Type == ModType.BEPINMOD) //Bepin mod
                 {
                     if (modInfo.Enabled)
                         path = "BepInEx\\plugins\\" + modInfo.Dirname;
                     else
                         path = "BepInEx\\plugins-disabled\\" + modInfo.Dirname;
                 }
-                else if (modInfo.ArchiveType == ArchiveType.DllDir) //Loose DLL bepin
+                else if (modInfo.Type == ModType.BEPINDLL) //Loose DLL bepin
                 {
                     if (modInfo.Enabled)
                         path = "BepInEx\\plugins";
                     else
                         path = "BepInEx\\plugins-disabled";
                 }
+                else if (modInfo.Type == ModType.JSONNPC) //JSON NPC
+                {
+                        path = "BepInEx\\config\\NPCLibEzNPC";
+                }
                 else if (melonPresent)
                 {
-                    if (modInfo.ArchiveType == ArchiveType.MelonDir) //Melon mod
+                    if (modInfo.Type == ModType.MELONMOD) //Melon mod
                     {
                         if (modInfo.Enabled)
                             path = "MLLoader\\mods";
@@ -815,13 +881,20 @@ namespace FreedomManager
         {
             if (fp2resCheckBox.Checked)
             {
+                fp2resComboBox.Enabled = true;
+                resPatchButton.Enabled = true;
+
                 resolutionPatchController.enabled = true;
-                resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
+                //resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
             }
             else
             {
+                fp2resComboBox.Enabled = false;
+                resPatchButton.Enabled = false;
+
                 resolutionPatchController.enabled = false;
                 resolutionPatchController.setIntResolution(ResolutionPatchController.Resolution.x360);
+                fp2resComboBox.SelectedIndex = 0;
             }
         }
 
@@ -831,6 +904,8 @@ namespace FreedomManager
 
         private void resPatchButton_Click(object sender, EventArgs e)
         {
+            if (!fp2resCheckBox.Checked) return;
+
             if (resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex))
             {
                 MessageBox.Show("Resolution patch successfull!",
@@ -847,7 +922,7 @@ namespace FreedomManager
         private async void updateCheckButton_Click(object sender, EventArgs e)
         {
             await Task.Run(() => CheckForUpdatesAsync(false));
-            checkForFP2LibUpdatesAsync(false);
+            await checkForFP2LibUpdatesAsync(true);
         }
 
         private void fp2libAutoUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -873,6 +948,42 @@ namespace FreedomManager
         private void saveProfileComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             fP2LibConfig.saveRedirectProfile = saveProfileComboBox.SelectedIndex;
+        }
+
+        private void openLogfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log")))
+                Process.Start("explorer", Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log"));
+        }
+
+        private async void checkForModUpdatesButton_Click(object sender, EventArgs e)
+        {
+            await checkForModUpdatesAsync(true);
+        }
+
+        internal async void modUpdateInstall_Click(object sender, EventArgs e)
+        {
+            foreach(ModUpdateInfo modUpdate in modUpdates)
+            {
+                if (modUpdate.DoUpdate)
+                {
+                    await AsyncModDownloadGitHub(new Uri(modUpdate.DownloadLink), "modUpdate.zip");
+                }
+            }
+            
+            Button butt = (Button)sender;
+            ModsUpdateInfoForm form = (ModsUpdateInfoForm)butt.Parent;
+
+            MessageBox.Show("Mod updates installed!",
+                "Mod Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            form.Close();
+            RenderList();
+        }
+
+        private void modUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            managerConfig.autoUpdateMods = modUpdateCheckBox.Checked;
         }
     }
 }
