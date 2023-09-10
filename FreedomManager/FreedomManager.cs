@@ -279,7 +279,8 @@ namespace FreedomManager
                     Console.WriteLine(ex.Message);
                 }
                 //Cursed way to display window topmost - create a new form and make it a parent of the messagebox. Microsoft, why?
-                dialogResult = MessageBox.Show(new Form { TopMost = true }, "Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1);
+                using (Form tempform = new Form { TopMost = true })
+                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1);
 
             }
             else if (type == UrlType.GITHUB)
@@ -295,7 +296,8 @@ namespace FreedomManager
                 {
                     Console.WriteLine(ex.Message);
                 }
-                dialogResult = MessageBox.Show(new Form { TopMost = true}, "Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                using (Form tempform = new Form { TopMost = true })
+                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             }
             else
             {
@@ -304,7 +306,8 @@ namespace FreedomManager
                     name = uri[1];
                     author = uri[2];
                 }
-                dialogResult = MessageBox.Show(new Form { TopMost = true }, "Do you want to install \"" + name + "\",  by: " + author + " from external site?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                using (Form tempform = new Form { TopMost = true })
+                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\",  by: " + author + " from external site?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             }
 
             if (dialogResult == DialogResult.Yes)

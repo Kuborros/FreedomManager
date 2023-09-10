@@ -35,8 +35,8 @@ namespace FreedomManager.Net
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.updatableListView = new System.Windows.Forms.ListView();
-            this.nameColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.versionColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.nameColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.versionColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.cancelButton = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.changelogRichTextBox = new System.Windows.Forms.RichTextBox();
