@@ -345,7 +345,7 @@ namespace FreedomManager
             if (!check.CanUpdate)
             {
                 if (!hideNoUpdates) MessageBox.Show("There are no new Freedom Manager updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //return;
+                return;
             }
 
             using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
