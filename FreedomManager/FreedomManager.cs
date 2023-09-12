@@ -277,6 +277,7 @@ namespace FreedomManager
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    return;
                 }
                 //Cursed way to display window topmost - create a new form and make it a parent of the messagebox. Microsoft, why?
                 using (Form tempform = new Form { TopMost = true })
@@ -285,16 +286,27 @@ namespace FreedomManager
             }
             else if (type == UrlType.GITHUB)
             {
-                try { 
+                try {
+                    //Direct link to release
                     MatchCollection matches = Regex.Matches(uri[0],"(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
+                    if (matches.Count > 0)
+                    {
+                        //Regex found a thingie
+                        author = matches[0].Groups[1].Value;
+                        name = matches[0].Groups[2].Value;
+                        gitHubFileName = matches[0].Groups[3].Value;
+                    } 
+                    else
+                    {
+                        //Likely we got provided just github page link
 
-                    author = matches[0].Groups[1].Value;
-                    name = matches[0].Groups[2].Value;
-                    gitHubFileName = matches[0].Groups[3].Value;
+                    }
                 }
-                catch (Exception ex)
+                catch (ArgumentOutOfRangeException ex)
                 {
+                    //Regexes failed
                     Console.WriteLine(ex.Message);
+                    return;
                 }
                 using (Form tempform = new Form { TopMost = true })
                     dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
@@ -333,20 +345,23 @@ namespace FreedomManager
             if (!check.CanUpdate)
             {
                 if (!hideNoUpdates) MessageBox.Show("There are no new Freedom Manager updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                //return;
             }
 
-            DialogResult dialogResult = MessageBox.Show("New Freedom Manager update is available!\n Version: " + check.LastVersion + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
+            using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
             {
-                bepinConfig.writeConfig();
-                managerConfig.writeConfig();
-                fP2LibConfig.writeConfig();
-                await _updateManager.PrepareUpdateAsync(check.LastVersion);
+                DialogResult dialogResult = updateForm.ShowDialog();
 
-                _updateManager.LaunchUpdater(check.LastVersion, true, "--post-update");
-                Application.Exit();
+                if (dialogResult == DialogResult.Yes)
+                {
+                    bepinConfig.writeConfig();
+                    managerConfig.writeConfig();
+                    fP2LibConfig.writeConfig();
+                    await _updateManager.PrepareUpdateAsync(check.LastVersion);
+
+                    _updateManager.LaunchUpdater(check.LastVersion, true, "--post-update");
+                    Application.Exit();
+                }
             }
         }
 

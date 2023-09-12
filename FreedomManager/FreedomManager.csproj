@@ -213,6 +213,12 @@
     <Compile Include="Net\GitHub\GitHubAsset.cs" />
     <Compile Include="Net\GitHub\GitHubRelease.cs" />
     <Compile Include="Net\GitHub\GitHubUploader.cs" />
+    <Compile Include="Net\ManagerUpdateInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Net\ManagerUpdateInfoForm.Designer.cs">
+      <DependentUpon>ManagerUpdateInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Net\ModUpdateHandler.cs" />
     <Compile Include="Net\ModUpdateInfo.cs" />
     <Compile Include="Program.cs" />
@@ -235,6 +241,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FreedomManager.resx">
       <DependentUpon>FreedomManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Net\ManagerUpdateInfoForm.resx">
+      <DependentUpon>ManagerUpdateInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Net\ModsUpdateInfoForm.resx">
       <DependentUpon>ModsUpdateInfoForm.cs</DependentUpon>
