@@ -14,12 +14,14 @@ using System.IO;
 using System.IO.Pipes;
 using System.Net;
 using System.Net.Cache;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace FreedomManager
 {
@@ -277,6 +279,7 @@ namespace FreedomManager
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    return;
                 }
                 //Cursed way to display window topmost - create a new form and make it a parent of the messagebox. Microsoft, why?
                 using (Form tempform = new Form { TopMost = true })
@@ -285,16 +288,28 @@ namespace FreedomManager
             }
             else if (type == UrlType.GITHUB)
             {
-                try { 
+                //TODO: Replace this mess - use just repo and author name like updates do.
+                try {
+                    //Direct link to release
                     MatchCollection matches = Regex.Matches(uri[0],"(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
-
-                    author = matches[0].Groups[1].Value;
-                    name = matches[0].Groups[2].Value;
-                    gitHubFileName = matches[0].Groups[3].Value;
+                    if (matches.Count > 0)
+                    {
+                        //Regex found a thingie
+                        author = matches[0].Groups[1].Value;
+                        name = matches[0].Groups[2].Value;
+                        gitHubFileName = matches[0].Groups[3].Value;
+                    } 
+                    else
+                    {
+                        MessageBox.Show("Invalid link.");
+                        return;
+                    }
                 }
-                catch (Exception ex)
+                catch (ArgumentOutOfRangeException ex)
                 {
+                    //Regexes failed
                     Console.WriteLine(ex.Message);
+                    return;
                 }
                 using (Form tempform = new Form { TopMost = true })
                     dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GitHub?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
@@ -328,25 +343,37 @@ namespace FreedomManager
 
         private async Task CheckForUpdatesAsync(bool hideNoUpdates)
         {
-            var check = await _updateManager.CheckForUpdatesAsync();
-
-            if (!check.CanUpdate)
+            try
             {
-                if (!hideNoUpdates) MessageBox.Show("There are no new Freedom Manager updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+                var check = await _updateManager.CheckForUpdatesAsync();
 
-            DialogResult dialogResult = MessageBox.Show("New Freedom Manager update is available!\n Version: " + check.LastVersion + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
+                if (!check.CanUpdate)
+                {
+                    if (!hideNoUpdates) MessageBox.Show("There are no new Freedom Manager updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-            if (dialogResult == DialogResult.Yes)
+                using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
+                {
+                    updateForm.loadFp2mmChangelog();
+                    DialogResult dialogResult = updateForm.ShowDialog();
+
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        bepinConfig.writeConfig();
+                        managerConfig.writeConfig();
+                        fP2LibConfig.writeConfig();
+                        await _updateManager.PrepareUpdateAsync(check.LastVersion);
+
+                        _updateManager.LaunchUpdater(check.LastVersion, true, "--post-update");
+                        Application.Exit();
+                    }
+                }
+            } 
+            catch (HttpRequestException ex)
             {
-                bepinConfig.writeConfig();
-                managerConfig.writeConfig();
-                fP2LibConfig.writeConfig();
-                await _updateManager.PrepareUpdateAsync(check.LastVersion);
-
-                _updateManager.LaunchUpdater(check.LastVersion, true, "--post-update");
-                Application.Exit();
+                Console.WriteLine(ex);
+                if (!hideNoUpdates) MessageBox.Show("Failed downloading update information.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -375,10 +402,14 @@ namespace FreedomManager
 
                     if (remote > local)
                     {
-                        DialogResult dialogResult = MessageBox.Show("New FP2Lib update is available!\n Version: " + release.tag_name + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
+                        using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
+                        {
+                            updateForm.loadFp2libChangelog();
+                            DialogResult dialogResult = updateForm.ShowDialog();
 
-                        if (dialogResult == DialogResult.Yes)
-                            await AsyncModDownloadGitHub(new Uri(release.downloadUrl),release.filename);
+                            if (dialogResult == DialogResult.Yes)
+                                await AsyncModDownloadGitHub(new Uri(release.downloadUrl), release.filename);
+                        }
                     }
                     else
                     {

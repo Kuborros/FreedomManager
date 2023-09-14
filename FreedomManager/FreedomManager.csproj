@@ -100,8 +100,8 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.3.7.2175\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Onova, Version=[2.6.7.0], Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Onova.2.6.7\lib\net462\Onova.dll</HintPath>
+    <Reference Include="Onova, Version=2.6.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Onova.2.6.10\lib\net462\Onova.dll</HintPath>
     </Reference>
     <Reference Include="SharpCompress, Version=0.33.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpCompress.0.33.0\lib\net462\SharpCompress.dll</HintPath>
@@ -213,6 +213,12 @@
     <Compile Include="Net\GitHub\GitHubAsset.cs" />
     <Compile Include="Net\GitHub\GitHubRelease.cs" />
     <Compile Include="Net\GitHub\GitHubUploader.cs" />
+    <Compile Include="Net\ManagerUpdateInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Net\ManagerUpdateInfoForm.Designer.cs">
+      <DependentUpon>ManagerUpdateInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Net\ModUpdateHandler.cs" />
     <Compile Include="Net\ModUpdateInfo.cs" />
     <Compile Include="Program.cs" />
@@ -235,6 +241,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FreedomManager.resx">
       <DependentUpon>FreedomManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Net\ManagerUpdateInfoForm.resx">
+      <DependentUpon>ManagerUpdateInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Net\ModsUpdateInfoForm.resx">
       <DependentUpon>ModsUpdateInfoForm.cs</DependentUpon>

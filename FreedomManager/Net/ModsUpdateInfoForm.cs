@@ -1,20 +1,11 @@
-﻿using FreedomManager.Mod;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FreedomManager.Net
 {
     public partial class ModsUpdateInfoForm : Form
     {
-        static int columnIndex;
 
         internal ModsUpdateInfoForm(List<ModUpdateInfo> updates)
         {
@@ -63,7 +54,6 @@ namespace FreedomManager.Net
                 ListViewHitTestInfo listViewHitTestInfo = updatableListView.HitTest(e.X, e.Y);
                 if (listViewHitTestInfo.Item != null)
                 {
-                    columnIndex = listViewHitTestInfo.Item.Index;
                     ModUpdateInfo info = (ModUpdateInfo)listViewHitTestInfo.Item.Tag;
                     changelogRichTextBox.Text = info.Description;
                 }
