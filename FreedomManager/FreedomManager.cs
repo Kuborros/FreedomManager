@@ -350,6 +350,7 @@ namespace FreedomManager
 
             using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
             {
+                await updateForm.loadFp2mmChangelog();
                 DialogResult dialogResult = updateForm.ShowDialog();
 
                 if (dialogResult == DialogResult.Yes)
@@ -390,10 +391,14 @@ namespace FreedomManager
 
                     if (remote > local)
                     {
-                        DialogResult dialogResult = MessageBox.Show("New FP2Lib update is available!\n Version: " + release.tag_name + "\n\n Would you like to install it now?", "Update", MessageBoxButtons.YesNo);
+                        using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
+                        {
+                            await updateForm.loadFp2libChangelog();
+                            DialogResult dialogResult = updateForm.ShowDialog();
 
-                        if (dialogResult == DialogResult.Yes)
-                            await AsyncModDownloadGitHub(new Uri(release.downloadUrl),release.filename);
+                            if (dialogResult == DialogResult.Yes)
+                                await AsyncModDownloadGitHub(new Uri(release.downloadUrl), release.filename);
+                        }
                     }
                     else
                     {
