@@ -14,6 +14,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Net;
 using System.Net.Cache;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -340,29 +341,37 @@ namespace FreedomManager
 
         private async Task CheckForUpdatesAsync(bool hideNoUpdates)
         {
-            var check = await _updateManager.CheckForUpdatesAsync();
-
-            if (!check.CanUpdate)
+            try
             {
-                if (!hideNoUpdates) MessageBox.Show("There are no new Freedom Manager updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+                var check = await _updateManager.CheckForUpdatesAsync();
 
-            using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
-            {
-                await updateForm.loadFp2mmChangelog();
-                DialogResult dialogResult = updateForm.ShowDialog();
-
-                if (dialogResult == DialogResult.Yes)
+                if (!check.CanUpdate)
                 {
-                    bepinConfig.writeConfig();
-                    managerConfig.writeConfig();
-                    fP2LibConfig.writeConfig();
-                    await _updateManager.PrepareUpdateAsync(check.LastVersion);
-
-                    _updateManager.LaunchUpdater(check.LastVersion, true, "--post-update");
-                    Application.Exit();
+                    if (!hideNoUpdates) MessageBox.Show("There are no new Freedom Manager updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
+
+                using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
+                {
+                    updateForm.loadFp2mmChangelog();
+                    DialogResult dialogResult = updateForm.ShowDialog();
+
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        bepinConfig.writeConfig();
+                        managerConfig.writeConfig();
+                        fP2LibConfig.writeConfig();
+                        await _updateManager.PrepareUpdateAsync(check.LastVersion);
+
+                        _updateManager.LaunchUpdater(check.LastVersion, true, "--post-update");
+                        Application.Exit();
+                    }
+                }
+            } 
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine(ex);
+                if (!hideNoUpdates) MessageBox.Show("Failed downloading update information.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -393,7 +402,7 @@ namespace FreedomManager
                     {
                         using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
                         {
-                            await updateForm.loadFp2libChangelog();
+                            updateForm.loadFp2libChangelog();
                             DialogResult dialogResult = updateForm.ShowDialog();
 
                             if (dialogResult == DialogResult.Yes)

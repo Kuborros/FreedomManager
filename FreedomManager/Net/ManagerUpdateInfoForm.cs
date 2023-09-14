@@ -14,7 +14,7 @@ namespace FreedomManager.Net
             InitializeComponent();
         }
 
-        internal async Task loadFp2mmChangelog()
+        internal void loadFp2mmChangelog()
         {
             titleLabel.Text = "Mod Manager Update available!";
 
@@ -25,7 +25,7 @@ namespace FreedomManager.Net
                 client.Headers["user-agent"] = "FreedomManager";
                 try
                 {
-                    string response = await client.DownloadStringTaskAsync(new Uri("https://api.github.com/repos/Kuborros/FreedomManager/releases/latest"));
+                    string response = client.DownloadString(new Uri("https://api.github.com/repos/Kuborros/FreedomManager/releases/latest"));
                     GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
                     changelogRichTextBox.Text = release.body;
                 }
@@ -37,7 +37,7 @@ namespace FreedomManager.Net
             }
         }
 
-        internal async Task loadFp2libChangelog()
+        internal void loadFp2libChangelog()
         {
             titleLabel.Text = "FP2Lib Update available!";
 
@@ -48,7 +48,7 @@ namespace FreedomManager.Net
                 client.Headers["user-agent"] = "FreedomManager";
                 try
                 {
-                    string response = await client.DownloadStringTaskAsync(new Uri("https://api.github.com/repos/Kuborros/FP2Lib/releases/latest"));
+                    string response = client.DownloadString(new Uri("https://api.github.com/repos/Kuborros/FP2Lib/releases/latest"));
                     GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
                     changelogRichTextBox.Text = release.body;
                 }
