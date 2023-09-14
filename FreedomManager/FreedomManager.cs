@@ -21,6 +21,7 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace FreedomManager
 {
@@ -287,6 +288,7 @@ namespace FreedomManager
             }
             else if (type == UrlType.GITHUB)
             {
+                //TODO: Replace this mess - use just repo and author name like updates do.
                 try {
                     //Direct link to release
                     MatchCollection matches = Regex.Matches(uri[0],"(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
@@ -299,8 +301,8 @@ namespace FreedomManager
                     } 
                     else
                     {
-                        //Likely we got provided just github page link
-
+                        MessageBox.Show("Invalid link.");
+                        return;
                     }
                 }
                 catch (ArgumentOutOfRangeException ex)
