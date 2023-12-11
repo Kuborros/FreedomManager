@@ -73,6 +73,7 @@
             this.fp2libVersionLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.managerVersionLabel = new System.Windows.Forms.Label();
+            this.fp2libAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.managerAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.fp2libGroupBox = new System.Windows.Forms.GroupBox();
@@ -80,7 +81,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.saveProfileComboBox = new System.Windows.Forms.ComboBox();
-            this.fp2libAutoUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
             this.bepinGroupBox = new System.Windows.Forms.GroupBox();
             this.appendLogCheckBox = new System.Windows.Forms.CheckBox();
@@ -402,6 +402,8 @@
             this.groupBox4.Controls.Add(this.resPatchButton);
             this.groupBox4.Controls.Add(this.fp2resComboBox);
             this.groupBox4.Controls.Add(this.fp2resCheckBox);
+            this.groupBox4.Cursor = System.Windows.Forms.Cursors.No;
+            this.groupBox4.Enabled = false;
             this.groupBox4.Location = new System.Drawing.Point(171, 341);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(297, 74);
@@ -514,6 +516,17 @@
             this.managerVersionLabel.TabIndex = 16;
             this.managerVersionLabel.Text = "2.0.0";
             // 
+            // fp2libAutoUpdateCheckBox
+            // 
+            this.fp2libAutoUpdateCheckBox.AutoSize = true;
+            this.fp2libAutoUpdateCheckBox.Location = new System.Drawing.Point(205, 42);
+            this.fp2libAutoUpdateCheckBox.Name = "fp2libAutoUpdateCheckBox";
+            this.fp2libAutoUpdateCheckBox.Size = new System.Drawing.Size(199, 17);
+            this.fp2libAutoUpdateCheckBox.TabIndex = 14;
+            this.fp2libAutoUpdateCheckBox.Text = "Check for FP2Lib updates on startup";
+            this.fp2libAutoUpdateCheckBox.UseVisualStyleBackColor = true;
+            this.fp2libAutoUpdateCheckBox.CheckedChanged += new System.EventHandler(this.fp2libAutoUpdateCheckBox_CheckedChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -596,17 +609,6 @@
             this.saveProfileComboBox.Size = new System.Drawing.Size(151, 21);
             this.saveProfileComboBox.TabIndex = 3;
             this.saveProfileComboBox.SelectedIndexChanged += new System.EventHandler(this.saveProfileComboBox_SelectedIndexChanged);
-            // 
-            // fp2libAutoUpdateCheckBox
-            // 
-            this.fp2libAutoUpdateCheckBox.AutoSize = true;
-            this.fp2libAutoUpdateCheckBox.Location = new System.Drawing.Point(205, 42);
-            this.fp2libAutoUpdateCheckBox.Name = "fp2libAutoUpdateCheckBox";
-            this.fp2libAutoUpdateCheckBox.Size = new System.Drawing.Size(199, 17);
-            this.fp2libAutoUpdateCheckBox.TabIndex = 14;
-            this.fp2libAutoUpdateCheckBox.Text = "Check for FP2Lib updates on startup";
-            this.fp2libAutoUpdateCheckBox.UseVisualStyleBackColor = true;
-            this.fp2libAutoUpdateCheckBox.CheckedChanged += new System.EventHandler(this.fp2libAutoUpdateCheckBox_CheckedChanged);
             // 
             // saveRedirecCheckBox
             // 

@@ -39,7 +39,7 @@ namespace FreedomManager.Mod
             if (!bepinInstalled)
             {
                 using (WebClient client = new WebClient()) {
-                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x86_5.4.21.0.zip"), "BepInEx.zip");
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.22/BepInEx_x86_5.4.22.0.zip"), "BepInEx.zip");
                     FreedomManager.modHandler.InstallMod("BepInEx.zip", true);
                     bepinInstalled = true;
                 }

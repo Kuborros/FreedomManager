@@ -21,6 +21,7 @@ namespace FreedomManager
     {
         BEPINMOD,
         BEPINDLL,
+        BEPINPATCH,
         MELONMOD,
         LIBRARY,
         JSONNPC,
