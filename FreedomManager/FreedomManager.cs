@@ -2,7 +2,6 @@
 using FreedomManager.Mod;
 using FreedomManager.Net;
 using FreedomManager.Net.GitHub;
-using FreedomManager.Patches;
 using Microsoft.Win32;
 using Onova;
 using Onova.Services;
@@ -21,7 +20,6 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace FreedomManager
 {
@@ -49,7 +47,6 @@ namespace FreedomManager
         static BepinConfig bepinConfig;
         static FP2LibConfig fP2LibConfig;
         static ManagerConfig managerConfig;
-        static ResolutionPatchController resolutionPatchController;
         static ModUpdateHandler modUpdateHandler;
         public static ModHandler modHandler;
         public static LoaderHandler loaderHandler;
@@ -106,23 +103,6 @@ namespace FreedomManager
             bepinConfig = new BepinConfig();
             fP2LibConfig = new FP2LibConfig();
             updateConfigUi();
-
-            resolutionPatchController = new ResolutionPatchController();
-
-            if (resolutionPatchController.enabled)
-            {
-                fp2resComboBox.SelectedIndex = Math.Min((int)resolutionPatchController.currentRes,9);
-                fp2resCheckBox.Checked = true;
-                fp2resComboBox.Enabled = true;
-                resPatchButton.Enabled = true;
-            }
-            else
-            {
-                fp2resComboBox.SelectedIndex = 0;
-                fp2resCheckBox.Checked = false;
-                fp2resComboBox.Enabled = false;
-                resPatchButton.Enabled = false;
-            }
 
             RenderList(modHandler.modList);
             OneClickServer();
@@ -208,6 +188,12 @@ namespace FreedomManager
                 if (gblink[0].Contains("gamebanana.com")) type = UrlType.GBANANA;
                 else if (gblink[0].Contains("github.com")) type = UrlType.GITHUB;
                 else type = UrlType.GENERIC;
+                //Patch for random GB issue generating link
+                if (type == UrlType.GBANANA) 
+                {
+                    gblink[0] = gblink[0].Replace("https//", "https://");
+                }
+
                 modDownloadWindow(gblink, type);
             }
             catch (Exception ex)
@@ -327,12 +313,20 @@ namespace FreedomManager
 
             if (dialogResult == DialogResult.Yes)
             {
+                Uri link;
+                try {link = new Uri(uri[0]); }
+                catch (UriFormatException)
+                {
+                    MessageBox.Show("The mod download link seems broken :( \nThere might be some issue on GameBanana side of things.", "Mod Download", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 switch (type) {
                     case UrlType.GBANANA:
-                        await AsyncModDownloadGbanana(new Uri(uri[0]), gBananFileName);
+                        await AsyncModDownloadGbanana(link, gBananFileName);
                         break;
                     case UrlType.GITHUB:
-                        await AsyncModDownloadGitHub(new Uri(uri[0]), gitHubFileName);
+                        await AsyncModDownloadGitHub(link, gitHubFileName);
                         break;
                     default:
                         MessageBox.Show("Link points at unsupported service.", "Mod Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -906,48 +900,6 @@ namespace FreedomManager
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
             fP2LibConfig.writeConfig();
-        }
-
-        private void fp2resCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (fp2resCheckBox.Checked)
-            {
-                fp2resComboBox.Enabled = true;
-                resPatchButton.Enabled = true;
-
-                resolutionPatchController.enabled = true;
-                //resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex);
-            }
-            else
-            {
-                fp2resComboBox.Enabled = false;
-                resPatchButton.Enabled = false;
-
-                resolutionPatchController.enabled = false;
-                resolutionPatchController.setIntResolution(ResolutionPatchController.Resolution.x360);
-                fp2resComboBox.SelectedIndex = 0;
-            }
-        }
-
-        private void fp2resComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void resPatchButton_Click(object sender, EventArgs e)
-        {
-            if (!fp2resCheckBox.Checked) return;
-
-            if (resolutionPatchController.setIntResolution((ResolutionPatchController.Resolution)fp2resComboBox.SelectedIndex))
-            {
-                MessageBox.Show("Resolution patch successfull!",
-                "Internal Resolution Patch", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Resolution patch failed!\n\n" +
-                "Patch offset could not be located, did the game update recently?",
-                "Internal Resolution Patch", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private async void updateCheckButton_Click(object sender, EventArgs e)
