@@ -62,11 +62,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.customLaunchParamCheckBox = new System.Windows.Forms.CheckBox();
+            this.LaunchParamsTextBox = new System.Windows.Forms.TextBox();
             this.checkForModUpdatesButton = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.resPatchButton = new System.Windows.Forms.Button();
-            this.fp2resComboBox = new System.Windows.Forms.ComboBox();
-            this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.updateCheckButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.modUpdateCheckBox = new System.Windows.Forms.CheckBox();
@@ -89,13 +88,17 @@
             this.hideLogsCheckBox = new System.Windows.Forms.CheckBox();
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
+            this.resPatchButton = new System.Windows.Forms.Button();
+            this.fp2resComboBox = new System.Windows.Forms.ComboBox();
+            this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.fp2libGroupBox.SuspendLayout();
             this.bepinGroupBox.SuspendLayout();
@@ -372,8 +375,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.checkForModUpdatesButton);
-            this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.updateCheckButton);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.fp2libGroupBox);
@@ -387,6 +390,35 @@
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.customLaunchParamCheckBox);
+            this.groupBox1.Controls.Add(this.LaunchParamsTextBox);
+            this.groupBox1.Location = new System.Drawing.Point(171, 341);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(297, 74);
+            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Launch Parameters";
+            // 
+            // customLaunchParamCheckBox
+            // 
+            this.customLaunchParamCheckBox.AutoSize = true;
+            this.customLaunchParamCheckBox.Location = new System.Drawing.Point(6, 19);
+            this.customLaunchParamCheckBox.Name = "customLaunchParamCheckBox";
+            this.customLaunchParamCheckBox.Size = new System.Drawing.Size(186, 17);
+            this.customLaunchParamCheckBox.TabIndex = 1;
+            this.customLaunchParamCheckBox.Text = "Enable custom launch parameters";
+            this.customLaunchParamCheckBox.UseVisualStyleBackColor = true;
+            this.customLaunchParamCheckBox.CheckedChanged += new System.EventHandler(this.customLaunchParamCheckBox_CheckedChanged);
+            // 
+            // LaunchParamsTextBox
+            // 
+            this.LaunchParamsTextBox.Location = new System.Drawing.Point(6, 42);
+            this.LaunchParamsTextBox.Name = "LaunchParamsTextBox";
+            this.LaunchParamsTextBox.Size = new System.Drawing.Size(285, 20);
+            this.LaunchParamsTextBox.TabIndex = 0;
+            // 
             // checkForModUpdatesButton
             // 
             this.checkForModUpdatesButton.Location = new System.Drawing.Point(311, 424);
@@ -396,59 +428,6 @@
             this.checkForModUpdatesButton.Text = "Check for Mod Updates";
             this.checkForModUpdatesButton.UseVisualStyleBackColor = true;
             this.checkForModUpdatesButton.Click += new System.EventHandler(this.checkForModUpdatesButton_Click);
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.resPatchButton);
-            this.groupBox4.Controls.Add(this.fp2resComboBox);
-            this.groupBox4.Controls.Add(this.fp2resCheckBox);
-            this.groupBox4.Cursor = System.Windows.Forms.Cursors.No;
-            this.groupBox4.Enabled = false;
-            this.groupBox4.Location = new System.Drawing.Point(171, 341);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(297, 74);
-            this.groupBox4.TabIndex = 13;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Internal Resolution Patch";
-            // 
-            // resPatchButton
-            // 
-            this.resPatchButton.Location = new System.Drawing.Point(168, 19);
-            this.resPatchButton.Name = "resPatchButton";
-            this.resPatchButton.Size = new System.Drawing.Size(123, 46);
-            this.resPatchButton.TabIndex = 2;
-            this.resPatchButton.Text = "Patch";
-            this.resPatchButton.UseVisualStyleBackColor = true;
-            this.resPatchButton.Click += new System.EventHandler(this.resPatchButton_Click);
-            // 
-            // fp2resComboBox
-            // 
-            this.fp2resComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fp2resComboBox.FormattingEnabled = true;
-            this.fp2resComboBox.Items.AddRange(new object[] {
-            "640x360",
-            "1280x720",
-            "1920x1080",
-            "2560x1440",
-            "3200x1800",
-            "3840x2160",
-            "4480x2520"});
-            this.fp2resComboBox.Location = new System.Drawing.Point(6, 42);
-            this.fp2resComboBox.Name = "fp2resComboBox";
-            this.fp2resComboBox.Size = new System.Drawing.Size(151, 21);
-            this.fp2resComboBox.TabIndex = 1;
-            this.fp2resComboBox.SelectedIndexChanged += new System.EventHandler(this.fp2resComboBox_SelectedIndexChanged);
-            // 
-            // fp2resCheckBox
-            // 
-            this.fp2resCheckBox.AutoSize = true;
-            this.fp2resCheckBox.Location = new System.Drawing.Point(6, 19);
-            this.fp2resCheckBox.Name = "fp2resCheckBox";
-            this.fp2resCheckBox.Size = new System.Drawing.Size(65, 17);
-            this.fp2resCheckBox.TabIndex = 0;
-            this.fp2resCheckBox.Text = "Enabled";
-            this.fp2resCheckBox.UseVisualStyleBackColor = true;
-            this.fp2resCheckBox.CheckedChanged += new System.EventHandler(this.fp2resCheckBox_CheckedChanged);
             // 
             // updateCheckButton
             // 
@@ -702,6 +681,27 @@
             this.enableConsoleCheckBox.UseVisualStyleBackColor = true;
             this.enableConsoleCheckBox.CheckedChanged += new System.EventHandler(this.enableConsoleCheckBox_CheckedChanged);
             // 
+            // resPatchButton
+            // 
+            this.resPatchButton.Location = new System.Drawing.Point(0, 0);
+            this.resPatchButton.Name = "resPatchButton";
+            this.resPatchButton.Size = new System.Drawing.Size(75, 23);
+            this.resPatchButton.TabIndex = 0;
+            // 
+            // fp2resComboBox
+            // 
+            this.fp2resComboBox.Location = new System.Drawing.Point(0, 0);
+            this.fp2resComboBox.Name = "fp2resComboBox";
+            this.fp2resComboBox.Size = new System.Drawing.Size(121, 21);
+            this.fp2resComboBox.TabIndex = 0;
+            // 
+            // fp2resCheckBox
+            // 
+            this.fp2resCheckBox.Location = new System.Drawing.Point(0, 0);
+            this.fp2resCheckBox.Name = "fp2resCheckBox";
+            this.fp2resCheckBox.Size = new System.Drawing.Size(104, 24);
+            this.fp2resCheckBox.TabIndex = 0;
+            // 
             // saveButton
             // 
             this.saveButton.Location = new System.Drawing.Point(137, 554);
@@ -736,8 +736,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.fp2libGroupBox.ResumeLayout(false);
@@ -797,7 +797,6 @@
         private System.Windows.Forms.CheckBox fp2libAutoUpdateCheckBox;
         private System.Windows.Forms.Label fp2libVersionLabel;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button resPatchButton;
         private System.Windows.Forms.ComboBox fp2resComboBox;
         private System.Windows.Forms.CheckBox fp2resCheckBox;
@@ -810,6 +809,10 @@
         private System.Windows.Forms.ToolStripMenuItem openLogfileToolStripMenuItem;
         private System.Windows.Forms.CheckBox modUpdateCheckBox;
         private System.Windows.Forms.Button checkForModUpdatesButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox customLaunchParamCheckBox;
+        private System.Windows.Forms.TextBox LaunchParamsTextBox;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }
 

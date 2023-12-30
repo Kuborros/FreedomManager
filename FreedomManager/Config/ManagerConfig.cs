@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security.Policy;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -14,6 +15,8 @@ namespace FreedomManager.Config
         public bool autoUpdateManager { get; set; }
         public bool autoUpdateFP2Lib { get; set; }
         public bool autoUpdateMods { get; set; }
+        public bool enableLaunchParams { get; set; }
+        public string launchParams { get; set; }
 
         public ManagerConfig()
         {
@@ -30,11 +33,13 @@ namespace FreedomManager.Config
         */
 
         [JsonConstructor]
-        public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib, bool autoUpdateMods)
+        public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib, bool autoUpdateMods, bool enableLaunchParams, string launchParams)
         {
             this.autoUpdateFP2Lib = autoUpdateFP2Lib;
             this.autoUpdateManager = autoUpdateManager;
             this.autoUpdateMods = autoUpdateMods;
+            this.enableLaunchParams = enableLaunchParams;
+            this.launchParams = launchParams;
         }
 
         public void writeConfig()
@@ -52,6 +57,8 @@ namespace FreedomManager.Config
                 autoUpdateFP2Lib = conf.autoUpdateFP2Lib;
                 autoUpdateManager = conf.autoUpdateManager;
                 autoUpdateMods = conf.autoUpdateMods;
+                enableLaunchParams = conf.enableLaunchParams;
+                launchParams = conf.launchParams;
             }
             else
             {
@@ -59,6 +66,8 @@ namespace FreedomManager.Config
                 autoUpdateManager = true;
                 autoUpdateFP2Lib = true;
                 autoUpdateMods = true;
+                enableLaunchParams = false;
+                launchParams = "";
                 writeConfig();
             }
 
