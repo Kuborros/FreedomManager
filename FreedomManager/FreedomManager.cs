@@ -176,6 +176,11 @@ namespace FreedomManager
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
             fp2libAutoUpdateCheckBox.Enabled = loaderHandler.fp2libInstalled;
             fp2libVersionLabel.Text = loaderHandler.fp2libVersion;
+
+            customLaunchParamCheckBox.Checked = managerConfig.enableLaunchParams;
+            LaunchParamsTextBox.Enabled = managerConfig.enableLaunchParams;
+            LaunchParamsTextBox.Text = managerConfig.launchParams;
+
         }
 
 
@@ -541,11 +546,19 @@ namespace FreedomManager
 
         private void savePlay_Click(object sender, EventArgs e)
         {
+            managerConfig.launchParams = LaunchParamsTextBox.Text;
+
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
             fP2LibConfig.writeConfig();
+
+            string parameters = "";
+            if (customLaunchParamCheckBox.Checked)
+            {
+                parameters = LaunchParamsTextBox.Text;
+            }
             //While launching trough Steam would allow for achievements to register, it would exclude Itch.io users.
-            if (fp2Found) Process.Start("FP2.exe");
+            if (fp2Found) Process.Start("FP2.exe",parameters);
         }
 
         private void setup_Click(object sender, EventArgs e)
@@ -897,6 +910,8 @@ namespace FreedomManager
 
         private void saveButton_Click(object sender, EventArgs e)
         {
+            managerConfig.launchParams = LaunchParamsTextBox.Text;
+
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
             fP2LibConfig.writeConfig();
@@ -967,6 +982,12 @@ namespace FreedomManager
         private void modUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             managerConfig.autoUpdateMods = modUpdateCheckBox.Checked;
+        }
+
+        private void customLaunchParamCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            managerConfig.enableLaunchParams = customLaunchParamCheckBox.Checked;
+            LaunchParamsTextBox.Enabled = customLaunchParamCheckBox.Checked;
         }
     }
 }

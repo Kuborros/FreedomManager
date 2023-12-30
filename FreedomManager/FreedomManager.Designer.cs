@@ -62,6 +62,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.customLaunchParamCheckBox = new System.Windows.Forms.CheckBox();
+            this.LaunchParamsTextBox = new System.Windows.Forms.TextBox();
             this.checkForModUpdatesButton = new System.Windows.Forms.Button();
             this.updateCheckButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -89,19 +92,16 @@
             this.fp2resComboBox = new System.Windows.Forms.ComboBox();
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.LaunchParamsTextBox = new System.Windows.Forms.TextBox();
-            this.customLaunchParamCheckBox = new System.Windows.Forms.CheckBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.fp2libGroupBox.SuspendLayout();
             this.bepinGroupBox.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // savePlay
@@ -389,6 +389,35 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.customLaunchParamCheckBox);
+            this.groupBox1.Controls.Add(this.LaunchParamsTextBox);
+            this.groupBox1.Location = new System.Drawing.Point(171, 341);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(297, 74);
+            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Launch Parameters";
+            // 
+            // customLaunchParamCheckBox
+            // 
+            this.customLaunchParamCheckBox.AutoSize = true;
+            this.customLaunchParamCheckBox.Location = new System.Drawing.Point(6, 19);
+            this.customLaunchParamCheckBox.Name = "customLaunchParamCheckBox";
+            this.customLaunchParamCheckBox.Size = new System.Drawing.Size(186, 17);
+            this.customLaunchParamCheckBox.TabIndex = 1;
+            this.customLaunchParamCheckBox.Text = "Enable custom launch parameters";
+            this.customLaunchParamCheckBox.UseVisualStyleBackColor = true;
+            this.customLaunchParamCheckBox.CheckedChanged += new System.EventHandler(this.customLaunchParamCheckBox_CheckedChanged);
+            // 
+            // LaunchParamsTextBox
+            // 
+            this.LaunchParamsTextBox.Location = new System.Drawing.Point(6, 42);
+            this.LaunchParamsTextBox.Name = "LaunchParamsTextBox";
+            this.LaunchParamsTextBox.Size = new System.Drawing.Size(285, 20);
+            this.LaunchParamsTextBox.TabIndex = 0;
             // 
             // checkForModUpdatesButton
             // 
@@ -683,34 +712,6 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.customLaunchParamCheckBox);
-            this.groupBox1.Controls.Add(this.LaunchParamsTextBox);
-            this.groupBox1.Location = new System.Drawing.Point(171, 341);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(297, 74);
-            this.groupBox1.TabIndex = 15;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Launch Parameters";
-            // 
-            // LaunchParamsTextBox
-            // 
-            this.LaunchParamsTextBox.Location = new System.Drawing.Point(6, 42);
-            this.LaunchParamsTextBox.Name = "LaunchParamsTextBox";
-            this.LaunchParamsTextBox.Size = new System.Drawing.Size(285, 20);
-            this.LaunchParamsTextBox.TabIndex = 0;
-            // 
-            // customLaunchParamCheckBox
-            // 
-            this.customLaunchParamCheckBox.AutoSize = true;
-            this.customLaunchParamCheckBox.Location = new System.Drawing.Point(6, 19);
-            this.customLaunchParamCheckBox.Name = "customLaunchParamCheckBox";
-            this.customLaunchParamCheckBox.Size = new System.Drawing.Size(186, 17);
-            this.customLaunchParamCheckBox.TabIndex = 1;
-            this.customLaunchParamCheckBox.Text = "Enable custom launch parameters";
-            this.customLaunchParamCheckBox.UseVisualStyleBackColor = true;
-            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -735,14 +736,14 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.fp2libGroupBox.ResumeLayout(false);
             this.fp2libGroupBox.PerformLayout();
             this.bepinGroupBox.ResumeLayout(false);
             this.bepinGroupBox.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
