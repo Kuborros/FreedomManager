@@ -53,7 +53,7 @@ namespace FreedomManager.Mod
             {
                 modList.AddRange(MelonScan());
             }
-            if (FreedomManager.loaderHandler.fp2libInstalled)
+            if (FreedomManager.loaderHandler.fp2libInstalled && FreedomManager.loaderHandler.bepinInstalled)
             {
                 modList.AddRange(NPCScan());
             }
