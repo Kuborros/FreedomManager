@@ -1,5 +1,4 @@
-﻿using FreedomManager.Mod;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace FreedomManager
 {
@@ -21,7 +20,8 @@ namespace FreedomManager
     {
         BEPINMOD,
         BEPINDLL,
-        BEPINPATCH,
+        BEPINPATCHDLL,
+        BEPINPATCHDIR,
         MELONMOD,
         LIBRARY,
         JSONNPC,
@@ -43,6 +43,7 @@ namespace FreedomManager
         public string Dirname { get; set; }
         public bool Enabled { get; set; }
         public bool HasIndex { get; set; }
+        public bool HideInUI { get; set; }
         public string GitHub { get; set; }
 
         //V1 Json
@@ -89,6 +90,8 @@ namespace FreedomManager
 
             if (archiveType == ModType.BEPINMOD) Loader = "BepInEx";
             else if (archiveType == ModType.BEPINDLL) Loader = "BepInEx (DLL)";
+            else if (archiveType == ModType.BEPINPATCHDLL) Loader = "BepInEx Patcher (DLL)";
+            else if (archiveType == ModType.BEPINPATCHDIR) Loader = "BepInEx Patcher";
             else if (archiveType == ModType.MELONMOD) Loader = "MelonLoader";
             else if (archiveType == ModType.JSONNPC) Loader = "NPC (JSON)";
             else if (archiveType == ModType.STAGE) Loader = "Stage";
