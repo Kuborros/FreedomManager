@@ -18,6 +18,9 @@ namespace FreedomManager.Mod
         public bool bepinUtilsInstalled;
         public bool bepinDevtoolsInstalled;
 
+        public bool runningUnderSteam;
+
+        private string gamePath;
 
         public LoaderHandler()
         {
@@ -27,6 +30,9 @@ namespace FreedomManager.Mod
             bepinDevtoolsInstalled = File.Exists("BepInEx\\patchers\\DemystifyExceptions.dll");
             melonInstalled = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
             fp2libInstalled = File.Exists("BepInEx\\plugins\\lib\\fp2lib.json");
+
+            gamePath = Path.GetFullPath("FP2.exe");
+            runningUnderSteam = gamePath.Contains("steamapps");
 
             if (fp2libInstalled)
             {
@@ -50,7 +56,7 @@ namespace FreedomManager.Mod
                     FreedomManager.modHandler.InstallMod("BepInEx.zip", true);
                     bepinInstalled = true;
                 }
-                installBepinUtils();
+                installBepinUtils(false);
             }
             else
             {
@@ -60,9 +66,9 @@ namespace FreedomManager.Mod
             return bepinInstalled;
         }
 
-        internal bool installBepinUtils()
+        internal bool installBepinUtils(bool force)
         {
-            if (!bepinUtilsInstalled)
+            if (!bepinUtilsInstalled || force)
             {
                     using (WebClient client = new WebClient())
                     {

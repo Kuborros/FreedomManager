@@ -12,9 +12,13 @@ namespace FreedomManager
         public bool UnityLogListening = true, LogConsoleToUnityLog = false;
         //[Logging.Console]
         public bool ShowConsole = false, ConsolePreventClose = false;
-        public string LogLevels = "Fatal, Error, Warning, Message";
+        public string LogLevels = "Fatal, Error, Warning, Message, Info";
         //[Logging.Disk]
         public bool WriteUnityLog = true, AppendLog = false, FileLog = true;
+        //[Harmony.Logger]
+        public string HarmonyLogLevels = "Warn, Error";
+        //[SplashScreen]
+        public bool SplashEnabled = true, OnlyNoConsole = true;
 
         public BepinConfig()
         {
@@ -39,6 +43,11 @@ namespace FreedomManager
                     WriteUnityLog = bool.Parse(data["Logging.Disk"]["WriteUnityLog"]);
                     AppendLog = bool.Parse(data["Logging.Disk"]["AppendLog"]);
                     FileLog = bool.Parse(data["Logging.Disk"]["Enabled"]);
+
+                    HarmonyLogLevels = data["Harmony.Logger"]["LogChannels"];
+
+                    SplashEnabled = bool.Parse(data["SplashScreen"]["Enabled"]);
+                    OnlyNoConsole = bool.Parse(data["SplashScreen"]["OnlyNoConsole"]);
                 }
                 catch (Exception ex)
                 {
@@ -66,6 +75,11 @@ namespace FreedomManager
                 data["Logging.Disk"]["WriteUnityLog"] = WriteUnityLog.ToString();
                 data["Logging.Disk"]["AppendLog"] = AppendLog.ToString();
                 data["Logging.Disk"]["Enabled"] = FileLog.ToString();
+
+                data["Harmony.Logger"]["LogChannels"] = HarmonyLogLevels;
+
+                data["SplashScreen"]["Enabled"] = SplashEnabled.ToString();
+                data["SplashScreen"]["OnlyNoConsole"] = OnlyNoConsole.ToString();
 
                 //We can technically construct the file ourselves, and BepInEx will accept it.
                 //If somehow you delete the file after we loaded it, this will ensure we still save it and not crash horribly.

@@ -102,6 +102,11 @@ namespace FreedomManager
 
             bepinConfig = new BepinConfig();
             fP2LibConfig = new FP2LibConfig();
+
+            if (loaderHandler.bepinInstalled && !loaderHandler.bepinUtilsInstalled)
+            {
+                loaderHandler.installBepinUtils(false);
+            }
             updateConfigUi();
 
             RenderList(modHandler.modList);
@@ -145,6 +150,10 @@ namespace FreedomManager
                 hideLogsCheckBox.Checked = bepinConfig.UnityLogListening;
                 unityFileCheckBox.Checked = bepinConfig.WriteUnityLog;
                 appendLogCheckBox.Checked = bepinConfig.AppendLog;
+                splashEnableCheckBox.Checked = bepinConfig.SplashEnabled;
+                splashWithConsoleCheckBox.Checked = !bepinConfig.OnlyNoConsole;
+                logLevelTextBox.Text = bepinConfig.LogLevels;
+                harmonyLogTextBox.Text = bepinConfig.HarmonyLogLevels;
             }
             else
             {
@@ -169,6 +178,15 @@ namespace FreedomManager
             {
                 fp2libGroupBox.Enabled = false;
             }
+
+            if (loaderHandler.runningUnderSteam)
+            {
+                runningUnderSteamLabel.Text = "Steam";
+                forceNonSteamCheckBox.Enabled = true;
+            }
+
+            if (!loaderHandler.bepinUtilsInstalled)
+                splashInstalledOkLabel.Text = "Possibly Broken!";
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
             modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
@@ -557,8 +575,9 @@ namespace FreedomManager
             {
                 parameters = LaunchParamsTextBox.Text;
             }
-            //While launching trough Steam would allow for achievements to register, it would exclude Itch.io users.
-            if (fp2Found) Process.Start("FP2.exe",parameters);
+            //Launch trough steam if detected, otherwise run game exe directly for Itch.io users
+            if (fp2Found && !loaderHandler.runningUnderSteam) Process.Start("FP2.exe", parameters);
+            else if (fp2Found) Process.Start("explorer", "steam://rungameid/595500");
         }
 
         private void setup_Click(object sender, EventArgs e)
@@ -911,6 +930,8 @@ namespace FreedomManager
         private void saveButton_Click(object sender, EventArgs e)
         {
             managerConfig.launchParams = LaunchParamsTextBox.Text;
+            bepinConfig.LogLevels = logLevelTextBox.Text;
+            bepinConfig.HarmonyLogLevels = harmonyLogTextBox.Text;
 
             bepinConfig.writeConfig();
             managerConfig.writeConfig();
@@ -988,6 +1009,28 @@ namespace FreedomManager
         {
             managerConfig.enableLaunchParams = customLaunchParamCheckBox.Checked;
             LaunchParamsTextBox.Enabled = customLaunchParamCheckBox.Checked;
+        }
+
+        private void splashEnableCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            bepinConfig.SplashEnabled = splashEnableCheckBox.Checked;
+        }
+
+        private void splashWithConsoleCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            bepinConfig.OnlyNoConsole = !splashWithConsoleCheckBox.Checked;
+        }
+
+        private void forceNonSteamCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            loaderHandler.runningUnderSteam = !forceNonSteamCheckBox.Checked;
+            if (forceNonSteamCheckBox.Checked) runningUnderSteamLabel.Text = "Forced Standalone";
+            else runningUnderSteamLabel.Text = "Steam";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            loaderHandler.installBepinUtils(true);
         }
     }
 }

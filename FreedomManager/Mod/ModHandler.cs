@@ -388,6 +388,7 @@ namespace FreedomManager.Mod
                     if (Path.GetExtension(f) == ".dll")
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
+                        if (modname != "BepInEx.MultiFolderLoader")
                         list.Add(new ModInfo(modname, dllType));
                     }
                 }
