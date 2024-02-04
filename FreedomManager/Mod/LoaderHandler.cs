@@ -78,7 +78,12 @@ namespace FreedomManager.Mod
                     using (WebClient client = new WebClient())
                     {
                         client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MultiFolderLoader/releases/download/v1.3.1/BepInEx.MultiFolderLoader.dll"), "BepInEx.MultiFolderLoader.dll");
-                        File.Move("BepInEx.MultiFolderLoader.dll", "BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll");
+                        if (File.Exists("BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll") && force) File.Delete("BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll");
+                        if (!File.Exists("BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll"))
+                        {
+                            File.Move("BepInEx.MultiFolderLoader.dll", "BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll");
+                        }
+                        if (File.Exists("BepInEx.MultiFolderLoader.dll")) File.Delete("BepInEx.MultiFolderLoader.dll");
                     }
                     bepinUtilsInstalled = true;
             }
