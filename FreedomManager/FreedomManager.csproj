@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\BepinConfig.cs" />
+    <Compile Include="Config\DoorstopConfig.cs" />
     <Compile Include="Config\FP2LibConfig.cs" />
     <Compile Include="Config\ManagerConfig.cs" />
     <Compile Include="Config\ModConfig.cs" />

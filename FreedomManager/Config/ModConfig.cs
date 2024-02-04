@@ -11,7 +11,8 @@ namespace FreedomManager
         public SectionDataCollection sections { get; set; }
 
 
-        public ModConfig(string filename) {
+        public ModConfig(string filename)
+        {
 
             if (File.Exists(filename))
             {

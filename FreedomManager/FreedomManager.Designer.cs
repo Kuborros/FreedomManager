@@ -115,6 +115,7 @@
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.doorstopFileLogCheckBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -675,6 +676,7 @@
             // 
             // bepinGroupBox
             // 
+            this.bepinGroupBox.Controls.Add(this.doorstopFileLogCheckBox);
             this.bepinGroupBox.Controls.Add(this.label10);
             this.bepinGroupBox.Controls.Add(this.label9);
             this.bepinGroupBox.Controls.Add(this.label8);
@@ -937,6 +939,27 @@
             this.melonButton.UseVisualStyleBackColor = true;
             this.melonButton.Click += new System.EventHandler(this.melonButton_Click);
             // 
+            // resPatchButton
+            // 
+            this.resPatchButton.Location = new System.Drawing.Point(0, 0);
+            this.resPatchButton.Name = "resPatchButton";
+            this.resPatchButton.Size = new System.Drawing.Size(75, 23);
+            this.resPatchButton.TabIndex = 0;
+            // 
+            // fp2resComboBox
+            // 
+            this.fp2resComboBox.Location = new System.Drawing.Point(0, 0);
+            this.fp2resComboBox.Name = "fp2resComboBox";
+            this.fp2resComboBox.Size = new System.Drawing.Size(121, 21);
+            this.fp2resComboBox.TabIndex = 0;
+            // 
+            // fp2resCheckBox
+            // 
+            this.fp2resCheckBox.Location = new System.Drawing.Point(0, 0);
+            this.fp2resCheckBox.Name = "fp2resCheckBox";
+            this.fp2resCheckBox.Size = new System.Drawing.Size(104, 24);
+            this.fp2resCheckBox.TabIndex = 0;
+            // 
             // saveButton
             // 
             this.saveButton.Location = new System.Drawing.Point(137, 554);
@@ -946,6 +969,17 @@
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // doorstopFileLogCheckBox
+            // 
+            this.doorstopFileLogCheckBox.AutoSize = true;
+            this.doorstopFileLogCheckBox.Location = new System.Drawing.Point(6, 65);
+            this.doorstopFileLogCheckBox.Name = "doorstopFileLogCheckBox";
+            this.doorstopFileLogCheckBox.Size = new System.Drawing.Size(199, 17);
+            this.doorstopFileLogCheckBox.TabIndex = 11;
+            this.doorstopFileLogCheckBox.Text = "[Doorstop] Write log to output_log.txt";
+            this.doorstopFileLogCheckBox.UseVisualStyleBackColor = true;
+            this.doorstopFileLogCheckBox.CheckedChanged += new System.EventHandler(this.doorstopFileLogCheckBox_CheckedChanged);
             // 
             // FreedomManager
             // 
@@ -1076,6 +1110,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox forceNonSteamCheckBox;
+        private System.Windows.Forms.CheckBox doorstopFileLogCheckBox;
     }
 }
 

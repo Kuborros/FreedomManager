@@ -29,6 +29,12 @@ namespace FreedomManager
         SPECIAL
     }
 
+    public enum ModLocation
+    {
+        WORKSHOP,
+        MODSDIR,
+        LEGACY
+    }
 
     public class ModInfo
     {
@@ -40,6 +46,7 @@ namespace FreedomManager
         public bool? HasAssets { get; set; }
         public int? GBID { get; set; }
         public ModType? Type { get; set; }
+        public ModLocation Location { get; set; }
         public string Dirname { get; set; }
         public bool Enabled { get; set; }
         public bool HasIndex { get; set; }
@@ -75,6 +82,7 @@ namespace FreedomManager
                 GBID = 0;
             }
             else GBID = gBID;
+            Location = ModLocation.LEGACY;
             GitHub = gitHub;
             Dirname = "invalid-directory-to-be-set";
             Enabled = true;
@@ -82,7 +90,7 @@ namespace FreedomManager
 
         public ModInfo(string name, ModType archiveType) : this(name, "N/A", archiveType) { }
 
-        public ModInfo(string name,string author, ModType archiveType)
+        public ModInfo(string name, string author, ModType archiveType)
         {
             Name = SpecialNames(name);
             Author = author;
@@ -90,12 +98,14 @@ namespace FreedomManager
 
             if (archiveType == ModType.BEPINMOD) Loader = "BepInEx";
             else if (archiveType == ModType.BEPINDLL) Loader = "BepInEx (DLL)";
-            else if (archiveType == ModType.BEPINPATCHDLL) Loader = "BepInEx Patcher (DLL)";
-            else if (archiveType == ModType.BEPINPATCHDIR) Loader = "BepInEx Patcher";
+            else if (archiveType == ModType.BEPINPATCHDLL) Loader = "BepInEx (Patch)";
+            else if (archiveType == ModType.BEPINPATCHDIR) Loader = "BepInEx (Patch)";
             else if (archiveType == ModType.MELONMOD) Loader = "MelonLoader";
             else if (archiveType == ModType.JSONNPC) Loader = "NPC (JSON)";
             else if (archiveType == ModType.STAGE) Loader = "Stage";
             else Loader = "N/A";
+
+            Location = ModLocation.LEGACY;
 
             HasAssets = true;
             Type = archiveType;

@@ -1,5 +1,4 @@
 ﻿using FreedomManager.Mod.Json;
-using FreedomManager.Net;
 using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
@@ -370,7 +369,7 @@ namespace FreedomManager.Mod
         {
             ModType dllType = ModType.BEPINDLL;
             ModType dirType = ModType.BEPINMOD;
-            
+
             if (type == ModType.BEPINPATCHDIR)
             {
                 dllType = ModType.BEPINPATCHDLL;
@@ -389,7 +388,7 @@ namespace FreedomManager.Mod
                     {
                         string modname = Path.GetFileNameWithoutExtension(f);
                         if (modname != "BepInEx.MultiFolderLoader")
-                        list.Add(new ModInfo(modname, dllType));
+                            list.Add(new ModInfo(modname, dllType));
                     }
                 }
                 foreach (string d in Directory.GetDirectories(dir))
@@ -544,14 +543,15 @@ namespace FreedomManager.Mod
                         if (Path.GetExtension(f) == ".json")
                         {
                             JsonNPC npc = JsonSerializer.Deserialize<JsonNPC>(File.ReadAllText(f));
-                            ModInfo info = new ModInfo("NPC: " + npc.name,npc.author,ModType.JSONNPC);
+                            ModInfo info = new ModInfo("NPC: " + npc.name, npc.author, ModType.JSONNPC);
                             info.Dirname = Path.GetFileName(f);
                             list.Add(info);
                         }
                     }
                 }
-            } catch (Exception ex) 
-            { 
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.Message);
             }
             return list;

@@ -1,13 +1,4 @@
-﻿using IniParser.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace FreedomManager.Config
 {
@@ -18,7 +9,7 @@ namespace FreedomManager.Config
         internal ModConfigurationMenu(ModConfig config)
         {
             InitializeComponent();
-            this.config = config;   
+            this.config = config;
 
             modConfigPropertyGrid.SelectedObject = config;
 

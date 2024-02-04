@@ -51,7 +51,8 @@ namespace FreedomManager.Mod
         {
             if (!bepinInstalled)
             {
-                using (WebClient client = new WebClient()) {
+                using (WebClient client = new WebClient())
+                {
                     client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.22/BepInEx_x86_5.4.22.0.zip"), "BepInEx.zip");
                     FreedomManager.modHandler.InstallMod("BepInEx.zip", true);
                     bepinInstalled = true;
@@ -70,22 +71,22 @@ namespace FreedomManager.Mod
         {
             if (!bepinUtilsInstalled || force)
             {
-                    using (WebClient client = new WebClient())
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.SplashScreen/releases/download/v2.2/BepInEx.SplashScreen_BepInEx5_v2.2.zip"), "BepInExSplash.zip");
+                    FreedomManager.modHandler.InstallMod("BepInExSplash.zip", true);
+                }
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MultiFolderLoader/releases/download/v1.3.1/BepInEx.MultiFolderLoader.dll"), "BepInEx.MultiFolderLoader.dll");
+                    if (File.Exists("BepInEx\\patchers\\BepInEx.MultiFolderLoader.dll") && force) File.Delete("BepInEx\\patchers\\BepInEx.MultiFolderLoader.dll");
+                    if (!File.Exists("BepInEx\\patchers\\BepInEx.MultiFolderLoader.dll"))
                     {
-                        client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.SplashScreen/releases/download/v2.2/BepInEx.SplashScreen_BepInEx5_v2.2.zip"), "BepInExSplash.zip");
-                        FreedomManager.modHandler.InstallMod("BepInExSplash.zip", true);
+                        File.Move("BepInEx.MultiFolderLoader.dll", "BepInEx\\patchers\\BepInEx.MultiFolderLoader.dll");
                     }
-                    using (WebClient client = new WebClient())
-                    {
-                        client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MultiFolderLoader/releases/download/v1.3.1/BepInEx.MultiFolderLoader.dll"), "BepInEx.MultiFolderLoader.dll");
-                        if (File.Exists("BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll") && force) File.Delete("BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll");
-                        if (!File.Exists("BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll"))
-                        {
-                            File.Move("BepInEx.MultiFolderLoader.dll", "BepInEx\\plugins\\BepInEx.MultiFolderLoader.dll");
-                        }
-                        if (File.Exists("BepInEx.MultiFolderLoader.dll")) File.Delete("BepInEx.MultiFolderLoader.dll");
-                    }
-                    bepinUtilsInstalled = true;
+                    if (File.Exists("BepInEx.MultiFolderLoader.dll")) File.Delete("BepInEx.MultiFolderLoader.dll");
+                }
+                bepinUtilsInstalled = true;
             }
             return bepinUtilsInstalled;
         }
