@@ -108,7 +108,6 @@
             this.splashInstalledOkLabel = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.backwardsBepinCompatButton = new System.Windows.Forms.Button();
             this.melonButton = new System.Windows.Forms.Button();
             this.resPatchButton = new System.Windows.Forms.Button();
             this.fp2resComboBox = new System.Windows.Forms.ComboBox();
@@ -910,7 +909,6 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.backwardsBepinCompatButton);
             this.groupBox2.Controls.Add(this.melonButton);
             this.groupBox2.Location = new System.Drawing.Point(6, 392);
             this.groupBox2.Name = "groupBox2";
@@ -918,16 +916,6 @@
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Compatibility";
-            // 
-            // backwardsBepinCompatButton
-            // 
-            this.backwardsBepinCompatButton.Enabled = false;
-            this.backwardsBepinCompatButton.Location = new System.Drawing.Point(221, 19);
-            this.backwardsBepinCompatButton.Name = "backwardsBepinCompatButton";
-            this.backwardsBepinCompatButton.Size = new System.Drawing.Size(235, 72);
-            this.backwardsBepinCompatButton.TabIndex = 11;
-            this.backwardsBepinCompatButton.Text = "Install Bepinex 5 Backwards Compat";
-            this.backwardsBepinCompatButton.UseVisualStyleBackColor = true;
             // 
             // melonButton
             // 
@@ -1084,7 +1072,6 @@
         private System.Windows.Forms.Button melonButton;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Button backwardsBepinCompatButton;
         private System.Windows.Forms.GroupBox bepinGroupBox;
         private System.Windows.Forms.CheckBox appendLogCheckBox;
         private System.Windows.Forms.CheckBox unityFileCheckBox;
