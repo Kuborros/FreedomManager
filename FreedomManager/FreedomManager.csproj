@@ -184,21 +184,8 @@
     <Compile Include="Config\DoorstopConfig.cs" />
     <Compile Include="Config\FP2LibConfig.cs" />
     <Compile Include="Config\ManagerConfig.cs" />
-    <Compile Include="Config\ModConfig.cs" />
-    <Compile Include="Config\ModConfigurationMenu.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Config\ModConfigurationMenu.Designer.cs">
-      <DependentUpon>ModConfigurationMenu.cs</DependentUpon>
-    </Compile>
     <Compile Include="Mod\Json\JsonMap.cs" />
     <Compile Include="Mod\Json\JsonNPC.cs" />
-    <Compile Include="Mod\ModInformationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Mod\ModInformationForm.Designer.cs">
-      <DependentUpon>ModInformationForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Net\DownloadProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,12 +221,6 @@
     <Compile Include="Net\ModsUpdateInfoForm.Designer.cs">
       <DependentUpon>ModsUpdateInfoForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Config\ModConfigurationMenu.resx">
-      <DependentUpon>ModConfigurationMenu.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Mod\ModInformationForm.resx">
-      <DependentUpon>ModInformationForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Net\DownloadProgress.resx">
       <DependentUpon>DownloadProgress.cs</DependentUpon>
     </EmbeddedResource>

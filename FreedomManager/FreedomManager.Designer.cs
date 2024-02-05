@@ -39,7 +39,6 @@
             this.handlerButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.seeOnGameBananaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -86,6 +85,7 @@
             this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.bepinGroupBox = new System.Windows.Forms.GroupBox();
+            this.doorstopFileLogCheckBox = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -114,7 +114,6 @@
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.doorstopFileLogCheckBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -199,38 +198,30 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFolderToolStripMenuItem,
-            this.infoToolStripMenuItem,
             this.seeOnGameBananaToolStripMenuItem,
             this.uninstallToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openFolderToolStripMenuItem.Text = "Open folder";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
-            // 
-            // infoToolStripMenuItem
-            // 
-            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.infoToolStripMenuItem.Text = "Info";
-            this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
             // 
             // seeOnGameBananaToolStripMenuItem
             // 
             this.seeOnGameBananaToolStripMenuItem.Name = "seeOnGameBananaToolStripMenuItem";
-            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.seeOnGameBananaToolStripMenuItem.Text = "See on GameBanana";
+            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.seeOnGameBananaToolStripMenuItem.Text = "See on Github";
             this.seeOnGameBananaToolStripMenuItem.Click += new System.EventHandler(this.seeOnGameBananaToolStripMenuItem_Click);
             // 
             // uninstallToolStripMenuItem
             // 
             this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.uninstallToolStripMenuItem.Text = "Uninstall";
             this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.uninstallToolStripMenuItem_Click);
             // 
@@ -696,6 +687,17 @@
             this.bepinGroupBox.TabStop = false;
             this.bepinGroupBox.Text = "Advanced BepInEx Settings";
             // 
+            // doorstopFileLogCheckBox
+            // 
+            this.doorstopFileLogCheckBox.AutoSize = true;
+            this.doorstopFileLogCheckBox.Location = new System.Drawing.Point(6, 65);
+            this.doorstopFileLogCheckBox.Name = "doorstopFileLogCheckBox";
+            this.doorstopFileLogCheckBox.Size = new System.Drawing.Size(199, 17);
+            this.doorstopFileLogCheckBox.TabIndex = 11;
+            this.doorstopFileLogCheckBox.Text = "[Doorstop] Write log to output_log.txt";
+            this.doorstopFileLogCheckBox.UseVisualStyleBackColor = true;
+            this.doorstopFileLogCheckBox.CheckedChanged += new System.EventHandler(this.doorstopFileLogCheckBox_CheckedChanged);
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -958,17 +960,6 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // doorstopFileLogCheckBox
-            // 
-            this.doorstopFileLogCheckBox.AutoSize = true;
-            this.doorstopFileLogCheckBox.Location = new System.Drawing.Point(6, 65);
-            this.doorstopFileLogCheckBox.Name = "doorstopFileLogCheckBox";
-            this.doorstopFileLogCheckBox.Size = new System.Drawing.Size(199, 17);
-            this.doorstopFileLogCheckBox.TabIndex = 11;
-            this.doorstopFileLogCheckBox.Text = "[Doorstop] Write log to output_log.txt";
-            this.doorstopFileLogCheckBox.UseVisualStyleBackColor = true;
-            this.doorstopFileLogCheckBox.CheckedChanged += new System.EventHandler(this.doorstopFileLogCheckBox_CheckedChanged);
-            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -1021,7 +1012,6 @@
         private System.Windows.Forms.Button refresh;
         private System.Windows.Forms.Button handlerButton;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;

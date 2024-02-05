@@ -22,6 +22,11 @@ namespace FreedomManager.Net
                 item.SubItems.Add(info.Version);
                 item.Checked = info.DoUpdate;
                 updatableListView.Items.Add(item);
+                if (updatableListView.Items.Count > 0 && updatableListView.Items[0].Selected == false)
+                {
+                    updatableListView.Items[0].Selected = true;
+                    changelogRichTextBox.Text = info.Description;
+                }
             }
         }
 
@@ -44,7 +49,7 @@ namespace FreedomManager.Net
 
         private void updatableListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            
         }
 
         private void updatableListView_NodeMouseClick(object sender, MouseEventArgs e)

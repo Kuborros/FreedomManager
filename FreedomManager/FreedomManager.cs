@@ -766,28 +766,12 @@ namespace FreedomManager
             }
         }
 
-        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
-
-            //Update for cooler UI
-
-            StringBuilder builder = new StringBuilder();
-            builder.Append("Name: ").AppendLine(modInfo.Name);
-            builder.Append("Version: ").AppendLine(modInfo.Version);
-            builder.Append("Author: ").AppendLine(modInfo.Author);
-            builder.Append("Used Loader: ").AppendLine(modInfo.Loader);
-            builder.Append("Uses extra files: ").AppendLine((bool)modInfo.HasAssets ? "Yes" : "No");
-
-            MessageBox.Show(this, builder.ToString(), "Mod information", MessageBoxButtons.OK);
-        }
-
         private void seeOnGameBananaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
-            if (modInfo.GBID != null && modInfo.GBID != 0)
+            if (modInfo.GitHub != null && modInfo.GitHub != "" && modInfo.GitHub.Contains("http"))
             {
-                Process.Start("explorer", "https://gamebanana.com/mods/" + modInfo.GBID + "/");
+                Process.Start("explorer", Uri.EscapeUriString(modInfo.GitHub));
             }
         }
 
@@ -896,9 +880,9 @@ namespace FreedomManager
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
-            if (modInfo.GBID == 0 || modInfo.GBID == null)
+            if (modInfo.GitHub == "" || modInfo.GitHub == null)
             {
-                contextMenuStrip1.Items[2].Enabled = false;
+                contextMenuStrip1.Items[1].Enabled = false;
             }
             e.Cancel = false;
         }

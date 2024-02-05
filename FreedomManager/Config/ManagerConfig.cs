@@ -23,14 +23,6 @@ namespace FreedomManager.Config
             readConfig();
         }
 
-        /*
-        {
-        "autoUpdateManager":true,
-        "autoUpdateFP2lib":true,
-        "autoUpdateMods":true
-        }
-        */
-
         [JsonConstructor]
         public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib, bool autoUpdateMods, bool enableLaunchParams, string launchParams)
         {

@@ -18,17 +18,12 @@ namespace FreedomManager.Mod
         PluginDir,
         MelonDir,
         DllDir,
+        WorkshopDir,
         None
     }
 
     public class ModHandler
     {
-
-        //private readonly string dirEnabled = "BepInEx\\plugins";
-        //private readonly string dirDisabled = "BepInEx\\plugins-disabled";
-        //private readonly string dirEnabledM = "MLLoader\\Mods";
-        //private readonly string dirDisabledM = "MLLoader\\Mods-disabled";
-
 
         public List<ModInfo> modList { get; }
 
@@ -116,12 +111,11 @@ namespace FreedomManager.Mod
         public bool EnableDisableMod(ModInfo info)
         {
             //There's no obvious easier or faster solution for this case. Zipping the mod was considered, but we would then add extra overhead when reading it's data.
-            //Mods are just a single .dll and .json (+maybe .index), so moving them around is fast and painless. AssetBundles in /mods, /mod_overrides, etc. can stay
+            //Mods are just a single .dll and .json, so moving them around is fast and painless. AssetBundles in /mods, /mod_overrides, etc. can stay
             try
             {
                 Directory.CreateDirectory("BepInEx\\plugins-disabled");
                 Directory.CreateDirectory("BepInEx\\patchers-disabled");
-                Directory.CreateDirectory("BepInEx\\npc-disabled");
                 Directory.CreateDirectory("MLLoader\\Mods-disabled");
 
                 string sourceDir;
@@ -180,9 +174,6 @@ namespace FreedomManager.Mod
                     case ModType.MELONMOD:
                         File.Move(sourceDir + info.Dirname + ".dll", destDir + info.Dirname + ".dll");
                         return !info.Enabled;
-                    case ModType.STAGE:
-                        File.Move(sourceDir + info.Dirname + ".json", destDir + info.Dirname + ".json");
-                        return !info.Enabled;
                 }
                 return info.Enabled;
             }
@@ -226,6 +217,20 @@ namespace FreedomManager.Mod
                             File.Delete("BepInEx\\plugins\\" + modInfo.Dirname + ".dll");
                         else
                             File.Delete("BepInEx\\plugins-disabled\\" + modInfo.Dirname + ".dll");
+                    }
+                    if (modInfo.Type == ModType.BEPINPATCHDIR) //Bepin patcher
+                    {
+                        if (modInfo.Enabled)
+                            Directory.Delete("BepInEx\\patchers\\" + modInfo.Dirname, true);
+                        else
+                            Directory.Delete("BepInEx\\patchers-disabled\\" + modInfo.Dirname, true);
+                    }
+                    else if (modInfo.Type == ModType.BEPINPATCHDLL) //Loose DLL patch
+                    {
+                        if (modInfo.Enabled)
+                            File.Delete("BepInEx\\patchers\\" + modInfo.Dirname + ".dll");
+                        else
+                            File.Delete("BepInEx\\patchers-disabled\\" + modInfo.Dirname + ".dll");
                     }
                     if (modInfo.Type == ModType.MELONMOD) //Melon mod
                     {
