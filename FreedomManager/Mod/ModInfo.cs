@@ -15,6 +15,17 @@ namespace FreedomManager
     }
     */
 
+    /*
+    {
+        "ManifestVer":2,
+        "Name":"",
+        "Author":"",
+        "Version":"",
+        "Loader":"",
+        "GitHub":"https://github.com/Author/Repo"
+    }
+*/
+
 
     public enum ModType
     {
@@ -61,7 +72,11 @@ namespace FreedomManager
             Author = author;
             Version = version;
 
-            if (loader.ToLower() == "bepinex" || loader.ToLower() == "bepin") Loader = "BepInEx";
+            if (loader.ToLower() == "bepinex" || loader.ToLower() == "bepin")
+            {
+                Loader = "BepInEx";
+                Location = ModLocation.LEGACY;
+            }
             else if (loader.ToLower() == "melonloader" || loader.ToLower() == "melon") Loader = "MelonLoader";
             else Loader = "Unknown";
 

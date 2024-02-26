@@ -72,17 +72,19 @@ namespace FreedomManager
             if (!fp2Found)
             {
                 //No FP2, no loader.
-                MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
-                "Please ensure the mod manager is in the main game directory.",
-                "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                using (Form tempform = new Form { TopMost = true })
+                    MessageBox.Show(tempform,"Freedom Planet 2 not Found!.\n\n" +
+                    "Please ensure the mod manager is in the main game directory.",
+                    "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 Environment.Exit(1);
             }
 
             if (fp2Found && !bepisPresent)
             {
-                MessageBox.Show("BepInEx not Found!.\n\n" +
+                using (Form tempform = new Form { TopMost = true })
+                    MessageBox.Show(tempform,"BepInEx not Found!.\n\n" +
                         "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
-                        "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
             }
             else setup.Text = "Uninstall BepInEx";
 
@@ -146,6 +148,9 @@ namespace FreedomManager
 
             if (bepinConfig.confExists)
             {
+                bepinGroupBox.Enabled = true;
+                bepinConfgroupBox.Enabled = true;
+
                 enableConsoleCheckBox.Checked = bepinConfig.ShowConsole;
                 noConsoleCloseCheckBox.Checked = bepinConfig.ConsolePreventClose;
                 logfileCheckBox.Checked = bepinConfig.FileLog;
@@ -162,10 +167,12 @@ namespace FreedomManager
             else
             {
                 bepinGroupBox.Enabled = false;
+                bepinConfgroupBox.Enabled = false;
             }
 
             if (fP2LibConfig.configExists)
             {
+                fp2libGroupBox.Enabled = true;
                 if (fP2LibConfig.saveRedirectEnabled)
                 {
                     saveRedirecCheckBox.Checked = true;
@@ -185,12 +192,21 @@ namespace FreedomManager
 
             if (loaderHandler.runningUnderSteam)
             {
-                runningUnderSteamLabel.Text = "Steam";
+                forceNonSteamCheckBox.Checked = managerConfig.forceNonSteam;
+                if (forceNonSteamCheckBox.Checked) runningUnderSteamLabel.Text = "Forced Standalone";
+                else runningUnderSteamLabel.Text = "Steam";
                 forceNonSteamCheckBox.Enabled = true;
             }
 
             if (!loaderHandler.bepinUtilsInstalled)
-                splashInstalledOkLabel.Text = "Possibly Broken!";
+            {
+                splashInstalledOkLabel.Text = "Not installed!";
+                reinstallSplashButton.Enabled = loaderHandler.bepinInstalled;
+            }
+            else splashInstalledOkLabel.Text = "Installed!";
+
+            melonButton.Enabled = loaderHandler.bepinInstalled;
+            //modUpdateCheckBox.Enabled = loaderHandler.bepinInstalled;
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
             modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
@@ -570,11 +586,7 @@ namespace FreedomManager
 
         private void savePlay_Click(object sender, EventArgs e)
         {
-            managerConfig.launchParams = LaunchParamsTextBox.Text;
-
-            bepinConfig.writeConfig();
-            managerConfig.writeConfig();
-            fP2LibConfig.writeConfig();
+            saveButton_Click(sender, e);
 
             string parameters = "";
             if (customLaunchParamCheckBox.Checked)
@@ -887,7 +899,7 @@ namespace FreedomManager
             e.Cancel = false;
         }
 
-        private void enableConsoleCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void enableConsoleCheckBox_CheckedChanged_1(object sender, EventArgs e)
         {
             bepinConfig.ShowConsole = enableConsoleCheckBox.Checked;
         }
@@ -927,6 +939,8 @@ namespace FreedomManager
             doorstopConfig.writeConfig();
             managerConfig.writeConfig();
             fP2LibConfig.writeConfig();
+
+            updateConfigUi();
         }
 
         private async void updateCheckButton_Click(object sender, EventArgs e)
@@ -1015,6 +1029,7 @@ namespace FreedomManager
         private void forceNonSteamCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             loaderHandler.runningUnderSteam = !forceNonSteamCheckBox.Checked;
+            managerConfig.forceNonSteam = forceNonSteamCheckBox.Checked;
             if (forceNonSteamCheckBox.Checked) runningUnderSteamLabel.Text = "Forced Standalone";
             else runningUnderSteamLabel.Text = "Steam";
         }
@@ -1027,6 +1042,11 @@ namespace FreedomManager
         private void doorstopFileLogCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             doorstopConfig.RedirectOutputLog = doorstopFileLogCheckBox.Checked;
+        }
+
+        private void disableMultiFolderBox_CheckedChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

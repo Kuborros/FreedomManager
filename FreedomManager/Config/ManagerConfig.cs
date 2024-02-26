@@ -16,6 +16,7 @@ namespace FreedomManager.Config
         public bool autoUpdateMods { get; set; }
         public bool enableLaunchParams { get; set; }
         public string launchParams { get; set; }
+        public bool forceNonSteam {  get; set; }
 
         public ManagerConfig()
         {
@@ -24,13 +25,14 @@ namespace FreedomManager.Config
         }
 
         [JsonConstructor]
-        public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib, bool autoUpdateMods, bool enableLaunchParams, string launchParams)
+        public ManagerConfig(bool autoUpdateManager, bool autoUpdateFP2Lib, bool autoUpdateMods, bool enableLaunchParams, string launchParams, bool forceNonSteam)
         {
             this.autoUpdateFP2Lib = autoUpdateFP2Lib;
             this.autoUpdateManager = autoUpdateManager;
             this.autoUpdateMods = autoUpdateMods;
             this.enableLaunchParams = enableLaunchParams;
             this.launchParams = launchParams;
+            this.forceNonSteam = forceNonSteam;
         }
 
         public void writeConfig()
@@ -50,6 +52,7 @@ namespace FreedomManager.Config
                 autoUpdateMods = conf.autoUpdateMods;
                 enableLaunchParams = conf.enableLaunchParams;
                 launchParams = conf.launchParams;
+                forceNonSteam = conf.forceNonSteam;
             }
             else
             {
@@ -59,6 +62,7 @@ namespace FreedomManager.Config
                 autoUpdateMods = true;
                 enableLaunchParams = false;
                 launchParams = "";
+                forceNonSteam = false;
                 writeConfig();
             }
 

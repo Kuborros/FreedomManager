@@ -7,14 +7,14 @@ namespace FreedomManager.Config
 {
     internal class DoorstopConfig
     {
-        public readonly bool confWritten = true;
+        public static bool confWritten = true;
         //[UnityDoorstop]
         public bool DoorstopEnabled = true, RedirectOutputLog = false;
         public string DllSearchPathOverride = "";
         //[MultiFolderLoader]
         public string ModsbaseDir = "";
         public string DisabledModsListPath = "";
-        private static bool EnableAdditionalDirectories = true;
+        private readonly bool EnableAdditionalDirectories = true;
         //[MultiFolderLoader_Workshop]
         public string WorkshopModsBaseDir = "";
         public string WorkshopDisabledModsListPath = "";
@@ -31,6 +31,8 @@ namespace FreedomManager.Config
                     if (!File.Exists("disabled_mods.list"))
                         File.Create("disabled_mods.list").Close();
 
+                    Directory.CreateDirectory("Mods");
+                    
                     var parser = new IniDataParser();
                     string basedir = Path.GetFullPath(".");
                     parser.Configuration.CommentString = "#";
@@ -40,10 +42,8 @@ namespace FreedomManager.Config
                     RedirectOutputLog = bool.Parse(data["UnityDoorstop"]["redirectOutputLog"]);
                     DllSearchPathOverride = data["UnityDoorstop"]["dllSearchPathOverride"];
 
-                    ModsbaseDir = basedir + "\\FPMods";
+                    ModsbaseDir = basedir + "\\Mods";
                     DisabledModsListPath = "disabled_mods.list";
-
-                    EnableAdditionalDirectories = bool.Parse(data["MultiFolderLoader"]["enableAdditionalDirectories"]);
 
                     if (FreedomManager.loaderHandler.runningUnderSteam)
                     {

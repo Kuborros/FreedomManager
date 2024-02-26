@@ -60,7 +60,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.bepinConfgroupBox = new System.Windows.Forms.GroupBox();
             this.splashWithConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.splashEnableCheckBox = new System.Windows.Forms.CheckBox();
             this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
@@ -102,7 +102,7 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.forceNonSteamCheckBox = new System.Windows.Forms.CheckBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.reinstallSplashButton = new System.Windows.Forms.Button();
             this.runningUnderSteamLabel = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.splashInstalledOkLabel = new System.Windows.Forms.Label();
@@ -114,12 +114,14 @@
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.disableMultiFolderBox = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.bepinConfgroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.fp2libGroupBox.SuspendLayout();
@@ -201,27 +203,27 @@
             this.seeOnGameBananaToolStripMenuItem,
             this.uninstallToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 70);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.openFolderToolStripMenuItem.Text = "Open folder";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
             // 
             // seeOnGameBananaToolStripMenuItem
             // 
             this.seeOnGameBananaToolStripMenuItem.Name = "seeOnGameBananaToolStripMenuItem";
-            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.seeOnGameBananaToolStripMenuItem.Text = "See on Github";
             this.seeOnGameBananaToolStripMenuItem.Click += new System.EventHandler(this.seeOnGameBananaToolStripMenuItem_Click);
             // 
             // uninstallToolStripMenuItem
             // 
             this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.uninstallToolStripMenuItem.Text = "Uninstall";
             this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.uninstallToolStripMenuItem_Click);
             // 
@@ -382,7 +384,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.groupBox4);
+            this.tabPage2.Controls.Add(this.bepinConfgroupBox);
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.checkForModUpdatesButton);
             this.tabPage2.Controls.Add(this.updateCheckButton);
@@ -397,17 +399,17 @@
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
+            // bepinConfgroupBox
             // 
-            this.groupBox4.Controls.Add(this.splashWithConsoleCheckBox);
-            this.groupBox4.Controls.Add(this.splashEnableCheckBox);
-            this.groupBox4.Controls.Add(this.enableConsoleCheckBox);
-            this.groupBox4.Location = new System.Drawing.Point(8, 6);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(454, 89);
-            this.groupBox4.TabIndex = 16;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "BepInEx Config";
+            this.bepinConfgroupBox.Controls.Add(this.splashWithConsoleCheckBox);
+            this.bepinConfgroupBox.Controls.Add(this.splashEnableCheckBox);
+            this.bepinConfgroupBox.Controls.Add(this.enableConsoleCheckBox);
+            this.bepinConfgroupBox.Location = new System.Drawing.Point(8, 6);
+            this.bepinConfgroupBox.Name = "bepinConfgroupBox";
+            this.bepinConfgroupBox.Size = new System.Drawing.Size(454, 89);
+            this.bepinConfgroupBox.TabIndex = 16;
+            this.bepinConfgroupBox.TabStop = false;
+            this.bepinConfgroupBox.Text = "BepInEx Config";
             // 
             // splashWithConsoleCheckBox
             // 
@@ -440,6 +442,7 @@
             this.enableConsoleCheckBox.TabIndex = 1;
             this.enableConsoleCheckBox.Text = "Enable Console";
             this.enableConsoleCheckBox.UseVisualStyleBackColor = true;
+            this.enableConsoleCheckBox.CheckedChanged += new System.EventHandler(this.enableConsoleCheckBox_CheckedChanged_1);
             // 
             // groupBox1
             // 
@@ -826,9 +829,11 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.label13);
+            this.groupBox5.Controls.Add(this.disableMultiFolderBox);
             this.groupBox5.Controls.Add(this.forceNonSteamCheckBox);
             this.groupBox5.Controls.Add(this.label14);
-            this.groupBox5.Controls.Add(this.button1);
+            this.groupBox5.Controls.Add(this.reinstallSplashButton);
             this.groupBox5.Controls.Add(this.runningUnderSteamLabel);
             this.groupBox5.Controls.Add(this.label12);
             this.groupBox5.Controls.Add(this.splashInstalledOkLabel);
@@ -846,30 +851,30 @@
             this.forceNonSteamCheckBox.Enabled = false;
             this.forceNonSteamCheckBox.Location = new System.Drawing.Point(11, 97);
             this.forceNonSteamCheckBox.Name = "forceNonSteamCheckBox";
-            this.forceNonSteamCheckBox.Size = new System.Drawing.Size(184, 17);
+            this.forceNonSteamCheckBox.Size = new System.Drawing.Size(109, 17);
             this.forceNonSteamCheckBox.TabIndex = 7;
-            this.forceNonSteamCheckBox.Text = "Set as Non-Steam for this session";
+            this.forceNonSteamCheckBox.Text = "Force Non-Steam";
             this.forceNonSteamCheckBox.UseVisualStyleBackColor = true;
             this.forceNonSteamCheckBox.CheckedChanged += new System.EventHandler(this.forceNonSteamCheckBox_CheckedChanged);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(259, 81);
+            this.label14.Location = new System.Drawing.Point(314, 16);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(197, 13);
+            this.label14.Size = new System.Drawing.Size(142, 13);
             this.label14.TabIndex = 6;
-            this.label14.Text = "Click here to reinstall the Splash Screen ";
+            this.label14.Text = "Reinstall Utilities and Splash:";
             // 
-            // button1
+            // reinstallSplashButton
             // 
-            this.button1.Location = new System.Drawing.Point(300, 97);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(156, 26);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Reinstall";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.reinstallSplashButton.Location = new System.Drawing.Point(317, 32);
+            this.reinstallSplashButton.Name = "reinstallSplashButton";
+            this.reinstallSplashButton.Size = new System.Drawing.Size(139, 26);
+            this.reinstallSplashButton.TabIndex = 5;
+            this.reinstallSplashButton.Text = "Reinstall";
+            this.reinstallSplashButton.UseVisualStyleBackColor = true;
+            this.reinstallSplashButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // runningUnderSteamLabel
             // 
@@ -886,9 +891,9 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(8, 54);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(112, 13);
+            this.label12.Size = new System.Drawing.Size(89, 13);
             this.label12.TabIndex = 3;
-            this.label12.Text = "Game is installed from:";
+            this.label12.Text = "Game is installed:";
             // 
             // splashInstalledOkLabel
             // 
@@ -905,9 +910,9 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(5, 19);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(139, 13);
+            this.label11.Size = new System.Drawing.Size(154, 13);
             this.label11.TabIndex = 1;
-            this.label11.Text = "Splash Screen seems to be:";
+            this.label11.Text = "Splash Screen and Utilities are:";
             // 
             // groupBox2
             // 
@@ -960,6 +965,30 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
+            // disableMultiFolderBox
+            // 
+            this.disableMultiFolderBox.AutoSize = true;
+            this.disableMultiFolderBox.Checked = true;
+            this.disableMultiFolderBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+            this.disableMultiFolderBox.Enabled = false;
+            this.disableMultiFolderBox.Location = new System.Drawing.Point(298, 97);
+            this.disableMultiFolderBox.Name = "disableMultiFolderBox";
+            this.disableMultiFolderBox.Size = new System.Drawing.Size(158, 17);
+            this.disableMultiFolderBox.TabIndex = 8;
+            this.disableMultiFolderBox.Text = "Disable Multi-Folder Support";
+            this.disableMultiFolderBox.UseVisualStyleBackColor = true;
+            this.disableMultiFolderBox.CheckedChanged += new System.EventHandler(this.disableMultiFolderBox_CheckedChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.label13.Location = new System.Drawing.Point(249, 81);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(207, 13);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "Use only when you know what your doing:";
+            // 
             // FreedomManager
             // 
             this.AllowDrop = true;
@@ -984,8 +1013,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.bepinConfgroupBox.ResumeLayout(false);
+            this.bepinConfgroupBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -1068,7 +1097,7 @@
         private System.Windows.Forms.CheckBox logfileCheckBox;
         private System.Windows.Forms.CheckBox hideLogsCheckBox;
         private System.Windows.Forms.CheckBox noConsoleCloseCheckBox;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox bepinConfgroupBox;
         private System.Windows.Forms.CheckBox splashWithConsoleCheckBox;
         private System.Windows.Forms.CheckBox splashEnableCheckBox;
         private System.Windows.Forms.CheckBox enableConsoleCheckBox;
@@ -1085,9 +1114,11 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label runningUnderSteamLabel;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button reinstallSplashButton;
         private System.Windows.Forms.CheckBox forceNonSteamCheckBox;
         private System.Windows.Forms.CheckBox doorstopFileLogCheckBox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox disableMultiFolderBox;
     }
 }
 
