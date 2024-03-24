@@ -26,7 +26,7 @@ namespace FreedomManager.Mod
         {
             fp2Found = File.Exists("FP2.exe");
             bepinInstalled = File.Exists("winhttp.dll");
-            bepinUtilsInstalled = (Directory.Exists("BepInEx\\patchers\\BepInEx.SplashScreen") && File.Exists("BepInEx\\patchers\\BepInEx.MultiFolderLoader.dll")) ;
+            bepinUtilsInstalled = (Directory.Exists("BepInEx\\patchers\\BepInEx.SplashScreen")); // && File.Exists("BepInEx\\patchers\\BepInEx.MultiFolderLoader.dll")) ;
             bepinDevtoolsInstalled = File.Exists("BepInEx\\patchers\\DemystifyExceptions.dll");
             melonInstalled = Directory.Exists("BepInEx\\plugins\\BepInEx.MelonLoader.Loader");
             fp2libInstalled = File.Exists("BepInEx\\plugins\\lib\\fp2lib.json");
@@ -76,6 +76,7 @@ namespace FreedomManager.Mod
                     client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.SplashScreen/releases/download/v2.2/BepInEx.SplashScreen_BepInEx5_v2.2.zip"), "BepInExSplash.zip");
                     FreedomManager.modHandler.InstallMod("BepInExSplash.zip", true);
                 }
+                /*
                 using (WebClient client = new WebClient())
                 {
                     client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.MultiFolderLoader/releases/download/v1.3.1/BepInEx.MultiFolderLoader.dll"), "BepInEx.MultiFolderLoader.dll");
@@ -86,6 +87,7 @@ namespace FreedomManager.Mod
                     }
                     if (File.Exists("BepInEx.MultiFolderLoader.dll")) File.Delete("BepInEx.MultiFolderLoader.dll");
                 }
+               */
                 bepinUtilsInstalled = true;
             }
             return bepinUtilsInstalled;
