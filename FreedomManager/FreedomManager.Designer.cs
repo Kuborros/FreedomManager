@@ -100,6 +100,8 @@
             this.hideLogsCheckBox = new System.Windows.Forms.CheckBox();
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.disableMultiFolderBox = new System.Windows.Forms.CheckBox();
             this.forceNonSteamCheckBox = new System.Windows.Forms.CheckBox();
             this.label14 = new System.Windows.Forms.Label();
             this.reinstallSplashButton = new System.Windows.Forms.Button();
@@ -114,8 +116,6 @@
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.disableMultiFolderBox = new System.Windows.Forms.CheckBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -845,6 +845,30 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Troubleshooting";
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.label13.Location = new System.Drawing.Point(249, 81);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(207, 13);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "Use only when you know what your doing:";
+            // 
+            // disableMultiFolderBox
+            // 
+            this.disableMultiFolderBox.AutoSize = true;
+            this.disableMultiFolderBox.Checked = true;
+            this.disableMultiFolderBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+            this.disableMultiFolderBox.Enabled = false;
+            this.disableMultiFolderBox.Location = new System.Drawing.Point(298, 97);
+            this.disableMultiFolderBox.Name = "disableMultiFolderBox";
+            this.disableMultiFolderBox.Size = new System.Drawing.Size(158, 17);
+            this.disableMultiFolderBox.TabIndex = 8;
+            this.disableMultiFolderBox.Text = "Disable Multi-Folder Support";
+            this.disableMultiFolderBox.UseVisualStyleBackColor = true;
+            this.disableMultiFolderBox.CheckedChanged += new System.EventHandler(this.disableMultiFolderBox_CheckedChanged);
+            // 
             // forceNonSteamCheckBox
             // 
             this.forceNonSteamCheckBox.AutoSize = true;
@@ -862,9 +886,9 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(314, 16);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(142, 13);
+            this.label14.Size = new System.Drawing.Size(85, 13);
             this.label14.TabIndex = 6;
-            this.label14.Text = "Reinstall Utilities and Splash:";
+            this.label14.Text = "Reinstall Splash:";
             // 
             // reinstallSplashButton
             // 
@@ -910,9 +934,9 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(5, 19);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(154, 13);
+            this.label11.Size = new System.Drawing.Size(89, 13);
             this.label11.TabIndex = 1;
-            this.label11.Text = "Splash Screen and Utilities are:";
+            this.label11.Text = "Splash Screen is:";
             // 
             // groupBox2
             // 
@@ -964,30 +988,6 @@
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // disableMultiFolderBox
-            // 
-            this.disableMultiFolderBox.AutoSize = true;
-            this.disableMultiFolderBox.Checked = true;
-            this.disableMultiFolderBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
-            this.disableMultiFolderBox.Enabled = false;
-            this.disableMultiFolderBox.Location = new System.Drawing.Point(298, 97);
-            this.disableMultiFolderBox.Name = "disableMultiFolderBox";
-            this.disableMultiFolderBox.Size = new System.Drawing.Size(158, 17);
-            this.disableMultiFolderBox.TabIndex = 8;
-            this.disableMultiFolderBox.Text = "Disable Multi-Folder Support";
-            this.disableMultiFolderBox.UseVisualStyleBackColor = true;
-            this.disableMultiFolderBox.CheckedChanged += new System.EventHandler(this.disableMultiFolderBox_CheckedChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            this.label13.Location = new System.Drawing.Point(249, 81);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(207, 13);
-            this.label13.TabIndex = 9;
-            this.label13.Text = "Use only when you know what your doing:";
             // 
             // FreedomManager
             // 

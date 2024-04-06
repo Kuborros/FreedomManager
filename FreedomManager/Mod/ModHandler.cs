@@ -430,7 +430,7 @@ namespace FreedomManager.Mod
             }
 
             //Disabled Mods
-            dir = dir + "-disabled";
+            dir += "-disabled";
             try
             {
                 foreach (string f in Directory.GetFiles(dir))
