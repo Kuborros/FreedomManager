@@ -1,13 +1,10 @@
 ﻿using FreedomManager.Net.GitHub;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace FreedomManager.Net
 {
@@ -37,7 +34,7 @@ namespace FreedomManager.Net
                     ghAuthor = matches[0].Groups[1].Value;
                     ghRepo = matches[0].Groups[2].Value;
 
-                    string response = await client.DownloadStringTaskAsync(new Uri(string.Format("https://api.github.com/repos/{0}/{1}/releases/latest",ghAuthor,ghRepo)));
+                    string response = await client.DownloadStringTaskAsync(new Uri(string.Format("https://api.github.com/repos/{0}/{1}/releases/latest", ghAuthor, ghRepo)));
                     GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
 
                     Version local = new Version(mod.Version);
@@ -58,12 +55,13 @@ namespace FreedomManager.Net
                     };
                     return info;
 
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                     return null;
                 }
-            } 
+            }
         }
 
         internal async Task<List<ModUpdateInfo>> getModsUpdates(List<ModInfo> mods)
@@ -79,6 +77,6 @@ namespace FreedomManager.Net
                 }
             }
             return updates;
-        }      
+        }
     }
 }

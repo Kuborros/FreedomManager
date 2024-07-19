@@ -39,7 +39,8 @@ namespace FreedomManager
                 {
                     pipe.Connect(3600);
 
-                    using (var writer = new StreamWriter(pipe)) {
+                    using (var writer = new StreamWriter(pipe))
+                    {
                         foreach (string s in uris)
                         {
                             writer.WriteLine(s);

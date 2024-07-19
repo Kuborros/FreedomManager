@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace FreedomManager.Mod.Json
+﻿namespace FreedomManager.Mod.Json
 {
     public class JsonNPC
     {

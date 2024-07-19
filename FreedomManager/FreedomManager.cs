@@ -45,6 +45,7 @@ namespace FreedomManager
             new ZipPackageExtractor());
 
         static BepinConfig bepinConfig;
+        static DoorstopConfig doorstopConfig;
         static FP2LibConfig fP2LibConfig;
         static ManagerConfig managerConfig;
         static ModUpdateHandler modUpdateHandler;
@@ -71,17 +72,19 @@ namespace FreedomManager
             if (!fp2Found)
             {
                 //No FP2, no loader.
-                MessageBox.Show("Freedom Planet 2 not Found!.\n\n" +
-                "Please ensure the mod manager is in the main game directory.",
-                "",MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                using (Form tempform = new Form { TopMost = true })
+                    MessageBox.Show(tempform,"Freedom Planet 2 not Found!.\n\n" +
+                    "Please ensure the mod manager is in the main game directory.",
+                    "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 Environment.Exit(1);
             }
 
             if (fp2Found && !bepisPresent)
             {
-                MessageBox.Show("BepInEx not Found!.\n\n" +
+                using (Form tempform = new Form { TopMost = true })
+                    MessageBox.Show(tempform,"BepInEx not Found!.\n\n" +
                         "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
-                        "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
             }
             else setup.Text = "Uninstall BepInEx";
 
@@ -101,7 +104,13 @@ namespace FreedomManager
             if (uris.Count > 0) handleGBUri(uris[0]);
 
             bepinConfig = new BepinConfig();
+            doorstopConfig = new DoorstopConfig();
             fP2LibConfig = new FP2LibConfig();
+
+            if (loaderHandler.bepinInstalled && !loaderHandler.bepinUtilsInstalled)
+            {
+                loaderHandler.installBepinUtils(false);
+            }
             updateConfigUi();
 
             RenderList(modHandler.modList);
@@ -139,20 +148,31 @@ namespace FreedomManager
 
             if (bepinConfig.confExists)
             {
+                bepinGroupBox.Enabled = true;
+                bepinConfgroupBox.Enabled = true;
+
                 enableConsoleCheckBox.Checked = bepinConfig.ShowConsole;
                 noConsoleCloseCheckBox.Checked = bepinConfig.ConsolePreventClose;
                 logfileCheckBox.Checked = bepinConfig.FileLog;
                 hideLogsCheckBox.Checked = bepinConfig.UnityLogListening;
                 unityFileCheckBox.Checked = bepinConfig.WriteUnityLog;
                 appendLogCheckBox.Checked = bepinConfig.AppendLog;
+                splashEnableCheckBox.Checked = bepinConfig.SplashEnabled;
+                splashWithConsoleCheckBox.Checked = !bepinConfig.OnlyNoConsole;
+                logLevelTextBox.Text = bepinConfig.LogLevels;
+                harmonyLogTextBox.Text = bepinConfig.HarmonyLogLevels;
+
+                doorstopFileLogCheckBox.Checked = doorstopConfig.RedirectOutputLog;
             }
             else
             {
                 bepinGroupBox.Enabled = false;
+                bepinConfgroupBox.Enabled = false;
             }
 
             if (fP2LibConfig.configExists)
             {
+                fp2libGroupBox.Enabled = true;
                 if (fP2LibConfig.saveRedirectEnabled)
                 {
                     saveRedirecCheckBox.Checked = true;
@@ -169,6 +189,24 @@ namespace FreedomManager
             {
                 fp2libGroupBox.Enabled = false;
             }
+
+            if (loaderHandler.runningUnderSteam)
+            {
+                forceNonSteamCheckBox.Checked = managerConfig.forceNonSteam;
+                if (forceNonSteamCheckBox.Checked) runningUnderSteamLabel.Text = "Forced Standalone";
+                else runningUnderSteamLabel.Text = "Steam";
+                forceNonSteamCheckBox.Enabled = true;
+            }
+
+            if (!loaderHandler.bepinUtilsInstalled)
+            {
+                splashInstalledOkLabel.Text = "Not installed!";
+                reinstallSplashButton.Enabled = loaderHandler.bepinInstalled;
+            }
+            else splashInstalledOkLabel.Text = "Installed!";
+
+            melonButton.Enabled = loaderHandler.bepinInstalled;
+            //modUpdateCheckBox.Enabled = loaderHandler.bepinInstalled;
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
             modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
@@ -194,7 +232,7 @@ namespace FreedomManager
                 else if (gblink[0].Contains("github.com")) type = UrlType.GITHUB;
                 else type = UrlType.GENERIC;
                 //Patch for random GB issue generating link
-                if (type == UrlType.GBANANA) 
+                if (type == UrlType.GBANANA)
                 {
                     gblink[0] = gblink[0].Replace("https//", "https://");
                 }
@@ -274,22 +312,23 @@ namespace FreedomManager
                 }
                 //Cursed way to display window topmost - create a new form and make it a parent of the messagebox. Microsoft, why?
                 using (Form tempform = new Form { TopMost = true })
-                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question ,MessageBoxDefaultButton.Button1);
+                    dialogResult = MessageBox.Show(tempform, "Do you want to install \"" + name + "\" by: " + author + " from GameBanana?", "Mod installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
             }
             else if (type == UrlType.GITHUB)
             {
                 //TODO: Replace this mess - use just repo and author name like updates do.
-                try {
+                try
+                {
                     //Direct link to release
-                    MatchCollection matches = Regex.Matches(uri[0],"(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
+                    MatchCollection matches = Regex.Matches(uri[0], "(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
                     if (matches.Count > 0)
                     {
                         //Regex found a thingie
                         author = matches[0].Groups[1].Value;
                         name = matches[0].Groups[2].Value;
                         gitHubFileName = matches[0].Groups[3].Value;
-                    } 
+                    }
                     else
                     {
                         MessageBox.Show("Invalid link.");
@@ -319,14 +358,15 @@ namespace FreedomManager
             if (dialogResult == DialogResult.Yes)
             {
                 Uri link;
-                try {link = new Uri(uri[0]); }
+                try { link = new Uri(uri[0]); }
                 catch (UriFormatException)
                 {
                     MessageBox.Show("The mod download link seems broken :( \nThere might be some issue on GameBanana side of things.", "Mod Download", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                switch (type) {
+                switch (type)
+                {
                     case UrlType.GBANANA:
                         await AsyncModDownloadGbanana(link, gBananFileName);
                         break;
@@ -368,7 +408,7 @@ namespace FreedomManager
                         Application.Exit();
                     }
                 }
-            } 
+            }
             catch (HttpRequestException ex)
             {
                 Console.WriteLine(ex);
@@ -413,7 +453,7 @@ namespace FreedomManager
                     else
                     {
                         if (!hideNoUpdates) MessageBox.Show("There are no new FP2Lib updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -546,19 +586,16 @@ namespace FreedomManager
 
         private void savePlay_Click(object sender, EventArgs e)
         {
-            managerConfig.launchParams = LaunchParamsTextBox.Text;
-
-            bepinConfig.writeConfig();
-            managerConfig.writeConfig();
-            fP2LibConfig.writeConfig();
+            saveButton_Click(sender, e);
 
             string parameters = "";
             if (customLaunchParamCheckBox.Checked)
             {
                 parameters = LaunchParamsTextBox.Text;
             }
-            //While launching trough Steam would allow for achievements to register, it would exclude Itch.io users.
-            if (fp2Found) Process.Start("FP2.exe",parameters);
+            //Launch trough steam if detected, otherwise run game exe directly for Itch.io users
+            if (fp2Found && !loaderHandler.runningUnderSteam) Process.Start("FP2.exe", parameters);
+            else if (fp2Found) Process.Start("explorer", "steam://rungameid/595500");
         }
 
         private void setup_Click(object sender, EventArgs e)
@@ -615,7 +652,7 @@ namespace FreedomManager
                 "MelonLoader compat is meant only to run mods requiring it.\n" +
                 "You do NOT need it, unless you want to use these specific mods.\n" +
                 "Bug reports for BepInEx mods where MelonLoader is installed will be ignored!\n\n" +
-                "Do you still want to proceed?", "MelonLoader Installation", MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                "Do you still want to proceed?", "MelonLoader Installation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -741,28 +778,12 @@ namespace FreedomManager
             }
         }
 
-        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
-
-            //Update for cooler UI
-
-            StringBuilder builder = new StringBuilder();
-            builder.Append("Name: ").AppendLine(modInfo.Name);
-            builder.Append("Version: ").AppendLine(modInfo.Version);
-            builder.Append("Author: ").AppendLine(modInfo.Author);
-            builder.Append("Used Loader: ").AppendLine(modInfo.Loader);
-            builder.Append("Uses extra files: ").AppendLine((bool)modInfo.HasAssets ? "Yes" : "No");
-
-            MessageBox.Show(this, builder.ToString(), "Mod information", MessageBoxButtons.OK);
-        }
-
         private void seeOnGameBananaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
-            if (modInfo.GBID != null && modInfo.GBID != 0)
+            if (modInfo.GitHub != null && modInfo.GitHub != "" && modInfo.GitHub.Contains("http"))
             {
-                Process.Start("explorer", "https://gamebanana.com/mods/" + modInfo.GBID + "/");
+                Process.Start("explorer", Uri.EscapeUriString(modInfo.GitHub));
             }
         }
 
@@ -824,7 +845,7 @@ namespace FreedomManager
                 }
                 else if (modInfo.Type == ModType.JSONNPC) //JSON NPC
                 {
-                        path = "BepInEx\\config\\NPCLibEzNPC";
+                    path = "BepInEx\\config\\NPCLibEzNPC";
                 }
                 else if (melonPresent)
                 {
@@ -871,14 +892,14 @@ namespace FreedomManager
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
-            if (modInfo.GBID == 0 || modInfo.GBID == null)
+            if (modInfo.GitHub == "" || modInfo.GitHub == null)
             {
-                contextMenuStrip1.Items[2].Enabled = false;
+                contextMenuStrip1.Items[1].Enabled = false;
             }
             e.Cancel = false;
         }
 
-        private void enableConsoleCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void enableConsoleCheckBox_CheckedChanged_1(object sender, EventArgs e)
         {
             bepinConfig.ShowConsole = enableConsoleCheckBox.Checked;
         }
@@ -911,10 +932,15 @@ namespace FreedomManager
         private void saveButton_Click(object sender, EventArgs e)
         {
             managerConfig.launchParams = LaunchParamsTextBox.Text;
+            bepinConfig.LogLevels = logLevelTextBox.Text;
+            bepinConfig.HarmonyLogLevels = harmonyLogTextBox.Text;
 
             bepinConfig.writeConfig();
+            doorstopConfig.writeConfig();
             managerConfig.writeConfig();
             fP2LibConfig.writeConfig();
+
+            updateConfigUi();
         }
 
         private async void updateCheckButton_Click(object sender, EventArgs e)
@@ -961,14 +987,14 @@ namespace FreedomManager
 
         internal async void modUpdateInstall_Click(object sender, EventArgs e)
         {
-            foreach(ModUpdateInfo modUpdate in modUpdates)
+            foreach (ModUpdateInfo modUpdate in modUpdates)
             {
                 if (modUpdate.DoUpdate)
                 {
                     await AsyncModDownloadGitHub(new Uri(modUpdate.DownloadLink), "modUpdate.zip");
                 }
             }
-            
+
             Button butt = (Button)sender;
             ModsUpdateInfoForm form = (ModsUpdateInfoForm)butt.Parent;
 
@@ -988,6 +1014,39 @@ namespace FreedomManager
         {
             managerConfig.enableLaunchParams = customLaunchParamCheckBox.Checked;
             LaunchParamsTextBox.Enabled = customLaunchParamCheckBox.Checked;
+        }
+
+        private void splashEnableCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            bepinConfig.SplashEnabled = splashEnableCheckBox.Checked;
+        }
+
+        private void splashWithConsoleCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            bepinConfig.OnlyNoConsole = !splashWithConsoleCheckBox.Checked;
+        }
+
+        private void forceNonSteamCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            loaderHandler.runningUnderSteam = !forceNonSteamCheckBox.Checked;
+            managerConfig.forceNonSteam = forceNonSteamCheckBox.Checked;
+            if (forceNonSteamCheckBox.Checked) runningUnderSteamLabel.Text = "Forced Standalone";
+            else runningUnderSteamLabel.Text = "Steam";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            loaderHandler.installBepinUtils(true);
+        }
+
+        private void doorstopFileLogCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            doorstopConfig.RedirectOutputLog = doorstopFileLogCheckBox.Checked;
+        }
+
+        private void disableMultiFolderBox_CheckedChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

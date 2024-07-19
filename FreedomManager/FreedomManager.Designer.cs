@@ -36,11 +36,9 @@
             this.modInstall = new System.Windows.Forms.Button();
             this.modFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.refresh = new System.Windows.Forms.Button();
-            this.melonButton = new System.Windows.Forms.Button();
             this.handlerButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.seeOnGameBananaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -62,6 +60,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.bepinConfgroupBox = new System.Windows.Forms.GroupBox();
+            this.splashWithConsoleCheckBox = new System.Windows.Forms.CheckBox();
+            this.splashEnableCheckBox = new System.Windows.Forms.CheckBox();
+            this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.customLaunchParamCheckBox = new System.Windows.Forms.CheckBox();
             this.LaunchParamsTextBox = new System.Windows.Forms.TextBox();
@@ -81,13 +83,34 @@
             this.label5 = new System.Windows.Forms.Label();
             this.saveProfileComboBox = new System.Windows.Forms.ComboBox();
             this.saveRedirecCheckBox = new System.Windows.Forms.CheckBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.bepinGroupBox = new System.Windows.Forms.GroupBox();
+            this.doorstopFileLogCheckBox = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.harmonyLogTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.logLevelTextBox = new System.Windows.Forms.TextBox();
             this.appendLogCheckBox = new System.Windows.Forms.CheckBox();
             this.unityFileCheckBox = new System.Windows.Forms.CheckBox();
             this.logfileCheckBox = new System.Windows.Forms.CheckBox();
             this.hideLogsCheckBox = new System.Windows.Forms.CheckBox();
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
-            this.enableConsoleCheckBox = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.disableMultiFolderBox = new System.Windows.Forms.CheckBox();
+            this.forceNonSteamCheckBox = new System.Windows.Forms.CheckBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.reinstallSplashButton = new System.Windows.Forms.Button();
+            this.runningUnderSteamLabel = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.splashInstalledOkLabel = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.melonButton = new System.Windows.Forms.Button();
             this.resPatchButton = new System.Windows.Forms.Button();
             this.fp2resComboBox = new System.Windows.Forms.ComboBox();
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
@@ -98,10 +121,14 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.bepinConfgroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.fp2libGroupBox.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.bepinGroupBox.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // savePlay
@@ -118,7 +145,7 @@
             // 
             this.setup.Location = new System.Drawing.Point(128, 419);
             this.setup.Name = "setup";
-            this.setup.Size = new System.Drawing.Size(249, 70);
+            this.setup.Size = new System.Drawing.Size(340, 70);
             this.setup.TabIndex = 2;
             this.setup.Text = "Install BepInEx";
             this.setup.UseVisualStyleBackColor = true;
@@ -159,16 +186,6 @@
             this.refresh.UseVisualStyleBackColor = true;
             this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
-            // melonButton
-            // 
-            this.melonButton.Location = new System.Drawing.Point(383, 419);
-            this.melonButton.Name = "melonButton";
-            this.melonButton.Size = new System.Drawing.Size(85, 70);
-            this.melonButton.TabIndex = 7;
-            this.melonButton.Text = "Install MelonLoader Compat";
-            this.melonButton.UseVisualStyleBackColor = true;
-            this.melonButton.Click += new System.EventHandler(this.melonButton_Click);
-            // 
             // handlerButton
             // 
             this.handlerButton.Location = new System.Drawing.Point(8, 341);
@@ -183,38 +200,30 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFolderToolStripMenuItem,
-            this.infoToolStripMenuItem,
             this.seeOnGameBananaToolStripMenuItem,
             this.uninstallToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 70);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.openFolderToolStripMenuItem.Text = "Open folder";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
-            // 
-            // infoToolStripMenuItem
-            // 
-            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.infoToolStripMenuItem.Text = "Info";
-            this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
             // 
             // seeOnGameBananaToolStripMenuItem
             // 
             this.seeOnGameBananaToolStripMenuItem.Name = "seeOnGameBananaToolStripMenuItem";
-            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.seeOnGameBananaToolStripMenuItem.Text = "See on GameBanana";
+            this.seeOnGameBananaToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.seeOnGameBananaToolStripMenuItem.Text = "See on Github";
             this.seeOnGameBananaToolStripMenuItem.Click += new System.EventHandler(this.seeOnGameBananaToolStripMenuItem_Click);
             // 
             // uninstallToolStripMenuItem
             // 
             this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.uninstallToolStripMenuItem.Text = "Uninstall";
             this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.uninstallToolStripMenuItem_Click);
             // 
@@ -352,6 +361,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -364,7 +374,6 @@
             this.tabPage1.Controls.Add(this.modInstall);
             this.tabPage1.Controls.Add(this.refresh);
             this.tabPage1.Controls.Add(this.setup);
-            this.tabPage1.Controls.Add(this.melonButton);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -375,12 +384,12 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.bepinConfgroupBox);
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.checkForModUpdatesButton);
             this.tabPage2.Controls.Add(this.updateCheckButton);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.fp2libGroupBox);
-            this.tabPage2.Controls.Add(this.bepinGroupBox);
             this.tabPage2.Controls.Add(this.handlerButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -389,6 +398,51 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // bepinConfgroupBox
+            // 
+            this.bepinConfgroupBox.Controls.Add(this.splashWithConsoleCheckBox);
+            this.bepinConfgroupBox.Controls.Add(this.splashEnableCheckBox);
+            this.bepinConfgroupBox.Controls.Add(this.enableConsoleCheckBox);
+            this.bepinConfgroupBox.Location = new System.Drawing.Point(8, 6);
+            this.bepinConfgroupBox.Name = "bepinConfgroupBox";
+            this.bepinConfgroupBox.Size = new System.Drawing.Size(454, 89);
+            this.bepinConfgroupBox.TabIndex = 16;
+            this.bepinConfgroupBox.TabStop = false;
+            this.bepinConfgroupBox.Text = "BepInEx Config";
+            // 
+            // splashWithConsoleCheckBox
+            // 
+            this.splashWithConsoleCheckBox.AutoSize = true;
+            this.splashWithConsoleCheckBox.Location = new System.Drawing.Point(6, 65);
+            this.splashWithConsoleCheckBox.Name = "splashWithConsoleCheckBox";
+            this.splashWithConsoleCheckBox.Size = new System.Drawing.Size(246, 17);
+            this.splashWithConsoleCheckBox.TabIndex = 3;
+            this.splashWithConsoleCheckBox.Text = "Show Loading Splash even with Console open";
+            this.splashWithConsoleCheckBox.UseVisualStyleBackColor = true;
+            this.splashWithConsoleCheckBox.CheckedChanged += new System.EventHandler(this.splashWithConsoleCheckBox_CheckedChanged);
+            // 
+            // splashEnableCheckBox
+            // 
+            this.splashEnableCheckBox.AutoSize = true;
+            this.splashEnableCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.splashEnableCheckBox.Name = "splashEnableCheckBox";
+            this.splashEnableCheckBox.Size = new System.Drawing.Size(135, 17);
+            this.splashEnableCheckBox.TabIndex = 2;
+            this.splashEnableCheckBox.Text = "Enable Loading Splash";
+            this.splashEnableCheckBox.UseVisualStyleBackColor = true;
+            this.splashEnableCheckBox.CheckedChanged += new System.EventHandler(this.splashEnableCheckBox_CheckedChanged);
+            // 
+            // enableConsoleCheckBox
+            // 
+            this.enableConsoleCheckBox.AutoSize = true;
+            this.enableConsoleCheckBox.Location = new System.Drawing.Point(6, 19);
+            this.enableConsoleCheckBox.Name = "enableConsoleCheckBox";
+            this.enableConsoleCheckBox.Size = new System.Drawing.Size(100, 17);
+            this.enableConsoleCheckBox.TabIndex = 1;
+            this.enableConsoleCheckBox.Text = "Enable Console";
+            this.enableConsoleCheckBox.UseVisualStyleBackColor = true;
+            this.enableConsoleCheckBox.CheckedChanged += new System.EventHandler(this.enableConsoleCheckBox_CheckedChanged_1);
             // 
             // groupBox1
             // 
@@ -600,25 +654,128 @@
             this.saveRedirecCheckBox.UseVisualStyleBackColor = true;
             this.saveRedirecCheckBox.CheckedChanged += new System.EventHandler(this.saveRedirecCheckBox_CheckedChanged);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.bepinGroupBox);
+            this.tabPage3.Controls.Add(this.groupBox5);
+            this.tabPage3.Controls.Add(this.groupBox2);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(474, 495);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Debug";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
             // bepinGroupBox
             // 
+            this.bepinGroupBox.Controls.Add(this.doorstopFileLogCheckBox);
+            this.bepinGroupBox.Controls.Add(this.label10);
+            this.bepinGroupBox.Controls.Add(this.label9);
+            this.bepinGroupBox.Controls.Add(this.label8);
+            this.bepinGroupBox.Controls.Add(this.label7);
+            this.bepinGroupBox.Controls.Add(this.harmonyLogTextBox);
+            this.bepinGroupBox.Controls.Add(this.label4);
+            this.bepinGroupBox.Controls.Add(this.label2);
+            this.bepinGroupBox.Controls.Add(this.logLevelTextBox);
             this.bepinGroupBox.Controls.Add(this.appendLogCheckBox);
             this.bepinGroupBox.Controls.Add(this.unityFileCheckBox);
             this.bepinGroupBox.Controls.Add(this.logfileCheckBox);
             this.bepinGroupBox.Controls.Add(this.hideLogsCheckBox);
             this.bepinGroupBox.Controls.Add(this.noConsoleCloseCheckBox);
-            this.bepinGroupBox.Controls.Add(this.enableConsoleCheckBox);
             this.bepinGroupBox.Location = new System.Drawing.Point(8, 6);
             this.bepinGroupBox.Name = "bepinGroupBox";
-            this.bepinGroupBox.Size = new System.Drawing.Size(460, 89);
-            this.bepinGroupBox.TabIndex = 0;
+            this.bepinGroupBox.Size = new System.Drawing.Size(460, 245);
+            this.bepinGroupBox.TabIndex = 10;
             this.bepinGroupBox.TabStop = false;
-            this.bepinGroupBox.Text = "BepInEx Settings";
+            this.bepinGroupBox.Text = "Advanced BepInEx Settings";
+            // 
+            // doorstopFileLogCheckBox
+            // 
+            this.doorstopFileLogCheckBox.AutoSize = true;
+            this.doorstopFileLogCheckBox.Location = new System.Drawing.Point(6, 65);
+            this.doorstopFileLogCheckBox.Name = "doorstopFileLogCheckBox";
+            this.doorstopFileLogCheckBox.Size = new System.Drawing.Size(199, 17);
+            this.doorstopFileLogCheckBox.TabIndex = 11;
+            this.doorstopFileLogCheckBox.Text = "[Doorstop] Write log to output_log.txt";
+            this.doorstopFileLogCheckBox.UseVisualStyleBackColor = true;
+            this.doorstopFileLogCheckBox.CheckedChanged += new System.EventHandler(this.doorstopFileLogCheckBox_CheckedChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.label10.Location = new System.Drawing.Point(6, 225);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(325, 13);
+            this.label10.TabIndex = 13;
+            this.label10.Text = "IL level dumps the whole patched methods, use only when needed!";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 212);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(281, 13);
+            this.label9.TabIndex = 12;
+            this.label9.Text = "Acceptable values: None, Info, IL, Warn, Error, Debug, All";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.label8.Location = new System.Drawing.Point(6, 145);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(438, 13);
+            this.label8.TabIndex = 11;
+            this.label8.Text = "Multiple values can be set at the same time by separating them with , (e.g. Debug" +
+    ", Warning)";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 132);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(358, 13);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Acceptable values: None, Fatal, Error, Warning, Message, Info, Debug, All";
+            // 
+            // harmonyLogTextBox
+            // 
+            this.harmonyLogTextBox.Location = new System.Drawing.Point(9, 189);
+            this.harmonyLogTextBox.Name = "harmonyLogTextBox";
+            this.harmonyLogTextBox.Size = new System.Drawing.Size(445, 20);
+            this.harmonyLogTextBox.TabIndex = 9;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 173);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(96, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Harmony LogLevel";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 93);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "LogLevel";
+            // 
+            // logLevelTextBox
+            // 
+            this.logLevelTextBox.Location = new System.Drawing.Point(6, 109);
+            this.logLevelTextBox.Name = "logLevelTextBox";
+            this.logLevelTextBox.Size = new System.Drawing.Size(448, 20);
+            this.logLevelTextBox.TabIndex = 6;
             // 
             // appendLogCheckBox
             // 
             this.appendLogCheckBox.AutoSize = true;
-            this.appendLogCheckBox.Location = new System.Drawing.Point(237, 65);
+            this.appendLogCheckBox.Location = new System.Drawing.Point(237, 42);
             this.appendLogCheckBox.Name = "appendLogCheckBox";
             this.appendLogCheckBox.Size = new System.Drawing.Size(126, 17);
             this.appendLogCheckBox.TabIndex = 5;
@@ -629,7 +786,7 @@
             // unityFileCheckBox
             // 
             this.unityFileCheckBox.AutoSize = true;
-            this.unityFileCheckBox.Location = new System.Drawing.Point(237, 42);
+            this.unityFileCheckBox.Location = new System.Drawing.Point(237, 19);
             this.unityFileCheckBox.Name = "unityFileCheckBox";
             this.unityFileCheckBox.Size = new System.Drawing.Size(136, 17);
             this.unityFileCheckBox.TabIndex = 4;
@@ -640,7 +797,7 @@
             // logfileCheckBox
             // 
             this.logfileCheckBox.AutoSize = true;
-            this.logfileCheckBox.Location = new System.Drawing.Point(237, 19);
+            this.logfileCheckBox.Location = new System.Drawing.Point(237, 65);
             this.logfileCheckBox.Name = "logfileCheckBox";
             this.logfileCheckBox.Size = new System.Drawing.Size(96, 17);
             this.logfileCheckBox.TabIndex = 3;
@@ -651,7 +808,7 @@
             // hideLogsCheckBox
             // 
             this.hideLogsCheckBox.AutoSize = true;
-            this.hideLogsCheckBox.Location = new System.Drawing.Point(6, 65);
+            this.hideLogsCheckBox.Location = new System.Drawing.Point(6, 42);
             this.hideLogsCheckBox.Name = "hideLogsCheckBox";
             this.hideLogsCheckBox.Size = new System.Drawing.Size(102, 17);
             this.hideLogsCheckBox.TabIndex = 2;
@@ -662,7 +819,7 @@
             // noConsoleCloseCheckBox
             // 
             this.noConsoleCloseCheckBox.AutoSize = true;
-            this.noConsoleCloseCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.noConsoleCloseCheckBox.Location = new System.Drawing.Point(6, 19);
             this.noConsoleCloseCheckBox.Name = "noConsoleCloseCheckBox";
             this.noConsoleCloseCheckBox.Size = new System.Drawing.Size(151, 17);
             this.noConsoleCloseCheckBox.TabIndex = 1;
@@ -670,16 +827,136 @@
             this.noConsoleCloseCheckBox.UseVisualStyleBackColor = true;
             this.noConsoleCloseCheckBox.CheckedChanged += new System.EventHandler(this.noConsoleCloseCheckBox_CheckedChanged);
             // 
-            // enableConsoleCheckBox
+            // groupBox5
             // 
-            this.enableConsoleCheckBox.AutoSize = true;
-            this.enableConsoleCheckBox.Location = new System.Drawing.Point(6, 19);
-            this.enableConsoleCheckBox.Name = "enableConsoleCheckBox";
-            this.enableConsoleCheckBox.Size = new System.Drawing.Size(100, 17);
-            this.enableConsoleCheckBox.TabIndex = 0;
-            this.enableConsoleCheckBox.Text = "Enable Console";
-            this.enableConsoleCheckBox.UseVisualStyleBackColor = true;
-            this.enableConsoleCheckBox.CheckedChanged += new System.EventHandler(this.enableConsoleCheckBox_CheckedChanged);
+            this.groupBox5.Controls.Add(this.label13);
+            this.groupBox5.Controls.Add(this.disableMultiFolderBox);
+            this.groupBox5.Controls.Add(this.forceNonSteamCheckBox);
+            this.groupBox5.Controls.Add(this.label14);
+            this.groupBox5.Controls.Add(this.reinstallSplashButton);
+            this.groupBox5.Controls.Add(this.runningUnderSteamLabel);
+            this.groupBox5.Controls.Add(this.label12);
+            this.groupBox5.Controls.Add(this.splashInstalledOkLabel);
+            this.groupBox5.Controls.Add(this.label11);
+            this.groupBox5.Location = new System.Drawing.Point(6, 257);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(462, 129);
+            this.groupBox5.TabIndex = 0;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Troubleshooting";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.label13.Location = new System.Drawing.Point(249, 81);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(207, 13);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "Use only when you know what your doing:";
+            // 
+            // disableMultiFolderBox
+            // 
+            this.disableMultiFolderBox.AutoSize = true;
+            this.disableMultiFolderBox.Checked = true;
+            this.disableMultiFolderBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+            this.disableMultiFolderBox.Enabled = false;
+            this.disableMultiFolderBox.Location = new System.Drawing.Point(298, 97);
+            this.disableMultiFolderBox.Name = "disableMultiFolderBox";
+            this.disableMultiFolderBox.Size = new System.Drawing.Size(158, 17);
+            this.disableMultiFolderBox.TabIndex = 8;
+            this.disableMultiFolderBox.Text = "Disable Multi-Folder Support";
+            this.disableMultiFolderBox.UseVisualStyleBackColor = true;
+            this.disableMultiFolderBox.CheckedChanged += new System.EventHandler(this.disableMultiFolderBox_CheckedChanged);
+            // 
+            // forceNonSteamCheckBox
+            // 
+            this.forceNonSteamCheckBox.AutoSize = true;
+            this.forceNonSteamCheckBox.Enabled = false;
+            this.forceNonSteamCheckBox.Location = new System.Drawing.Point(11, 97);
+            this.forceNonSteamCheckBox.Name = "forceNonSteamCheckBox";
+            this.forceNonSteamCheckBox.Size = new System.Drawing.Size(109, 17);
+            this.forceNonSteamCheckBox.TabIndex = 7;
+            this.forceNonSteamCheckBox.Text = "Force Non-Steam";
+            this.forceNonSteamCheckBox.UseVisualStyleBackColor = true;
+            this.forceNonSteamCheckBox.CheckedChanged += new System.EventHandler(this.forceNonSteamCheckBox_CheckedChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(314, 16);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(85, 13);
+            this.label14.TabIndex = 6;
+            this.label14.Text = "Reinstall Splash:";
+            // 
+            // reinstallSplashButton
+            // 
+            this.reinstallSplashButton.Location = new System.Drawing.Point(317, 32);
+            this.reinstallSplashButton.Name = "reinstallSplashButton";
+            this.reinstallSplashButton.Size = new System.Drawing.Size(139, 26);
+            this.reinstallSplashButton.TabIndex = 5;
+            this.reinstallSplashButton.Text = "Reinstall";
+            this.reinstallSplashButton.UseVisualStyleBackColor = true;
+            this.reinstallSplashButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // runningUnderSteamLabel
+            // 
+            this.runningUnderSteamLabel.AutoSize = true;
+            this.runningUnderSteamLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.runningUnderSteamLabel.Location = new System.Drawing.Point(8, 67);
+            this.runningUnderSteamLabel.Name = "runningUnderSteamLabel";
+            this.runningUnderSteamLabel.Size = new System.Drawing.Size(71, 13);
+            this.runningUnderSteamLabel.TabIndex = 4;
+            this.runningUnderSteamLabel.Text = "Standalone";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(8, 54);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(89, 13);
+            this.label12.TabIndex = 3;
+            this.label12.Text = "Game is installed:";
+            // 
+            // splashInstalledOkLabel
+            // 
+            this.splashInstalledOkLabel.AutoSize = true;
+            this.splashInstalledOkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.splashInstalledOkLabel.Location = new System.Drawing.Point(8, 32);
+            this.splashInstalledOkLabel.Name = "splashInstalledOkLabel";
+            this.splashInstalledOkLabel.Size = new System.Drawing.Size(105, 13);
+            this.splashInstalledOkLabel.TabIndex = 2;
+            this.splashInstalledOkLabel.Text = "Installed Properly";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(5, 19);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(89, 13);
+            this.label11.TabIndex = 1;
+            this.label11.Text = "Splash Screen is:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.melonButton);
+            this.groupBox2.Location = new System.Drawing.Point(6, 392);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(462, 97);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Compatibility";
+            // 
+            // melonButton
+            // 
+            this.melonButton.Location = new System.Drawing.Point(6, 19);
+            this.melonButton.Name = "melonButton";
+            this.melonButton.Size = new System.Drawing.Size(209, 72);
+            this.melonButton.TabIndex = 8;
+            this.melonButton.Text = "Install MelonLoader Compat";
+            this.melonButton.UseVisualStyleBackColor = true;
+            this.melonButton.Click += new System.EventHandler(this.melonButton_Click);
             // 
             // resPatchButton
             // 
@@ -736,14 +1013,20 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.bepinConfgroupBox.ResumeLayout(false);
+            this.bepinConfgroupBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.fp2libGroupBox.ResumeLayout(false);
             this.fp2libGroupBox.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
             this.bepinGroupBox.ResumeLayout(false);
             this.bepinGroupBox.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -756,10 +1039,8 @@
         private System.Windows.Forms.Button modInstall;
         private System.Windows.Forms.OpenFileDialog modFileDialog;
         private System.Windows.Forms.Button refresh;
-        private System.Windows.Forms.Button melonButton;
         private System.Windows.Forms.Button handlerButton;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -783,13 +1064,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox fp2libGroupBox;
-        private System.Windows.Forms.GroupBox bepinGroupBox;
-        private System.Windows.Forms.CheckBox appendLogCheckBox;
-        private System.Windows.Forms.CheckBox unityFileCheckBox;
-        private System.Windows.Forms.CheckBox logfileCheckBox;
-        private System.Windows.Forms.CheckBox hideLogsCheckBox;
-        private System.Windows.Forms.CheckBox noConsoleCloseCheckBox;
-        private System.Windows.Forms.CheckBox enableConsoleCheckBox;
         private System.Windows.Forms.Button updateCheckButton;
         private System.Windows.Forms.CheckBox managerAutoUpdateCheckBox;
         private System.Windows.Forms.Label managerVersionLabel;
@@ -813,6 +1087,38 @@
         private System.Windows.Forms.CheckBox customLaunchParamCheckBox;
         private System.Windows.Forms.TextBox LaunchParamsTextBox;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Button melonButton;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox bepinGroupBox;
+        private System.Windows.Forms.CheckBox appendLogCheckBox;
+        private System.Windows.Forms.CheckBox unityFileCheckBox;
+        private System.Windows.Forms.CheckBox logfileCheckBox;
+        private System.Windows.Forms.CheckBox hideLogsCheckBox;
+        private System.Windows.Forms.CheckBox noConsoleCloseCheckBox;
+        private System.Windows.Forms.GroupBox bepinConfgroupBox;
+        private System.Windows.Forms.CheckBox splashWithConsoleCheckBox;
+        private System.Windows.Forms.CheckBox splashEnableCheckBox;
+        private System.Windows.Forms.CheckBox enableConsoleCheckBox;
+        private System.Windows.Forms.TextBox logLevelTextBox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox harmonyLogTextBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label splashInstalledOkLabel;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label runningUnderSteamLabel;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button reinstallSplashButton;
+        private System.Windows.Forms.CheckBox forceNonSteamCheckBox;
+        private System.Windows.Forms.CheckBox doorstopFileLogCheckBox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox disableMultiFolderBox;
     }
 }
 

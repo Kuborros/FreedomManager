@@ -1,5 +1,4 @@
-﻿using FreedomManager.Mod;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace FreedomManager
 {
@@ -16,12 +15,24 @@ namespace FreedomManager
     }
     */
 
+    /*
+    {
+        "ManifestVer":2,
+        "Name":"",
+        "Author":"",
+        "Version":"",
+        "Loader":"",
+        "GitHub":"https://github.com/Author/Repo"
+    }
+*/
+
 
     public enum ModType
     {
         BEPINMOD,
         BEPINDLL,
-        BEPINPATCH,
+        BEPINPATCHDLL,
+        BEPINPATCHDIR,
         MELONMOD,
         LIBRARY,
         JSONNPC,
@@ -29,6 +40,12 @@ namespace FreedomManager
         SPECIAL
     }
 
+    public enum ModLocation
+    {
+        WORKSHOP,
+        MODSDIR,
+        LEGACY
+    }
 
     public class ModInfo
     {
@@ -40,9 +57,11 @@ namespace FreedomManager
         public bool? HasAssets { get; set; }
         public int? GBID { get; set; }
         public ModType? Type { get; set; }
+        public ModLocation Location { get; set; }
         public string Dirname { get; set; }
         public bool Enabled { get; set; }
         public bool HasIndex { get; set; }
+        public bool HideInUI { get; set; }
         public string GitHub { get; set; }
 
         //V1 Json
@@ -53,7 +72,11 @@ namespace FreedomManager
             Author = author;
             Version = version;
 
-            if (loader.ToLower() == "bepinex" || loader.ToLower() == "bepin") Loader = "BepInEx";
+            if (loader.ToLower() == "bepinex" || loader.ToLower() == "bepin")
+            {
+                Loader = "BepInEx";
+                Location = ModLocation.LEGACY;
+            }
             else if (loader.ToLower() == "melonloader" || loader.ToLower() == "melon") Loader = "MelonLoader";
             else Loader = "Unknown";
 
@@ -74,6 +97,7 @@ namespace FreedomManager
                 GBID = 0;
             }
             else GBID = gBID;
+            Location = ModLocation.LEGACY;
             GitHub = gitHub;
             Dirname = "invalid-directory-to-be-set";
             Enabled = true;
@@ -81,7 +105,7 @@ namespace FreedomManager
 
         public ModInfo(string name, ModType archiveType) : this(name, "N/A", archiveType) { }
 
-        public ModInfo(string name,string author, ModType archiveType)
+        public ModInfo(string name, string author, ModType archiveType)
         {
             Name = SpecialNames(name);
             Author = author;
@@ -89,10 +113,14 @@ namespace FreedomManager
 
             if (archiveType == ModType.BEPINMOD) Loader = "BepInEx";
             else if (archiveType == ModType.BEPINDLL) Loader = "BepInEx (DLL)";
+            else if (archiveType == ModType.BEPINPATCHDLL) Loader = "BepInEx (Patch)";
+            else if (archiveType == ModType.BEPINPATCHDIR) Loader = "BepInEx (Patch)";
             else if (archiveType == ModType.MELONMOD) Loader = "MelonLoader";
             else if (archiveType == ModType.JSONNPC) Loader = "NPC (JSON)";
             else if (archiveType == ModType.STAGE) Loader = "Stage";
             else Loader = "N/A";
+
+            Location = ModLocation.LEGACY;
 
             HasAssets = true;
             Type = archiveType;
