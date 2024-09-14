@@ -143,6 +143,7 @@ namespace FreedomManager
             bepinConfig = new BepinConfig();
 
             bepInExToolStripMenuItem.Enabled = bepisPresent;
+            reinstallSplashButton.Enabled = bepisPresent;
             melonLoaderToolStripMenuItem.Enabled = melonPresent;
             openLogfileToolStripMenuItem.Enabled = File.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log"));
 
@@ -926,7 +927,7 @@ namespace FreedomManager
 
         private void appendLogCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            bepinConfig.AppendLog = enableConsoleCheckBox.Checked;
+            bepinConfig.AppendLog = appendLogCheckBox.Checked;
         }
 
         private void saveButton_Click(object sender, EventArgs e)

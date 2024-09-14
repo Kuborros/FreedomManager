@@ -69,7 +69,7 @@ namespace FreedomManager.Mod
 
         internal bool installBepinUtils(bool force)
         {
-            if (!bepinUtilsInstalled || force)
+            if ((!bepinUtilsInstalled && bepinInstalled) || force)
             {
                 using (WebClient client = new WebClient())
                 {
