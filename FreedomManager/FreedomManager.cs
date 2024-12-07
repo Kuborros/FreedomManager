@@ -14,7 +14,6 @@ using System.IO.Pipes;
 using System.Net;
 using System.Net.Cache;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -82,11 +81,25 @@ namespace FreedomManager
             if (fp2Found && !bepisPresent)
             {
                 using (Form tempform = new Form { TopMost = true })
-                    MessageBox.Show(tempform,"BepInEx not Found!.\n\n" +
+                    MessageBox.Show(tempform, "BepInEx not Found!.\n\n" +
                         "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
                         "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+
+                bepinVersionLabel.Text = "N/A";
             }
-            else setup.Text = "Uninstall BepInEx";
+            else
+            {
+                setup.Text = "Uninstall BepInEx";
+                if (managerConfig.bepinexVersion != null)
+                {
+                    loaderHandler.bepinVersion = managerConfig.bepinexVersion;
+                }
+                else
+                {
+                    loaderHandler.bepinVersion = "5.4.22.0";
+                }
+                bepinVersionLabel.Text = loaderHandler.bepinVersion;
+            }
 
             if (melonPresent)
             {
@@ -132,6 +145,10 @@ namespace FreedomManager
             if (managerConfig.autoUpdateMods)
             {
                 checkForModUpdatesAsync(false);
+            }
+            if (managerConfig.autoUpdateBepin)
+            {
+                checkForBepInExUpdatesAsync(false);
             }
 
             managerVersionLabel.Text = Application.ProductVersion;
@@ -210,6 +227,7 @@ namespace FreedomManager
             //modUpdateCheckBox.Enabled = loaderHandler.bepinInstalled;
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
+            bepinUpdateCheckbox.Checked = managerConfig.autoUpdateBepin;
             modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
 
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
@@ -463,6 +481,52 @@ namespace FreedomManager
             }
         }
 
+        private async Task checkForBepInExUpdatesAsync(bool hideNoUpdates)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.Headers["Accept"] = "application/vnd.github+json";
+                client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
+                client.Headers["user-agent"] = "FreedomManager";
+                try
+                {
+                    string response = await client.DownloadStringTaskAsync(LoaderHandler.latestStableBepInEx5);
+
+                    GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
+
+                    string localVersion = "0.0.0";
+                    if (loaderHandler.bepinInstalled)
+                    {
+                        localVersion = loaderHandler.bepinVersion.TrimStart('v');
+                    }
+                    Version local = new Version(localVersion);
+
+                    string remoteVersion = release.tag_name.Split('-')[0].TrimStart('v');
+                    Version remote = new Version(remoteVersion);
+
+                    if (remote > local)
+                    {
+                        using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
+                        {
+                            updateForm.loadBepInExChangelog();
+                            DialogResult dialogResult = updateForm.ShowDialog();
+
+                            if (dialogResult == DialogResult.Yes)
+                                await AsyncModDownloadGitHub(LoaderHandler.latestStableBepInEx5File, "BepInEx_win_x86_5.4.23.2.zip");
+                        }
+                    }
+                    else
+                    {
+                        if (!hideNoUpdates) MessageBox.Show("There are no new BepInEx5 updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+        }
+
         private async Task checkForModUpdatesAsync(bool showOnNoUpdates)
         {
             modUpdates = new List<ModUpdateInfo>();
@@ -609,6 +673,8 @@ namespace FreedomManager
                     "The game is now ready for modding.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     setup.Text = "Uninstall BepInEx";
+                    managerConfig.bepinexVersion = loaderHandler.bepinVersion;
+                    bepinVersionLabel.Text = loaderHandler.bepinVersion;
                 }
                 else
                 {
@@ -617,10 +683,13 @@ namespace FreedomManager
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     setup.Text = "Install BepInEx";
+                    managerConfig.bepinexVersion = "";
+                    bepinVersionLabel.Text = "N/A";
 
                 }
                 RenderList();
-                checkForFP2LibUpdatesAsync(true);
+                if (loaderHandler.bepinInstalled)
+                    checkForFP2LibUpdatesAsync(true);
             }
             catch (Exception ex)
             {
@@ -811,7 +880,7 @@ namespace FreedomManager
             if (listView1.FocusedItem != null) //Prevents the initial checking of every item from firing an event
             {
                 ModInfo info = (ModInfo)e.Item.Tag;
-                if (info.Type == ModType.JSONNPC || info.Type == ModType.STAGE || info.Type == ModType.SPECIAL)
+                if (info.Type == ModType.JSONNPC || info.Type == ModType.STAGE || info.Type == ModType.SPECIAL || info.InternalMod)
                 {
                     //These types cannot be disabled. Winforms UI does not let you show it nicely without custom drawing, so we just force the option always on.
                     e.Item.Checked = true;
@@ -1048,6 +1117,16 @@ namespace FreedomManager
         private void disableMultiFolderBox_CheckedChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private async void bepinUpdateButton_Click(object sender, EventArgs e)
+        {
+            await checkForBepInExUpdatesAsync(false);
+        }
+
+        private void bepinUpdateCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            managerConfig.autoUpdateBepin = bepinUpdateCheckbox.Checked;
         }
     }
 }

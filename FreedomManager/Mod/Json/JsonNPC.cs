@@ -5,6 +5,7 @@
         public string UID { get; set; }
         public string name { get; set; }
         public string author { get; set; }
+        public string version { get; set; }
         public string scene { get; set; }
         public string bundlePath { get; set; }
         public int species { get; set; }

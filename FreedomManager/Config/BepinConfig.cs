@@ -18,7 +18,7 @@ namespace FreedomManager
         //[Harmony.Logger]
         public string HarmonyLogLevels = "Warn, Error";
         //[SplashScreen]
-        public bool SplashEnabled = true, OnlyNoConsole = true;
+        public bool SplashEnabled = false, OnlyNoConsole = true;
 
         public BepinConfig()
         {
@@ -46,7 +46,8 @@ namespace FreedomManager
 
                     HarmonyLogLevels = data["Harmony.Logger"]["LogChannels"];
 
-                    SplashEnabled = bool.Parse(data["SplashScreen"]["Enabled"]);
+                    //SplashEnabled = bool.Parse(data["SplashScreen"]["Enabled"]);
+                    SplashEnabled = false;
                     OnlyNoConsole = bool.Parse(data["SplashScreen"]["OnlyNoConsole"]);
                 }
                 catch (Exception ex)

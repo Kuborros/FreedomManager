@@ -5,14 +5,10 @@ namespace FreedomManager.Mod.Json
 {
     internal class JsonMap
     {
-        internal string Author { get; set; }
-        internal string Name { get; set; }
-
-        [JsonConstructor]
-        internal JsonMap(string author, string name)
-        {
-            Author = author;
-            Name = name;
-        }
+        public string UID { get; set; }
+        public string name { get; set; }
+        public string author { get; set; }
+        public string version { get; set; }
+        public string bundlePath { get; set; }
     }
 }

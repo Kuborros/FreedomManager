@@ -9,8 +9,9 @@ namespace FreedomManager.Config
     {
         public static bool confWritten = true;
         //[UnityDoorstop]
-        public bool DoorstopEnabled = true, RedirectOutputLog = false;
+        public bool DoorstopEnabled = true, RedirectOutputLog = false, EnableDebugger = false;
         public string DllSearchPathOverride = "";
+        /*
         //[MultiFolderLoader]
         public string ModsbaseDir = "";
         public string DisabledModsListPath = "";
@@ -18,7 +19,7 @@ namespace FreedomManager.Config
         //[MultiFolderLoader_Workshop]
         public string WorkshopModsBaseDir = "";
         public string WorkshopDisabledModsListPath = "";
-
+        */
 
         public DoorstopConfig()
         {
@@ -38,10 +39,13 @@ namespace FreedomManager.Config
                     parser.Configuration.CommentString = "#";
                     IniData data = parser.Parse(File.ReadAllText("doorstop_config.ini"));
 
-                    DoorstopEnabled = bool.Parse(data["UnityDoorstop"]["enabled"]);
-                    RedirectOutputLog = bool.Parse(data["UnityDoorstop"]["redirectOutputLog"]);
-                    DllSearchPathOverride = data["UnityDoorstop"]["dllSearchPathOverride"];
+                    DoorstopEnabled = bool.Parse(data["General"]["enabled"]);
+                    RedirectOutputLog = bool.Parse(data["General"]["redirect_output_log"]);
+                    DllSearchPathOverride = data["UnityMono"]["dll_search_path_override"];
+                    EnableDebugger = bool.Parse(data["UnityMono"]["debug_enabled"]);
 
+                    //Used for multi folder loader. Currently unused due to steam workshop plans being abandoned by GT.
+                    /*
                     ModsbaseDir = basedir + "\\Mods";
                     DisabledModsListPath = "disabled_mods.list";
 
@@ -50,6 +54,8 @@ namespace FreedomManager.Config
                         WorkshopModsBaseDir = basedir.Replace("common\\Freedom Planet 2", "workshop\\content\\595500");
                         WorkshopDisabledModsListPath = "disabled_mods.list";
                     }
+                    */
+                    
                 }
                 catch (Exception ex)
                 {
@@ -67,10 +73,12 @@ namespace FreedomManager.Config
                 parser.Configuration.CommentString = "#";
                 IniData data = parser.Parse(File.ReadAllText("doorstop_config.ini"));
 
-                data["UnityDoorstop"]["enabled"] = DoorstopEnabled.ToString();
-                data["UnityDoorstop"]["redirectOutputLog"] = RedirectOutputLog.ToString();
-                data["UnityDoorstop"]["dllSearchPathOverride"] = DllSearchPathOverride;
+                data["General"]["enabled"] = DoorstopEnabled.ToString();
+                data["General"]["redirect_output_log"] = RedirectOutputLog.ToString();
+                data["UnityMono"]["dll_search_path_override"] = DllSearchPathOverride;
+                data["UnityMono"]["debug_enabled"] = EnableDebugger.ToString();
 
+                /*
                 data["MultiFolderLoader"]["baseDir"] = ModsbaseDir;
                 data["MultiFolderLoader"]["disabledModsListPath"] = DisabledModsListPath;
                 data["MultiFolderLoader"]["enableAdditionalDirectories"] = EnableAdditionalDirectories.ToString();
@@ -80,8 +88,9 @@ namespace FreedomManager.Config
                     data["MultiFolderLoader_Workshop"]["baseDir"] = WorkshopModsBaseDir;
                     data["MultiFolderLoader_Workshop"]["disabledModsListPath"] = WorkshopDisabledModsListPath;
                 }
-
+                */
                 File.WriteAllText("doorstop_config.ini", data.ToString());
+
             }
             catch (Exception ex)
             {

@@ -52,7 +52,11 @@ namespace FreedomManager.Config
                     data["Save Redirection"]["Fancy Json"] = saveFancyJson.ToString();
                     data["Save Redirection"]["Profile"] = saveRedirectProfile.ToString();
 
-                    //TODO: Maybe add same existence check as BepInConfig has
+                    //We are trying to write to a file that dissapeared? Make sure the path exists.
+                    if (!File.Exists("BepInEx\\config\\000.kuborro.libraries.fp2.fp2lib.cfg"))
+                    {
+                        Directory.CreateDirectory("BepInEx\\config");
+                    }
                     File.WriteAllText(confPath, data.ToString());
                 }
                 catch (Exception ex)
