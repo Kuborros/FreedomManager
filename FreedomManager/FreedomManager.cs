@@ -981,12 +981,22 @@ namespace FreedomManager
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
+            //Check if to enable GitHub link option
             if (modInfo.GitHub == "" || modInfo.GitHub == null)
             {
                 contextMenuStrip1.Items[1].Enabled = false;
             } 
             else
                 contextMenuStrip1.Items[1].Enabled = true;
+
+            //Disable uninstall if the mod is specified as internal
+            if (modInfo.InternalMod)
+            {
+                contextMenuStrip1.Items[2].Enabled = false;
+            }
+            else
+                contextMenuStrip1.Items[2].Enabled = true;
+
             e.Cancel = false;
         }
 
