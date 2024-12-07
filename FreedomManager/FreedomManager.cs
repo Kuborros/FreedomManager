@@ -496,11 +496,22 @@ namespace FreedomManager
                     GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
 
                     string localVersion = "0.0.0";
-                    if (loaderHandler.bepinInstalled)
-                    {
-                        localVersion = loaderHandler.bepinVersion.TrimStart('v');
-                    }
                     Version local = new Version(localVersion);
+                    try
+                    {
+                        if (loaderHandler.bepinInstalled)
+                        {
+                            localVersion = loaderHandler.bepinVersion.TrimStart('v');
+                        }
+                        //Visual Studio insists this is more readable than if statement. Ok. (this puts a placeholder value in case we get null from parsing localVersion)
+                        local = new Version(localVersion);
+
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Failed to parse the bepinex version value. Assuming broken!");
+                        Console.Error.WriteLine(exit.Text);
+                    }
 
                     string remoteVersion = release.tag_name.Split('-')[0].TrimStart('v');
                     Version remote = new Version(remoteVersion);
