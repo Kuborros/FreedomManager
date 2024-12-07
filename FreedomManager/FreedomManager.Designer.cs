@@ -60,6 +60,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.bepinUpdateButton = new System.Windows.Forms.Button();
             this.bepinConfgroupBox = new System.Windows.Forms.GroupBox();
             this.splashWithConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.splashEnableCheckBox = new System.Windows.Forms.CheckBox();
@@ -100,8 +101,6 @@
             this.hideLogsCheckBox = new System.Windows.Forms.CheckBox();
             this.noConsoleCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.disableMultiFolderBox = new System.Windows.Forms.CheckBox();
             this.forceNonSteamCheckBox = new System.Windows.Forms.CheckBox();
             this.label14 = new System.Windows.Forms.Label();
             this.reinstallSplashButton = new System.Windows.Forms.Button();
@@ -116,6 +115,10 @@
             this.fp2resCheckBox = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.label15 = new System.Windows.Forms.Label();
+            this.bepinVersionLabel = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.bepinUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -384,6 +387,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.bepinUpdateButton);
             this.tabPage2.Controls.Add(this.bepinConfgroupBox);
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.checkForModUpdatesButton);
@@ -399,8 +403,19 @@
             this.tabPage2.Text = "Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // bepinUpdateButton
+            // 
+            this.bepinUpdateButton.Location = new System.Drawing.Point(171, 424);
+            this.bepinUpdateButton.Name = "bepinUpdateButton";
+            this.bepinUpdateButton.Size = new System.Drawing.Size(134, 65);
+            this.bepinUpdateButton.TabIndex = 17;
+            this.bepinUpdateButton.Text = "Check for Loader Updates";
+            this.bepinUpdateButton.UseVisualStyleBackColor = true;
+            this.bepinUpdateButton.Click += new System.EventHandler(this.bepinUpdateButton_Click);
+            // 
             // bepinConfgroupBox
             // 
+            this.bepinConfgroupBox.Controls.Add(this.label16);
             this.bepinConfgroupBox.Controls.Add(this.splashWithConsoleCheckBox);
             this.bepinConfgroupBox.Controls.Add(this.splashEnableCheckBox);
             this.bepinConfgroupBox.Controls.Add(this.enableConsoleCheckBox);
@@ -414,6 +429,7 @@
             // splashWithConsoleCheckBox
             // 
             this.splashWithConsoleCheckBox.AutoSize = true;
+            this.splashWithConsoleCheckBox.Enabled = false;
             this.splashWithConsoleCheckBox.Location = new System.Drawing.Point(6, 65);
             this.splashWithConsoleCheckBox.Name = "splashWithConsoleCheckBox";
             this.splashWithConsoleCheckBox.Size = new System.Drawing.Size(246, 17);
@@ -425,6 +441,7 @@
             // splashEnableCheckBox
             // 
             this.splashEnableCheckBox.AutoSize = true;
+            this.splashEnableCheckBox.Enabled = false;
             this.splashEnableCheckBox.Location = new System.Drawing.Point(6, 42);
             this.splashEnableCheckBox.Name = "splashEnableCheckBox";
             this.splashEnableCheckBox.Size = new System.Drawing.Size(135, 17);
@@ -495,6 +512,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.bepinUpdateCheckbox);
+            this.groupBox3.Controls.Add(this.bepinVersionLabel);
+            this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.modUpdateCheckBox);
             this.groupBox3.Controls.Add(this.fp2libVersionLabel);
             this.groupBox3.Controls.Add(this.label3);
@@ -574,9 +594,9 @@
             this.managerAutoUpdateCheckBox.AutoSize = true;
             this.managerAutoUpdateCheckBox.Location = new System.Drawing.Point(6, 19);
             this.managerAutoUpdateCheckBox.Name = "managerAutoUpdateCheckBox";
-            this.managerAutoUpdateCheckBox.Size = new System.Drawing.Size(252, 17);
+            this.managerAutoUpdateCheckBox.Size = new System.Drawing.Size(203, 17);
             this.managerAutoUpdateCheckBox.TabIndex = 13;
-            this.managerAutoUpdateCheckBox.Text = "Check for Freedom Manager updates on startup";
+            this.managerAutoUpdateCheckBox.Text = "Check for FP2MM updates on startup";
             this.managerAutoUpdateCheckBox.UseVisualStyleBackColor = true;
             this.managerAutoUpdateCheckBox.CheckedChanged += new System.EventHandler(this.managerAutoUpdateCheckBox_CheckedChanged);
             // 
@@ -829,8 +849,6 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.label13);
-            this.groupBox5.Controls.Add(this.disableMultiFolderBox);
             this.groupBox5.Controls.Add(this.forceNonSteamCheckBox);
             this.groupBox5.Controls.Add(this.label14);
             this.groupBox5.Controls.Add(this.reinstallSplashButton);
@@ -844,30 +862,6 @@
             this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Troubleshooting";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            this.label13.Location = new System.Drawing.Point(249, 81);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(207, 13);
-            this.label13.TabIndex = 9;
-            this.label13.Text = "Use only when you know what your doing:";
-            // 
-            // disableMultiFolderBox
-            // 
-            this.disableMultiFolderBox.AutoSize = true;
-            this.disableMultiFolderBox.Checked = true;
-            this.disableMultiFolderBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
-            this.disableMultiFolderBox.Enabled = false;
-            this.disableMultiFolderBox.Location = new System.Drawing.Point(298, 97);
-            this.disableMultiFolderBox.Name = "disableMultiFolderBox";
-            this.disableMultiFolderBox.Size = new System.Drawing.Size(158, 17);
-            this.disableMultiFolderBox.TabIndex = 8;
-            this.disableMultiFolderBox.Text = "Disable Multi-Folder Support";
-            this.disableMultiFolderBox.UseVisualStyleBackColor = true;
-            this.disableMultiFolderBox.CheckedChanged += new System.EventHandler(this.disableMultiFolderBox_CheckedChanged);
             // 
             // forceNonSteamCheckBox
             // 
@@ -884,15 +878,15 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(314, 16);
+            this.label14.Location = new System.Drawing.Point(314, 81);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(85, 13);
+            this.label14.Size = new System.Drawing.Size(86, 13);
             this.label14.TabIndex = 6;
-            this.label14.Text = "Reinstall Splash:";
+            this.label14.Text = "Reinstall Utilities:";
             // 
             // reinstallSplashButton
             // 
-            this.reinstallSplashButton.Location = new System.Drawing.Point(317, 32);
+            this.reinstallSplashButton.Location = new System.Drawing.Point(317, 97);
             this.reinstallSplashButton.Name = "reinstallSplashButton";
             this.reinstallSplashButton.Size = new System.Drawing.Size(139, 26);
             this.reinstallSplashButton.TabIndex = 5;
@@ -934,9 +928,9 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(5, 19);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(89, 13);
+            this.label11.Size = new System.Drawing.Size(81, 13);
             this.label11.TabIndex = 1;
-            this.label11.Text = "Splash Screen is:";
+            this.label11.Text = "Utility mods are:";
             // 
             // groupBox2
             // 
@@ -988,6 +982,45 @@
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(3, 84);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(131, 13);
+            this.label15.TabIndex = 20;
+            this.label15.Text = "Current BepInEx5 Version:";
+            // 
+            // bepinVersionLabel
+            // 
+            this.bepinVersionLabel.AutoSize = true;
+            this.bepinVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.bepinVersionLabel.Location = new System.Drawing.Point(142, 84);
+            this.bepinVersionLabel.Name = "bepinVersionLabel";
+            this.bepinVersionLabel.Size = new System.Drawing.Size(30, 13);
+            this.bepinVersionLabel.TabIndex = 21;
+            this.bepinVersionLabel.Text = "N/A";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(142, 43);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(301, 13);
+            this.label16.TabIndex = 4;
+            this.label16.Text = "- Currently disabled due to Discord detecting it as wrong game!";
+            // 
+            // bepinUpdateCheckbox
+            // 
+            this.bepinUpdateCheckbox.AutoSize = true;
+            this.bepinUpdateCheckbox.Location = new System.Drawing.Point(205, 19);
+            this.bepinUpdateCheckbox.Name = "bepinUpdateCheckbox";
+            this.bepinUpdateCheckbox.Size = new System.Drawing.Size(206, 17);
+            this.bepinUpdateCheckbox.TabIndex = 5;
+            this.bepinUpdateCheckbox.Text = "Check for BepInEx updates on startup";
+            this.bepinUpdateCheckbox.UseVisualStyleBackColor = true;
+            this.bepinUpdateCheckbox.CheckedChanged += new System.EventHandler(this.bepinUpdateCheckbox_CheckedChanged);
             // 
             // FreedomManager
             // 
@@ -1117,8 +1150,11 @@
         private System.Windows.Forms.Button reinstallSplashButton;
         private System.Windows.Forms.CheckBox forceNonSteamCheckBox;
         private System.Windows.Forms.CheckBox doorstopFileLogCheckBox;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.CheckBox disableMultiFolderBox;
+        private System.Windows.Forms.Button bepinUpdateButton;
+        private System.Windows.Forms.Label bepinVersionLabel;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.CheckBox bepinUpdateCheckbox;
     }
 }
 

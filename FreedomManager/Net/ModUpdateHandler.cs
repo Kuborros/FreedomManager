@@ -37,9 +37,9 @@ namespace FreedomManager.Net
                     string response = await client.DownloadStringTaskAsync(new Uri(string.Format("https://api.github.com/repos/{0}/{1}/releases/latest", ghAuthor, ghRepo)));
                     GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
 
-                    Version local = new Version(mod.Version);
+                    Version local = new Version(mod.Version.TrimStart('v'));
 
-                    string remoteVersion = release.tag_name.Split('-')[0];
+                    string remoteVersion = release.tag_name.Split('-')[0].TrimStart('v');
                     Version remote = new Version(remoteVersion);
 
                     //If local ver is higher or equal, it means no updates

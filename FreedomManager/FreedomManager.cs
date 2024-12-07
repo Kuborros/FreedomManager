@@ -14,7 +14,6 @@ using System.IO.Pipes;
 using System.Net;
 using System.Net.Cache;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -82,11 +81,25 @@ namespace FreedomManager
             if (fp2Found && !bepisPresent)
             {
                 using (Form tempform = new Form { TopMost = true })
-                    MessageBox.Show(tempform,"BepInEx not Found!.\n\n" +
+                    MessageBox.Show(tempform, "BepInEx not Found!.\n\n" +
                         "Seems you dont have BepInEx installed - before you install any mods, install it by clicking on \"Install BepInEx\" button.",
                         "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+
+                bepinVersionLabel.Text = "N/A";
             }
-            else setup.Text = "Uninstall BepInEx";
+            else
+            {
+                setup.Text = "Uninstall BepInEx";
+                if (managerConfig.bepinexVersion != null)
+                {
+                    loaderHandler.bepinVersion = managerConfig.bepinexVersion;
+                }
+                else
+                {
+                    loaderHandler.bepinVersion = "5.4.22.0";
+                }
+                bepinVersionLabel.Text = loaderHandler.bepinVersion;
+            }
 
             if (melonPresent)
             {
@@ -133,6 +146,10 @@ namespace FreedomManager
             {
                 checkForModUpdatesAsync(false);
             }
+            if (managerConfig.autoUpdateBepin)
+            {
+                checkForBepInExUpdatesAsync(true);
+            }
 
             managerVersionLabel.Text = Application.ProductVersion;
         }
@@ -143,6 +160,7 @@ namespace FreedomManager
             bepinConfig = new BepinConfig();
 
             bepInExToolStripMenuItem.Enabled = bepisPresent;
+            reinstallSplashButton.Enabled = bepisPresent;
             melonLoaderToolStripMenuItem.Enabled = melonPresent;
             openLogfileToolStripMenuItem.Enabled = File.Exists(Path.Combine(Path.GetFullPath("."), "BepInEx\\LogOutput.log"));
 
@@ -209,6 +227,8 @@ namespace FreedomManager
             //modUpdateCheckBox.Enabled = loaderHandler.bepinInstalled;
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
+            bepinUpdateCheckbox.Checked = managerConfig.autoUpdateBepin;
+            bepinVersionLabel.Text = managerConfig.bepinexVersion;
             modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
 
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
@@ -462,6 +482,63 @@ namespace FreedomManager
             }
         }
 
+        private async Task checkForBepInExUpdatesAsync(bool hideNoUpdates)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.Headers["Accept"] = "application/vnd.github+json";
+                client.Headers["X-GitHub-Api-Version"] = "2022-11-28";
+                client.Headers["user-agent"] = "FreedomManager";
+                try
+                {
+                    string response = await client.DownloadStringTaskAsync(LoaderHandler.latestStableBepInEx5);
+
+                    GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(response);
+
+                    string localVersion = "0.0.0";
+                    Version local = new Version(localVersion);
+                    try
+                    {
+                        if (loaderHandler.bepinInstalled)
+                        {
+                            localVersion = loaderHandler.bepinVersion.TrimStart('v');
+                        }
+                        //Visual Studio insists this is more readable than if statement. Ok. (this puts a placeholder value in case we get null from parsing localVersion)
+                        local = new Version(localVersion);
+
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Failed to parse the bepinex version value. Assuming broken!");
+                        Console.Error.WriteLine(exit.Text);
+                    }
+
+                    string remoteVersion = release.tag_name.Split('-')[0].TrimStart('v');
+                    Version remote = new Version(remoteVersion);
+
+                    if (remote > local)
+                    {
+                        using (ManagerUpdateInfoForm updateForm = new ManagerUpdateInfoForm())
+                        {
+                            updateForm.loadBepInExChangelog();
+                            DialogResult dialogResult = updateForm.ShowDialog();
+
+                            if (dialogResult == DialogResult.Yes)
+                                await AsyncModDownloadGitHub(LoaderHandler.latestStableBepInEx5File, "BepInEx_win_x86_5.4.23.2.zip");
+                        }
+                    }
+                    else
+                    {
+                        if (!hideNoUpdates) MessageBox.Show("There are no new BepInEx5 updates available.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+        }
+
         private async Task checkForModUpdatesAsync(bool showOnNoUpdates)
         {
             modUpdates = new List<ModUpdateInfo>();
@@ -545,6 +622,12 @@ namespace FreedomManager
             {
                 RenderList();
                 loaderHandler.checkFP2Lib();
+                if (tempname.Contains(LoaderHandler.latestStableBepInEx5Ver))
+                {
+                    loaderHandler.bepinVersion = LoaderHandler.latestStableBepInEx5Ver;
+                    managerConfig.bepinexVersion = LoaderHandler.latestStableBepInEx5Ver;
+                }
+                managerConfig.writeConfig();
                 updateConfigUi();
             }
             else
@@ -608,6 +691,8 @@ namespace FreedomManager
                     "The game is now ready for modding.",
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     setup.Text = "Uninstall BepInEx";
+                    managerConfig.bepinexVersion = loaderHandler.bepinVersion;
+                    bepinVersionLabel.Text = loaderHandler.bepinVersion;
                 }
                 else
                 {
@@ -616,10 +701,13 @@ namespace FreedomManager
                     Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     setup.Text = "Install BepInEx";
+                    managerConfig.bepinexVersion = "";
+                    bepinVersionLabel.Text = "N/A";
 
                 }
                 RenderList();
-                checkForFP2LibUpdatesAsync(true);
+                if (loaderHandler.bepinInstalled)
+                    checkForFP2LibUpdatesAsync(true);
             }
             catch (Exception ex)
             {
@@ -627,6 +715,7 @@ namespace FreedomManager
                 "Error info: " + ex.Message,
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            managerConfig.writeConfig();
             updateConfigUi();
         }
 
@@ -810,7 +899,7 @@ namespace FreedomManager
             if (listView1.FocusedItem != null) //Prevents the initial checking of every item from firing an event
             {
                 ModInfo info = (ModInfo)e.Item.Tag;
-                if (info.Type == ModType.JSONNPC || info.Type == ModType.STAGE || info.Type == ModType.SPECIAL)
+                if (info.Type == ModType.JSONNPC || info.Type == ModType.STAGE || info.Type == ModType.SPECIAL || info.InternalMod)
                 {
                     //These types cannot be disabled. Winforms UI does not let you show it nicely without custom drawing, so we just force the option always on.
                     e.Item.Checked = true;
@@ -892,10 +981,22 @@ namespace FreedomManager
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             ModInfo modInfo = (ModInfo)listView1.Items[columnIndex].Tag;
+            //Check if to enable GitHub link option
             if (modInfo.GitHub == "" || modInfo.GitHub == null)
             {
                 contextMenuStrip1.Items[1].Enabled = false;
+            } 
+            else
+                contextMenuStrip1.Items[1].Enabled = true;
+
+            //Disable uninstall if the mod is specified as internal
+            if (modInfo.InternalMod)
+            {
+                contextMenuStrip1.Items[2].Enabled = false;
             }
+            else
+                contextMenuStrip1.Items[2].Enabled = true;
+
             e.Cancel = false;
         }
 
@@ -926,7 +1027,7 @@ namespace FreedomManager
 
         private void appendLogCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            bepinConfig.AppendLog = enableConsoleCheckBox.Checked;
+            bepinConfig.AppendLog = appendLogCheckBox.Checked;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -1047,6 +1148,16 @@ namespace FreedomManager
         private void disableMultiFolderBox_CheckedChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private async void bepinUpdateButton_Click(object sender, EventArgs e)
+        {
+            await checkForBepInExUpdatesAsync(false);
+        }
+
+        private void bepinUpdateCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            managerConfig.autoUpdateBepin = bepinUpdateCheckbox.Checked;
         }
     }
 }

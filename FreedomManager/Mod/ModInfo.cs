@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace FreedomManager
 {
@@ -46,7 +47,7 @@ namespace FreedomManager
         MODSDIR,
         LEGACY
     }
-
+    [Serializable]
     public class ModInfo
     {
         public int ManifestVer { get; set; }
@@ -63,6 +64,8 @@ namespace FreedomManager
         public bool HasIndex { get; set; }
         public bool HideInUI { get; set; }
         public string GitHub { get; set; }
+
+        internal bool InternalMod = false;
 
         //V1 Json
         [JsonConstructor]
