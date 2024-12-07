@@ -11,6 +11,7 @@ namespace FreedomManager.Mod
         //TODO: Figure out some nicer way to push this without updating whole mod manager
         public static readonly Uri latestStableBepInEx5 = new Uri("https://api.github.com/repos/BepInEx/BepInEx/releases/153584734");
         public static readonly Uri latestStableBepInEx5File = new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x86_5.4.23.2.zip");
+        public static readonly string latestStableBepInEx5Ver = "5.4.23.2";
 
         public bool bepinInstalled;
         public bool melonInstalled;
@@ -57,16 +58,7 @@ namespace FreedomManager.Mod
 
             if (bepinInstalled)
             {
-                if (File.Exists(".doorstop_version"))
-                {
-                    doorstopVersion = File.ReadAllText(".doorstop_version");
-                }
-                else
-                {
-                    //Doorstop version file was added in 5.4.23. If not present, we are on 5.4.22 or lower.
-                    bepinVersion = "5.4.22.0";
-                    doorstopVersion = "3.4.0";
-                }
+                checkBepinVer();
             }
 
         }
@@ -188,6 +180,20 @@ namespace FreedomManager.Mod
             {
                 fp2libInstalled = false;
                 fp2libVersion = "Not Installed";
+            }
+        }
+
+        internal void checkBepinVer()
+        {
+            if (File.Exists(".doorstop_version"))
+            {
+                doorstopVersion = File.ReadAllText(".doorstop_version");
+            }
+            else
+            {
+                //Doorstop version file was added in 5.4.23. If not present, we are on 5.4.22 or lower.
+                bepinVersion = "5.4.22.0";
+                doorstopVersion = "3.4.0";
             }
         }
     }

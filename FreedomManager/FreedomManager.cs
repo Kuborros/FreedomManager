@@ -148,7 +148,7 @@ namespace FreedomManager
             }
             if (managerConfig.autoUpdateBepin)
             {
-                checkForBepInExUpdatesAsync(false);
+                checkForBepInExUpdatesAsync(true);
             }
 
             managerVersionLabel.Text = Application.ProductVersion;
@@ -228,6 +228,7 @@ namespace FreedomManager
 
             managerAutoUpdateCheckBox.Checked = managerConfig.autoUpdateManager;
             bepinUpdateCheckbox.Checked = managerConfig.autoUpdateBepin;
+            bepinVersionLabel.Text = managerConfig.bepinexVersion;
             modUpdateCheckBox.Checked = managerConfig.autoUpdateMods;
 
             fp2libAutoUpdateCheckBox.Checked = managerConfig.autoUpdateFP2Lib;
@@ -610,6 +611,12 @@ namespace FreedomManager
             {
                 RenderList();
                 loaderHandler.checkFP2Lib();
+                if (tempname.Contains(LoaderHandler.latestStableBepInEx5Ver))
+                {
+                    loaderHandler.bepinVersion = LoaderHandler.latestStableBepInEx5Ver;
+                    managerConfig.bepinexVersion = LoaderHandler.latestStableBepInEx5Ver;
+                }
+                managerConfig.writeConfig();
                 updateConfigUi();
             }
             else
@@ -697,6 +704,7 @@ namespace FreedomManager
                 "Error info: " + ex.Message,
                 Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            managerConfig.writeConfig();
             updateConfigUi();
         }
 
