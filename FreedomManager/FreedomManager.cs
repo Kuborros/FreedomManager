@@ -973,7 +973,9 @@ namespace FreedomManager
             if (modInfo.GitHub == "" || modInfo.GitHub == null)
             {
                 contextMenuStrip1.Items[1].Enabled = false;
-            }
+            } 
+            else
+                contextMenuStrip1.Items[1].Enabled = true;
             e.Cancel = false;
         }
 
