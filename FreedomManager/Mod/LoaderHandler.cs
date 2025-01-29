@@ -73,7 +73,6 @@ namespace FreedomManager.Mod
                     FreedomManager.modHandler.InstallMod("BepInEx.zip", true);
                     bepinInstalled = true;
                     bepinVersion = "5.4.23.2";
-                    
                 }
                 installBepinUtils(false);
             }
@@ -99,7 +98,8 @@ namespace FreedomManager.Mod
                 using (WebClient client = new WebClient())
                 {
                     //Delete the old loose version
-                    File.Delete("BepInEx\\plugins\\ConfigurationManager.dll");
+                    if (File.Exists("BepInEx\\plugins\\ConfigurationManager.dll"))
+                        File.Delete("BepInEx\\plugins\\ConfigurationManager.dll");
 
                     client.DownloadFile(new Uri("https://github.com/BepInEx/BepInEx.ConfigurationManager/releases/download/v18.3/BepInEx.ConfigurationManager.BepInEx5_v18.3.zip"), "BepInExSplash.zip");
                     FreedomManager.modHandler.InstallMod("BepInExSplash.zip", true);
