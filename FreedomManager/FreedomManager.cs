@@ -24,9 +24,10 @@ namespace FreedomManager
 {
     public partial class FreedomManager : Form
     {
-        readonly bool bepisPresent = false;
-        readonly bool fp2Found = false;
+        bool bepisPresent = false;
+        bool fp2Found = false;
         bool melonPresent = false;
+        bool runningUnderWineOrMono = false;
         int columnIndex = 0;
         internal string tempname;
         internal List<ModUpdateInfo> modUpdates;
@@ -53,6 +54,7 @@ namespace FreedomManager
 
         public FreedomManager(List<string> uris)
         {
+            //Force TLS 1.2 on Windows 7
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             DragDrop += new DragEventHandler(FM_DragDrop);
@@ -67,6 +69,8 @@ namespace FreedomManager
             bepisPresent = loaderHandler.bepinInstalled;
             melonPresent = loaderHandler.melonInstalled;
             fp2Found = loaderHandler.fp2Found;
+
+            runningUnderWineOrMono = (IsRunningOnMono() || IsRunningOnWine());
 
             if (!fp2Found)
             {
@@ -153,6 +157,20 @@ namespace FreedomManager
 
             managerVersionLabel.Text = Application.ProductVersion;
         }
+
+        private static bool IsRunningOnMono()
+        {
+            return Type.GetType("Mono.Runtime") != null;
+        }
+
+        private static bool IsRunningOnWine()
+        {
+            //While a very general check and users on Windows could be silly and add it for multitude of reasons, we do not change any major code paths here
+            //Thus misidentification is acceptable.
+            RegistryKey wineKey = Registry.LocalMachine.OpenSubKey(@"Software\Wine", false);
+            return (wineKey != null);
+        }
+
 
         private void updateConfigUi()
         {
