@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: windows-2019
+    permissions:
+      contents: read
+      pull-requests: write
+      attestations: write
 
     steps:
     - uses: actions/checkout@v3
