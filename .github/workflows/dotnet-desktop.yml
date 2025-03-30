@@ -32,7 +32,7 @@ jobs:
       run: msbuild FreedomManager.sln -t:rebuild -property:Configuration=Release
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Release build
         path: D:\a\FreedomManager\FreedomManager\FreedomManager\bin\Release\FreedomManager.exe
