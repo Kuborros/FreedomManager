@@ -44,7 +44,7 @@ If you don't trust random .exe from the internet, thats good!
 You can check the code (including solution files, you can sneak _spicy_ things in there), and compile it yourself from the github repo.
 Visual Studio 2022 will happily load and set it all up for you. 
 
-Additionally, here is the VirusTotal scan result: [Here](https://www.virustotal.com/gui/file/0910a97edddff134e20a00a1ad43b973428c57b45db60d5e194becdb5112ef3b). I know MaxSecure shows it as "sus" (literaly), but if you check online its a common issue, like in [this example](https://www.reddit.com/r/antivirus/comments/qo9vus/is_this_safe_and_false_positive_from_virustotal/). And their 'report false positive' webpage 404s me.  
+Additionally, here is the VirusTotal scan result: [Here](https://www.virustotal.com/gui/file/9da4a498507cae1ec9456d071b76fb760ca4e43622eff04ccee6176255547c24). I know MaxSecure shows it as "sus" (literaly), but if you check online its a common issue, like in [this example](https://www.reddit.com/r/antivirus/comments/qo9vus/is_this_safe_and_false_positive_from_virustotal/). And their 'report false positive' webpage 404s me.  
 
 As for Theta, let their official site speak for itself:
 "Bitdefender Theta: All detections are based on **machine learning** which do not include detection created by malware researchers. *High chances of false positive.*"
@@ -59,3 +59,4 @@ Please read our Wiki documentation on making mods [here](https://github.com/Kubo
 
 ## Building:
 Clone and open the solution in Visual Studio 2022, then build the project - all the needed dependencies should be automatically pulled from nuGet repository.
+If you want to maintain compatibility with older systems do not update Onova package. If you wish to develop the update from within Russia or Belarus, updating the Onova package will trigger a lockout added by it's developer.
