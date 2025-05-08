@@ -100,7 +100,7 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.3.13.2069\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Onova, Version=2.6.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Onova, Version=[2.6.11.0], Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Onova.2.6.11\lib\net462\Onova.dll</HintPath>
     </Reference>
     <Reference Include="SharpCompress, Version=0.39.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
