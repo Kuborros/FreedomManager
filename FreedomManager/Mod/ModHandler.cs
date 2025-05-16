@@ -12,6 +12,13 @@ using System.Windows.Forms;
 namespace FreedomManager.Mod
 {
 
+    public enum ArchiveFormat
+    {
+        Zip,
+        sevenZip,
+        rar
+    }
+
     public enum ArchiveType
     {
         BepinDir,
