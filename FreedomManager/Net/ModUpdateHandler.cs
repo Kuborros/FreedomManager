@@ -13,8 +13,6 @@ namespace FreedomManager.Net
 
         public ModUpdateHandler() { }
 
-
-
         private async Task<ModUpdateInfo> getModUpdate(ModInfo mod)
         {
             string ghAuthor, ghRepo;
@@ -29,7 +27,7 @@ namespace FreedomManager.Net
                 client.Headers["user-agent"] = "FreedomManager";
                 try
                 {
-                    MatchCollection matches = Regex.Matches(mod.GitHub, "(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)");
+                    MatchCollection matches = Regex.Matches(mod.GitHub, "(?:\\w*:\\/\\/github.com\\/)([\\w\\d\\.-]*)(?:\\/)([\\w\\d\\.-]*)");
 
                     ghAuthor = matches[0].Groups[1].Value;
                     ghRepo = matches[0].Groups[2].Value;
@@ -51,6 +49,7 @@ namespace FreedomManager.Net
                         Version = release.tag_name,
                         Description = release.body,
                         DownloadLink = release.downloadUrl,
+                        FileName = release.filename,
                         DoUpdate = true
                     };
                     return info;

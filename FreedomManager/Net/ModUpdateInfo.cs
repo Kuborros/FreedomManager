@@ -1,11 +1,15 @@
-﻿namespace FreedomManager.Net
+﻿using FreedomManager.Mod;
+
+namespace FreedomManager.Net
 {
+
     internal class ModUpdateInfo
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public string Version { get; set; }
         public string DownloadLink { get; set; }
+        public string FileName { get; set; }
         public bool DoUpdate { get; set; }
     }
 }

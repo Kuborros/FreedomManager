@@ -9,9 +9,9 @@ namespace FreedomManager.Mod
     {
         //These updates can cause breaking changes, so they are verified by hand.
         //TODO: Figure out some nicer way to push this without updating whole mod manager
-        public static readonly Uri latestStableBepInEx5 = new Uri("https://api.github.com/repos/BepInEx/BepInEx/releases/153584734");
-        public static readonly Uri latestStableBepInEx5File = new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x86_5.4.23.2.zip");
-        public static readonly string latestStableBepInEx5Ver = "5.4.23.2";
+        public static readonly Uri latestStableBepInEx5 = new Uri("https://api.github.com/repos/BepInEx/BepInEx/releases/213931957");
+        public static readonly Uri latestStableBepInEx5File = new Uri("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.3/BepInEx_win_x86_5.4.23.3.zip");
+        public static readonly string latestStableBepInEx5Ver = "5.4.23.3";
 
         public bool bepinInstalled;
         public bool melonInstalled;
@@ -72,7 +72,7 @@ namespace FreedomManager.Mod
                     client.DownloadFile(latestStableBepInEx5File, "BepInEx.zip");
                     FreedomManager.modHandler.InstallMod("BepInEx.zip", true);
                     bepinInstalled = true;
-                    bepinVersion = "5.4.23.2";
+                    bepinVersion = latestStableBepInEx5Ver;
                 }
                 installBepinUtils(false);
             }

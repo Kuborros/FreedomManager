@@ -27,7 +27,7 @@ namespace FreedomManager
         bool bepisPresent = false;
         bool fp2Found = false;
         bool melonPresent = false;
-        bool runningUnderWineOrMono = false;
+        //bool runningUnderWineOrMono = false;
         int columnIndex = 0;
         internal string tempname;
         internal List<ModUpdateInfo> modUpdates;
@@ -55,7 +55,7 @@ namespace FreedomManager
         public FreedomManager(List<string> uris)
         {
             //Force TLS 1.2 on Windows 7
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             DragDrop += new DragEventHandler(FM_DragDrop);
             DragEnter += new DragEventHandler(FM_DragEnter);
@@ -70,7 +70,7 @@ namespace FreedomManager
             melonPresent = loaderHandler.melonInstalled;
             fp2Found = loaderHandler.fp2Found;
 
-            runningUnderWineOrMono = (IsRunningOnMono() || IsRunningOnWine());
+            //runningUnderWineOrMono = (IsRunningOnMono() || IsRunningOnWine());
 
             if (!fp2Found)
             {
@@ -359,7 +359,7 @@ namespace FreedomManager
                 try
                 {
                     //Direct link to release
-                    MatchCollection matches = Regex.Matches(uri[0], "(?:\\w*:\\/\\/github.com\\/)([\\w\\d]*)(?:\\/)([\\w\\d]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
+                    MatchCollection matches = Regex.Matches(uri[0], "(?:\\w*:\\/\\/github.com\\/)([\\w\\d\\.-]*)(?:\\/)([\\w\\d\\.-]*)(?:\\/[\\w\\d]*\\/[\\w\\d]*\\/[\\w\\d\\W][^\\/]*\\/)(\\S*)");
                     if (matches.Count > 0)
                     {
                         //Regex found a thingie
@@ -542,7 +542,7 @@ namespace FreedomManager
                             DialogResult dialogResult = updateForm.ShowDialog();
 
                             if (dialogResult == DialogResult.Yes)
-                                await AsyncModDownloadGitHub(LoaderHandler.latestStableBepInEx5File, "BepInEx_win_x86_5.4.23.2.zip");
+                                await AsyncModDownloadGitHub(LoaderHandler.latestStableBepInEx5File, "BepInEx-" + LoaderHandler.latestStableBepInEx5Ver + ".zip");
                         }
                     }
                     else
@@ -1110,7 +1110,7 @@ namespace FreedomManager
             {
                 if (modUpdate.DoUpdate)
                 {
-                    await AsyncModDownloadGitHub(new Uri(modUpdate.DownloadLink), "modUpdate.zip");
+                    await AsyncModDownloadGitHub(new Uri(modUpdate.DownloadLink), modUpdate.FileName);
                 }
             }
 
