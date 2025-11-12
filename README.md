@@ -42,12 +42,14 @@ You can also set custom launch parameters here!
 
 If you don't trust random .exe from the internet, thats good!  
 You can check the code (including solution files, you can sneak _spicy_ things in there), and compile it yourself from the github repo.
-Visual Studio 2022 will happily load and set it all up for you. 
+Visual Studio 2022/2026 will happily load and set it all up for you. 
 
 Additionally, here is the VirusTotal scan result: [Here](https://www.virustotal.com/gui/file/9da4a498507cae1ec9456d071b76fb760ca4e43622eff04ccee6176255547c24). I know MaxSecure shows it as "sus" (literaly), but if you check online its a common issue, like in [this example](https://www.reddit.com/r/antivirus/comments/qo9vus/is_this_safe_and_false_positive_from_virustotal/). And their 'report false positive' webpage 404s me.  
 
 As for Theta, let their official site speak for itself:
 "Bitdefender Theta: All detections are based on **machine learning** which do not include detection created by malware researchers. *High chances of false positive.*"
+
+I would wager that all the random false-positives would dissapear if i signed the app with a code signing certificate. However these cost ~$500 a year and i do not have that money just lying around to spend on such things. 
 
 ## For modders:
 
@@ -58,5 +60,6 @@ MelonLoader mods can be supported, if they implement a valid directory structure
 Please read our Wiki documentation on making mods [here](https://github.com/Kuborros/FreedomManager/wiki)!  
 
 ## Building:
-Clone and open the solution in Visual Studio 2022, then build the project - all the needed dependencies should be automatically pulled from nuGet repository.
-If you want to maintain compatibility with older systems do not update Onova package. If you wish to develop the update from within Russia or Belarus, updating the Onova package will trigger a lockout added by it's developer.
+Clone and open the solution in Visual Studio 2022, then build the project - all the needed dependencies should be automatically pulled from nuGet repository. It should also work in 2026 most likely, but i have not tried so - i dread to think how much hassle installing 2026 and uninstalling 2022 would cause  (last time i did so, with VS2017, it created a phantom 2017 install that forever broke half the toolsets on that Windows install).
+If you want to maintain compatibility with older systems **do not** update the Onova package. If you wish to develop the update from within Russia or Belarus, updating the Onova package will trigger a lockout added by it's developer. It also sabotages the project files from what i was told.
+Another auto-update system is planned for the future.
