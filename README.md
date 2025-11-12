@@ -60,6 +60,9 @@ MelonLoader mods can be supported, if they implement a valid directory structure
 Please read our Wiki documentation on making mods [here](https://github.com/Kuborros/FreedomManager/wiki)!  
 
 ## Building:
-Clone and open the solution in Visual Studio 2022, then build the project - all the needed dependencies should be automatically pulled from nuGet repository. It should also work in 2026 most likely, but i have not tried so - i dread to think how much hassle installing 2026 and uninstalling 2022 would cause  (last time i did so, with VS2017, it created a phantom 2017 install that forever broke half the toolsets on that Windows install).
+Clone and open the solution in Visual Studio 2022, then build the project - all the needed dependencies should be automatically pulled from nuGet repository. 
+It should also work in 2026, but i have not tried so - i dread to think how much hassle installing 2026 and uninstalling 2022 would cause (last time i did so, with VS2017, it created a phantom 2017 install that forever broke half the toolsets on that Windows install).
+
+
 If you want to maintain compatibility with older systems **do not** update the Onova package. If you wish to develop the update from within Russia or Belarus, updating the Onova package will trigger a lockout added by it's developer. It also sabotages the project files from what i was told.
 Another auto-update system is planned for the future.
