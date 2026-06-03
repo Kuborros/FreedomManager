@@ -4,13 +4,14 @@
 
 I _genuinely_ hope this is self-explanatory. 
 
-## Follow Netiquette
+## Follow the basic Netiquette
 
 Yes i have used a term from 1997.
 I will also _link you_ to a [book from 1997](http://www.albion.com/netiquette/book/index.html)
 
 The internet might have changed since then - for better or worse - but that doesn't change the fact behaving like a proper human being, and treating others like such, was and still is a right way to deal with many issues plaguing the web.
 
+tl;dr don't be an ass.
 
 ## No AI usage
 
